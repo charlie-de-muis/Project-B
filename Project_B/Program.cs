@@ -1,30 +1,5 @@
 ﻿class Program
 {
-    public void MakeAccountOrLogin()
-    {
-        // Implementation for making account or login
-    }
-
-    public void ViewMenu()
-    {
-        // Implementation for viewing the menu
-    }
-
-    public void MakeReservation()
-    {
-        // Implementation for making a reservation
-    }
-
-    public void ViewPastReservations()
-    {
-        // Implementation for viewing past reservations
-    }
-
-    public void AdminOptions()
-    {
-        // Implementation for admin options
-    }
-
     static void Main()
     {
         while (true)
