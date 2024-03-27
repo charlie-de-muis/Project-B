@@ -1,65 +1,15 @@
 public class Account
 {
-    private string UserName;
-    private string PassWord;
-    private string Email;
+    public string UserName;
+    public string PassWord;
+    public string Email;
 
     public Account(string username, string password, string email)
     {
         this.UserName = username;
         this.PassWord = password;
         this.Email = email;
-    }
-
-    private static void WriteToCSV(Account account)
-    {
-        // File path where you want to store the CSV
-        string filePath = "account_data.csv";
-
-        // Check if the file already exists, if not create a new file and write headers
-        if (!File.Exists(filePath))
-        {
-            // Write headers
-            File.WriteAllText(filePath, "Username;Password;Email\n");
-        }
-
-        // Write new data to the CSV file
-        string userDataString = $"{account.UserName};{account.PassWord};{account.Email}\n";
-
-        File.AppendAllText(filePath, userDataString);
-    }
-
-
-    private static List<Account> ReadFromCSV()
-    {
-        try
-        {
-            string filePath = Path.GetFullPath("account_data.csv");
-
-            if (!File.Exists(filePath))
-                File.Create(filePath).Close();
-
-            using(var reader = new StreamReader(filePath))
-            {
-                List<Account> accounts = new List<Account>();
-                while (!reader.EndOfStream)
-                {
-                    var line = reader.ReadLine();
-                    string[] values = line.Split(";");
-                    string[] values2 = values[0].Split(",");
-
-                    if (values2.Length == 3)
-                        accounts.Add(new Account(values2[0], values2[1], values2[2]));
-                }
-                return accounts;
-            }
-        }
-        catch (FileNotFoundException ex)
-        {
-            Console.WriteLine($"File not found {ex}");
-            return null;
-        }
-    }
+    } 
 
     public static string Option()
     {
@@ -119,13 +69,13 @@ public class Account
     private static void MakeAccount(string username, string password, string email)
     {
         password = PasswordEncoding.EncodeString(password);
-        WriteToCSV(new Account(username, password, email));
+        CSV.WriteToCSV(new Account(username, password, email));
     }
 
     private static bool Login(string username, string password)
     {
         //Console.WriteLine(ReadFromCSV().Count);
-        foreach (Account acc in ReadFromCSV())
+        foreach (Account acc in CSV.ReadFromCSV())
         {
             //Console.WriteLine(acc.UserName);
             //Console.WriteLine(acc.PassWord);
