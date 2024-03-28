@@ -28,11 +28,14 @@ class CSV
             return null;
         }
     }
-
+    
     public static void WriteToCSV(Account account)
     {
+        // Folder path where you want to store the CSV
+        string folderPath = Path.Combine(Environment.CurrentDirectory, "Data_Sources");
+        
         // File path where you want to store the CSV
-        string filePath = "account_data.csv";
+        string filePath = Path.Combine(folderPath, "account_data.csv");
 
         // Check if the file already exists, if not create a new file and write headers
         if (!File.Exists(filePath))
