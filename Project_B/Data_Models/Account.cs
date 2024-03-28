@@ -51,12 +51,12 @@ public class Account
             {
                 Console.WriteLine("Enter an e-mail:");
                 string email = Console.ReadLine();
+                if (!email.Contains("@")){return "Invalid email";}
                 Console.WriteLine("Enter a username:");
                 string username = Console.ReadLine();
                 Console.WriteLine("Enter a password:");
                 string password = Console.ReadLine();
-                MakeAccount(username, password, email);
-                return "account created\n";
+                if (MakeAccount(username, password, email)) {return "account created\n";}
             }
             else 
             {
@@ -66,10 +66,25 @@ public class Account
         return "unknown error in option method\n";
     }
 
-    private static void MakeAccount(string username, string password, string email)
+    private static bool MakeAccount(string username, string password, string email)
     {
-        password = PasswordEncoding.EncodeString(password);
-        CSV.WriteToCSV(new Account(username, password, email));
+        bool test_chars = true;
+        foreach (char c in password)
+        {
+            if (!PasswordEncoding.Chars.Contains(c))
+            {
+                Console.WriteLine($"Creating account failed. Invalid character {c}");
+                test_chars = false;
+                break;
+            }
+        }
+        if (test_chars == true)
+        {
+            password = PasswordEncoding.EncodeString(password);
+            CSV.WriteToCSV(new Account(username, password, email));
+            return true;
+        }
+        return false;
     }
 
     private static bool Login(string username, string password)
