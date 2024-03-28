@@ -11,8 +11,9 @@ class Main_Menu
                 // Console.WriteLine("4. View Past Reservations");
                 // Console.WriteLine("5. Admin Options");
                 Console.WriteLine("Enter your choice:");
-                int choice = int.Parse(Console.ReadLine());
-                if (choice != 1){Console.WriteLine("Please enter a valid choice");}
+                int choice = 0;
+                try {choice = int.Parse(Console.ReadLine());}
+                catch {Console.WriteLine("Invalid entry");}
 
                 switch (choice)
                 {

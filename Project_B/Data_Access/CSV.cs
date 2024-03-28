@@ -16,10 +16,8 @@ class CSV
                 {
                     var line = reader.ReadLine();
                     string[] values = line.Split(";");
-                    string[] values2 = values[0].Split(",");
 
-                    if (values2.Length == 3)
-                        accounts.Add(new Account(values2[0], values2[1], values2[2]));
+                    accounts.Add(new Account(values[0], values[1], values[2]));
                 }
                 return accounts;
             }

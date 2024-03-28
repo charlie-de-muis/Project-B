@@ -1,7 +1,7 @@
 public class PasswordEncoding
 {
     // allowed chars in password
-    public const string Chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!?@.,_-*#$%:;<>=/";
+    public const string Chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!?@.,_-*#$%:<>=/";
     // dictionaries to convert chars
     private static readonly Dictionary<char,char> EncodeDict = AddPairs();
     private static readonly Dictionary<char,char> DecodeDict = AddPairsDecode();
