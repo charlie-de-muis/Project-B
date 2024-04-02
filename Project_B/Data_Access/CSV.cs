@@ -31,22 +31,45 @@ class CSV
     
     public static void WriteToCSV(Account account)
     {
-        // Folder path where you want to store the CSV
-        string folderPath = Path.Combine("..", "..", "..", "Data_Sources");
-        
-        // File path within the folder
-        string filePath = Path.Combine(folderPath, "account_data.csv");
-
-        // Check if the file already exists, if not create a new file and write headers
-        if (!File.Exists(filePath))
+        try
         {
-            // Write headers
-            File.WriteAllText(filePath, "Username;Password;Email\n");
+            // Folder path where you want to store the CSV
+            string folderPath = Path.Combine(Environment.CurrentDirectory, "Data_Sources");
+
+            // File path within the folder
+            string filePath = Path.Combine(folderPath, "account_data.csv");
+
+            // Check if the file already exists, if not create a new file and write headers
+            if (!File.Exists(filePath))
+            {
+                // Write headers
+                File.WriteAllText(filePath, "Username;Password;Email\n");
+            }
+
+            // Write new data to the CSV file
+            string userDataString = $"{account.UserName};{account.PassWord};{account.Email}\n";
+
+            File.AppendAllText(filePath, userDataString);
         }
+        catch
+        {
+            // Folder path where you want to store the CSV
+            string folderPath = Path.Combine("..", "..", "..", "Data_Sources");
 
-        // Write new data to the CSV file
-        string userDataString = $"{account.UserName};{account.PassWord};{account.Email}\n";
+            // File path within the folder
+            string filePath = Path.Combine(folderPath, "account_data.csv");
 
-        File.AppendAllText(filePath, userDataString);
+            // Check if the file already exists, if not create a new file and write headers
+            if (!File.Exists(filePath))
+            {
+                // Write headers
+                File.WriteAllText(filePath, "Username;Password;Email\n");
+            }
+
+            // Write new data to the CSV file
+            string userDataString = $"{account.UserName};{account.PassWord};{account.Email}\n";
+
+            File.AppendAllText(filePath, userDataString);
+        }
     }
 }
