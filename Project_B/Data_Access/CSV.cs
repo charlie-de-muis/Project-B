@@ -32,7 +32,7 @@ class CSV
     public static void WriteToCSV(Account account)
     {
         // Folder path where you want to store the CSV
-        string folderPath = Path.Combine(Environment.CurrentDirectory, "Data_Sources");
+        string folderPath = Path.Combine("..", "..", "..", "Data_Sources");
         
         // File path within the folder
         string filePath = Path.Combine(folderPath, "account_data.csv");
