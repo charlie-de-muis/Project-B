@@ -24,7 +24,7 @@ class Main_Menu
                     break;
                 case 2:
                     Console.WriteLine("Menu");
-                    DisplayMenu();
+                    MenuManager.ViewMenu();
                     break;
                 case 3:
                     Console.WriteLine("Reservation");
@@ -47,29 +47,6 @@ class Main_Menu
                     Console.WriteLine("Invalid choice. Please try again.");
                     break;
             }
-        }
-    }
-    public static void DisplayMenu()
-    {
-        // Read menu items from JSON
-        List<MenuItem> menuItems = JSON.ReadJSON();
-
-        // Print menu items
-        foreach (var item in menuItems)
-        {
-            Console.WriteLine($"{item.Name}");
-            Console.WriteLine("Ingredients: ");
-            foreach (var ingredient in item.Ingredients)
-            {
-                Console.WriteLine($"- {ingredient}");
-            }
-            Console.WriteLine($"Price: ${item.Price}");
-            Console.WriteLine("Dietary Info: ");
-            foreach (var info in item.DietaryInfo)
-            {
-                Console.WriteLine($"- {info}");
-            }
-            Console.WriteLine();
         }
     }
 

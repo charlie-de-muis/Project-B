@@ -6,7 +6,7 @@ public class Delete_Item
         
         while (true)
         {
-            Main_Menu.DisplayMenu();
+            //MenuManager.PrintMenu();
 
             Console.WriteLine("\nWhich item do you want to delete? Or type cancel.");
             string choice = Console.ReadLine();
