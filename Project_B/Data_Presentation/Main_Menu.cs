@@ -4,6 +4,7 @@ class Main_Menu
     {
         while (true)
         {
+            Account.CheckAdmin();
             Console.WriteLine("Welcome to Restaurant Booking System!");
             Console.WriteLine("1. Make Account / Login");
             Console.WriteLine("2. View Menu");
@@ -74,8 +75,18 @@ class Main_Menu
 
     public static void PrintAboutText()
     {
-        Console.WriteLine("Welcome to [Restaurant Name], your sustainable dining destination in Rotterdam! Our mission is simple: to provide delicious meals made from locally-sourced ingredients, supporting our community and minimizing our environmental impact.");
-        Console.WriteLine("Led by founder Jake Darcy, our restaurant offers a diverse menu with options for meat lovers, seafood enthusiasts, vegetarians, and vegans. Our cozy space features intimate tables for two, group-friendly seating, and a vibrant bar area.");
-        Console.WriteLine("Located at Wijnhaven 107, 3011 WN, [Restaurant Name] invites you to indulge in our 2, 3, and 4-course dining options, paired with our carefully curated wine selections. Join us for a memorable culinary experience that celebrates Rotterdam's flavors and sustainability efforts. See you soon at [Restaurant Name]!");
+        string text = TXT.ReadFromTXT();
+        if (text != null)
+        {
+            Console.WriteLine(text);
+        }
+    }
+
+    public static void AboutTextAdmin()
+    {
+        Console.WriteLine("Type 3 lines of information about your restaurant:");
+        TXT.WritetoTXT();
+        TXT.WritetoTXT();
+        TXT.WritetoTXT();
     }
 }

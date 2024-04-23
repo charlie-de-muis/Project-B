@@ -98,4 +98,23 @@ public class Account
         }
         return false;
     }
+
+    public static void CheckAdmin()
+    {
+        List<Account> info = CSV.ReadFromCSV();
+        bool adminExists = false;
+        foreach (Account profile in info)
+        {
+            if (profile.UserName == "Admin" && profile.PassWord == "SvEAF" && profile.Email == "admin@admin.com")
+            {
+                adminExists = true;
+                break;
+            }
+        }
+
+        if (!adminExists)
+        {
+            MakeAccount("Admin", "Admin", "admin@admin.com");
+        }
+    }
 }
