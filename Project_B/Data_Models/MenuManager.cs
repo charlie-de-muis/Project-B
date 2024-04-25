@@ -15,26 +15,27 @@ public class MenuManager
         PrintMenu(filteredMenu);
     }
 
-    private static void PrintMenu(List<MenuItem> menuItems)
+private static void PrintMenu(List<MenuItem> menuItems)
+{
+    // Print menu items with index numbers
+    for (int i = 0; i < menuItems.Count; i++)
     {
-        // Print menu items
-        foreach (var item in menuItems)
+        var item = menuItems[i];
+        Console.WriteLine($"{i + 1}. {item.Name}");
+        Console.WriteLine("Ingredients: ");
+        foreach (var ingredient in item.Ingredients)
         {
-            Console.WriteLine($"{item.Name}");
-            Console.WriteLine("Ingredients: ");
-            foreach (var ingredient in item.Ingredients)
-            {
-                Console.WriteLine($"- {ingredient}");
-            }
-            Console.WriteLine($"Price: ${item.Price}");
-            Console.WriteLine("Dietary Info: ");
-            foreach (var info in item.DietaryInfo)
-            {
-                Console.WriteLine($"- {info}");
-            }
-            Console.WriteLine();
+            Console.WriteLine($"- {ingredient}");
         }
+        Console.WriteLine($"Price: ${item.Price}");
+        Console.WriteLine("Dietary Info: ");
+        foreach (var info in item.DietaryInfo)
+        {
+            Console.WriteLine($"- {info}");
+        }
+        Console.WriteLine();
     }
+}
 
 private static List<MenuItem> FilterMenu(List<MenuItem> menuItems, string filter)
 {
