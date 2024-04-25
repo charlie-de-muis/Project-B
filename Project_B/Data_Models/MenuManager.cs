@@ -17,17 +17,21 @@ public class MenuManager
 
 private static void PrintMenu(List<MenuItem> menuItems)
 {
-    // Print menu items with index numbers
+    // Print menu items with index numbers and better readability
     for (int i = 0; i < menuItems.Count; i++)
     {
         var item = menuItems[i];
+        // Display the index number and name of the menu item
         Console.WriteLine($"{i + 1}. {item.Name}");
+        // Display the list of ingredients for the menu item
         Console.WriteLine("Ingredients: ");
         foreach (var ingredient in item.Ingredients)
         {
             Console.WriteLine($"- {ingredient}");
         }
+        // Display the price of the menu item
         Console.WriteLine($"Price: ${item.Price}");
+        // Display the dietary information for the menu item
         Console.WriteLine("Dietary Info: ");
         foreach (var info in item.DietaryInfo)
         {
