@@ -15,6 +15,18 @@ public class MenuManager
         PrintMenu(filteredMenu);
     }
 
+        public static void DisplaySortedMenu()
+    {
+        // Read menu items from JSON
+        var menuItems = JSON.ReadJSON();
+
+        // Sort menu items by price, low to high
+        menuItems = menuItems.OrderBy(item => item.Price).ToList();
+
+        // Print the sorted menu
+        PrintMenu(menuItems);
+    }
+
 private static void PrintMenu(List<MenuItem> menuItems)
 {
     // Print menu items with index numbers and better readability
@@ -58,21 +70,36 @@ private static List<MenuItem> FilterMenu(List<MenuItem> menuItems, string filter
     return filteredItems;
 }
 
-    public static void ViewMenu()
-    {
-        Console.WriteLine("\nWould you like to filter the menu? (yes/no)");
-        string filterChoice = Console.ReadLine();
+public static void ViewMenu()
+{
+    Console.WriteLine("\nWould you like to filter or sort the menu? (yes/no)");
+    string filterSortChoice = Console.ReadLine();
 
-        if (filterChoice.ToLower() == "yes")
+    if (filterSortChoice.ToLower() == "yes")
+    {
+        Console.WriteLine("\nWould you like to filter based on ingredients or diet, or would you like to sort based on price? (filter/sort)");
+        string filterSortInput = Console.ReadLine();
+
+        if (filterSortInput.ToLower() == "filter")
         {
             // Prompt user for filter input
             Console.WriteLine("Enter an ingredient or dietary restriction to filter the menu:");
             string filterInput = Console.ReadLine();
             DisplayFilteredMenu(filterInput);
         }
+        else if (filterSortInput.ToLower() == "sort")
+        {
+            // Sort and display the menu
+            DisplaySortedMenu();
+        }
         else
         {
-            DisplayMenu();
+            Console.WriteLine("Invalid input. Please enter 'filter' or 'sort'.");
         }
     }
+    else
+    {
+        DisplayMenu();
+    }
+}
 }
