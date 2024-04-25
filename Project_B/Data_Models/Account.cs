@@ -81,7 +81,7 @@ public class Account
         if (test_chars == true)
         {
             password = PasswordEncoding.EncodeString(password);
-            CSV.WriteToCSV(new Account(username, password, email));
+            CSV.WriteToCSV(new Account(username, password, email), "account_data.csv");
             return true;
         }
         return false;
@@ -90,7 +90,7 @@ public class Account
     private static bool Login(string username, string password)
     {
         //Console.WriteLine(ReadFromCSV().Count);
-        foreach (Account acc in CSV.ReadFromCSV())
+        foreach (Account acc in CSV.ReadFromCSV("account_data.csv"))
         {
             //Console.WriteLine(acc.UserName);
             //Console.WriteLine(acc.PassWord);
@@ -101,7 +101,7 @@ public class Account
 
     public static void CheckAdmin()
     {
-        List<Account> info = CSV.ReadFromCSV();
+        List<Account> info = CSV.ReadFromCSV("account_data.csv");
         bool adminExists = false;
         foreach (Account profile in info)
         {
