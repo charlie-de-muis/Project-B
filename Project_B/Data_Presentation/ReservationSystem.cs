@@ -51,6 +51,7 @@ static class ReservationSystem
             //List<int> menuOrders; (all the orders chosen from the menu) (NEXT SPRINT)
             //More variables coming?
 
+            //First the sure selects on of the future dates to book.
             Console.WriteLine("Or type 'cancel' to cancel the reservation.\n");
             Console.WriteLine($"1.  {DateTime.Now.AddDays(1):dd-MM-yyyy}");
             Console.WriteLine($"2.  {DateTime.Now.AddDays(2):dd-MM-yyyy}");
@@ -73,6 +74,7 @@ static class ReservationSystem
             else if (entry == "cancel") { return; }
             else { Console.WriteLine("Invalid entry, for which day do you want to book?"); continue; }
             
+            //The following code has been organized for readability, comments are in the methods.
             while (true)
             {
                 string resultTimeSlot = SelectTimeSlot();
@@ -98,7 +100,7 @@ static class ReservationSystem
 
     private static string SelectTimeSlot()
     {
-        //CUSTOMER SELECTS WHICH TIME OF DAY HE/SHE WANTS TO RESERVE.
+        //Customer selects which time of day he/she wants to reserve.
         Console.WriteLine("For what timeslot do you want to book? (Brunch, Lunch, Afternoon, Dinner)");
         while (true)
         {
@@ -120,6 +122,7 @@ static class ReservationSystem
 
     private static string SelectCustomerCount()
     {
+        //Customer specifiec for how many people will be reserved.
         Console.WriteLine("For how many people do you order? (1 - 16)");
         while (true)
         {
@@ -142,6 +145,9 @@ static class ReservationSystem
 
     private static string SelectTables(List<Reservation> reservations)
     {
+        //Customer selects a table/multiple tables.
+        //This code will check if the tables will be available depending on a chosen timeslot.
+        //This code will check if the tables will have enough seats for the amount of people the customer has specified.
         List<Table> tables = Table.GetTableInfo();
         List<int> allAvailableTables = new List<int>();
         foreach (Table table in tables)
@@ -181,11 +187,12 @@ static class ReservationSystem
             List<string> tableNumbers = new List<string>() { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15" };
             foreach (string number in TableChoicesSTR) { if (!tableNumbers.Contains(number)) { Console.WriteLine("Invalid entry."); count = false; break; } }
 
+            //If the arguments given match, it will pass on to the next code below.
             if (count)
             {
                 foreach (string number in TableChoicesSTR) { TableChoices.Add(int.Parse(number)); }
 
-                //Single table.
+                //Single table chosen.
                 if (TableChoices.Count == 1)
                 {
                     if (!tables[TableChoices[0] - 1].IsAvailable)
@@ -204,7 +211,7 @@ static class ReservationSystem
                         return entryTables;
                     }
                 }
-                //Multiple tables.
+                //Multiple tables chosen.
                 else if (TableChoices.Count > 1)
                 {
                     bool availableTables = true;
@@ -217,7 +224,7 @@ static class ReservationSystem
                         }
                     }
 
-                    //After checking table availablility, they will be checked for merge capability.
+                    //After checking table availablility, the amount of seats must be higher than the number of people they reserve for.
                     if (availableTables)
                     {
                         string tablesMerge = string.Join(", ", TableChoices);
@@ -250,6 +257,7 @@ static class ReservationSystem
 
         if (spacing > 10) { width -= spacing - 10; }
 
+        //Final menu which displays their selections and what they can change, or they confirm of course.
         while (true)
         {
             Console.WriteLine("This is what you have selected:");
@@ -277,6 +285,7 @@ static class ReservationSystem
             else { Console.WriteLine("Invalid entry, please try again.\n"); continue; }
         }
 
+        //If the customer confirms reservation, the reservation is saved and a receipt will be printed.
         string ReservationCode = GenerateReservationCode(reservations);
         Reservation reservation = new Reservation(DateSelect, TimeSlot, TableChoices, Customer.UserName, AmountofPersons, ReservationCode);
         CSV.WriteToCSVReservations(reservation, "Reservation.csv");
