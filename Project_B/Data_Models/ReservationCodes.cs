@@ -15,7 +15,7 @@ public class ReservationCodes
         catch (Exception e){return false;}
     }
 
-    // maak een random code, check of hij al bestaan, en stuur de code of een error bericht terug.
+    // maak een random code, check of hij al bestaat, en stuur de code of een error bericht terug.
     public static string GenerateReservationCode()
     {
         string code = "";
