@@ -78,6 +78,11 @@ public class Account
                 break;
             }
         }
+        if (EmailExists(email))
+        {
+            Console.WriteLine($"Creating account failed. Email {email} already exists.");
+            return false;
+        }
         if (test_chars == true)
         {
             password = PasswordEncoding.EncodeString(password);
