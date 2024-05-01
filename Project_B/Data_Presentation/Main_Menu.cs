@@ -1,3 +1,5 @@
+using System.Security.Cryptography.X509Certificates;
+
 class Main_Menu
 {
     public static void MainMenu()
@@ -17,32 +19,63 @@ class Main_Menu
             try {choice = int.Parse(Console.ReadLine());}
             catch {Console.WriteLine("Invalid entry");}
 
+            //Choices: 1, 2, 4, 5 'can be chosen by both 'Admin and Customer''
+            //Choice: 6 'can only be chosen by 'Admin''
+            //Choice: 3 'can only be chosen by 'Customer''
+            object result = null;
             switch (choice)
             {
                 case 1:
-                    Console.WriteLine(Account.Option());
-                    break;
+                result = Account.Option();
+                if (result is string)
+                {
+                    Console.WriteLine(result);
+                }
+                break;
                 case 2:
                     Console.WriteLine("Menu");
                     DisplayMenu();
                     break;
                 case 3:
-                    Console.WriteLine("Reservation");
-                    // restaurantSystem.MakeReservation();
-                    break;
+                Console.WriteLine("Reservation");
+                // Check if the logged-in user is a customer, if yes then access is granted for the reservation system
+                if (IsCustomer(result))
+                {
+                    // Code here for reservations!! IDK
+                }
+                else
+                {
+                    Console.WriteLine("Only customers can make reservations.");
+                }
+                break;
                 case 4:
-                    Console.WriteLine("Past reservations");
-                    // restaurantSystem.ViewPastReservations();
-                    break;
+                Console.WriteLine("Past reservations");
+                // Check if the logged-in user is a customer, if yes then access is granted for viewing reservations
+                if (IsCustomer(result))
+                {
+                    // Put reservation code here
+                }
+                else
+                {
+                    Console.WriteLine("Only customers can view past reservations.");
+                }
+                break;
                 case 5:
                     Console.WriteLine("About restaurant");
                     PrintAboutText();
                     break;
                 case 6:
-                    Console.WriteLine("Admin account");
-                    // restaurantSystem.AdminOptions();
+                Console.WriteLine("Admin account");
+                // Check if the logged-in user is an admin, if yes then grant access to the admin control pannel
+                if (result is Admin)
+                {
                     Admin_Menu.AdminMenu();
-                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Only admins can access this.");
+                }
+                break;
                 default:
                     Console.WriteLine("Invalid choice. Please try again.");
                     break;
@@ -88,5 +121,11 @@ class Main_Menu
         TXT.WritetoTXT();
         TXT.WritetoTXT();
         TXT.WritetoTXT();
+    }
+
+    //this function is used to see if the user is a customer or not, if yes then it returns true, if no then false.
+    private static bool IsCustomer(object result)
+    {
+        return result is Customer;
     }
 }

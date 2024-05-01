@@ -3,6 +3,7 @@ public class Account
     public string UserName;
     public string PassWord;
     public string Email;
+    public bool IsAdmin;
 
     public Account(string username, string password, string email)
     {
@@ -11,7 +12,7 @@ public class Account
         this.Email = email;
     } 
 
-    public static string Option()
+    public static object Option()
     {
         Console.WriteLine("Login or Create account?");
         string choice = Console.ReadLine().ToLower();
@@ -20,10 +21,6 @@ public class Account
         {
             if (choice == "login")
             {
-                // make it look through the csv database and see if the username exists, if yes continue, 
-                // if not print line (account with that name not found). Make user enter it again.
-                
-                // look at the corresponding password, if it exists then return true. If its wrong 3 times then exit program.
                 int attemptsleft = 3;
                 bool NextStep = false;
 
@@ -34,18 +31,23 @@ public class Account
                     Console.WriteLine($"Enter password ({attemptsleft} attempts remaining):");
                     string password = Console.ReadLine();
                     NextStep = Login(username, password);
-                    // volgende regel verwijderen
-                    //Console.WriteLine(NextStep);
                     attemptsleft--;
-                    //unfinished code!! need password taken from database below
                     if (NextStep == true)
                     {
-                        return "Log in succesful!\n";
+                        Account loggedInAccount = GetAccountByUsername(username);
+                        if (loggedInAccount != null && loggedInAccount.IsAdmin)
+                        {
+                            return new Admin(loggedInAccount.UserName, loggedInAccount.PassWord, loggedInAccount.Email);
+                        }
+                        else
+                        {
+                            return new Customer(loggedInAccount.UserName, loggedInAccount.PassWord, loggedInAccount.Email);
+                        }
                     }
                     else {Console.WriteLine("Wrong username and/or password\n");}
                 }
 
-                return "Log in failed\n";
+                return null;
             }
             else if (choice == "create account")
             {
@@ -64,6 +66,18 @@ public class Account
             };
         }
         return "unknown error in option method\n";
+    }
+
+    private static Account GetAccountByUsername(string username)
+    {
+        foreach (Account acc in CSV.ReadFromCSV())
+        {
+            if (acc.UserName == username)
+            {
+                return acc;
+            }
+        }
+        return null;
     }
 
     private static bool MakeAccount(string username, string password, string email)
