@@ -87,6 +87,16 @@ public class Account
         return false;
     }
 
+    private static bool EmailExists(string email)
+    {
+        List<Account> accounts = CSV.ReadFromCSV();
+        if (accounts != null)
+        {
+            return accounts.Any(acc => acc.Email == email);
+        }
+        return false;
+    }
+
     private static bool Login(string username, string password)
     {
         //Console.WriteLine(ReadFromCSV().Count);
