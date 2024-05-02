@@ -22,4 +22,10 @@ public class UnitTest1
 
     //     CollectionAssert.Contains(JSON.ReadJSON(), Pizza);
     // }
+
+    // [TestMethod]
+    // public void Test_Saved_ReservationCode
+    // {
+    //      hoe moet je het testen als er een input is?
+    // }
 }

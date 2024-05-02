@@ -9,6 +9,7 @@ public class Admin_Menu
                 Console.WriteLine("2. Delete menu items");
                 // Console.WriteLine("3. View reservations");
                 Console.WriteLine("4. Add restaurant info");
+                Console.WriteLine("5. Back to the main menu");
 
                 Console.WriteLine("Enter your choice:");
                 int choice = 0;
@@ -30,6 +31,8 @@ public class Admin_Menu
                     case 4: 
                         Main_Menu.AboutTextAdmin();
                         break;
+                    case 5:
+                    break;
                     default:
                         Console.WriteLine("Invalid choice. Please try again.");
                         break;

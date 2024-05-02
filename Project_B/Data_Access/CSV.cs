@@ -1,6 +1,6 @@
 class CSV
 {
-    public static List<Account> ReadFromCSV(string filename)
+    public static List<Account> ReadFromCSV()
     {
         try
         {
@@ -8,7 +8,7 @@ class CSV
             string folderPath = Path.Combine(Environment.CurrentDirectory, "Data_Sources");
 
             // File path within the folder
-            string filePath = Path.Combine(folderPath, filename);
+            string filePath = Path.Combine(folderPath, "account_data.csv");
             try
         {
 
@@ -43,7 +43,7 @@ class CSV
             string folderPath = Path.Combine("..", "..", "..", "Data_Sources");
 
             // File path within the folder
-            string filePath = Path.Combine(folderPath, filename);
+            string filePath = Path.Combine(folderPath, "account_data.csv");
             try
         {
 
@@ -85,36 +85,47 @@ class CSV
             // File path within the folder
             string filePath = Path.Combine(folderPath, filename);
             try
-        {
-
-            if (!File.Exists(filePath))
             {
-                // Write headers
-                File.WriteAllText(filePath, "Date;Timeslot;Table;Name;Amount of persons;Reservationcode\n");
-            }
 
-            using(var reader = new StreamReader(filePath))
-            {
-                List<Reservation> reservations = new List<Reservation>();
-                while (!reader.EndOfStream)
+                if (!File.Exists(filePath))
                 {
-                    var line = reader.ReadLine();
-                    string[] values = line.Split(";");
-                    List<string> tables = values[2].Split(",").ToList();
-                    List<int> tablesInt = new();
-                    for (int i = 0; i < tables.Count; i++)
-                        tablesInt.Add(Convert.ToInt32(tables[i]));
-
-                    reservations.Add(new Reservation(values[0], values[1], tablesInt, values[3], Convert.ToInt32(values[4]), values[5]));
+                    // Write headers
+                    File.WriteAllText(filePath, "Date;Timeslot;Table;Name;Amount of persons;Reservationcode\n");
                 }
-                return reservations;
+
+                using(var reader = new StreamReader(filePath))
+                {
+                    List<Reservation> reservations = new List<Reservation>();
+                    while (!reader.EndOfStream)
+                    {
+                        var line = reader.ReadLine();
+                        string[] values = line.Split(";");
+                        List<string> tables = values[2].Split(",").ToList();
+                        List<int> tablesInt = new();
+                        for (int i = 0; i < tables.Count; i++)
+                        {
+                            if (int.TryParse(tables[i], out int tableInt))
+                            {
+                                tablesInt.Add(tableInt);
+                            }
+                        }
+
+                        int NumPers = 0;
+                        if (int.TryParse(values[4], out int PersInt))
+                        {
+                            NumPers = PersInt;
+                        }
+
+                        reservations.Add(new Reservation(values[0], values[1], tablesInt, values[3], NumPers, values[5]));
+                    }
+                    return reservations;
+                }
             }
-        }
-        catch (FileNotFoundException ex)
-        {
-            Console.WriteLine($"File not found {ex}");
-            return null;
-        }
+            catch (FileNotFoundException ex)
+            {
+                Console.WriteLine($"File not found {ex}");
+                return null;
+            }
         }
         catch
         {
@@ -124,39 +135,50 @@ class CSV
             // File path within the folder
             string filePath = Path.Combine(folderPath, filename);
             try
-        {
-
-            if (!File.Exists(filePath))
             {
-                // Write headers
-                File.WriteAllText(filePath, "Date;Timeslot;Table;Name;Amount of persons;Reservationcode\n");
-            }
 
-            using(var reader = new StreamReader(filePath))
-            {
-                List<Reservation> reservations = new List<Reservation>();
-                while (!reader.EndOfStream)
+                if (!File.Exists(filePath))
                 {
-                    var line = reader.ReadLine();
-                    string[] values = line.Split(";");
-                    List<string> tables = values[2].Split(",").ToList();
-                    List<int> tablesInt = new();
-                    for (int i = 0; i < tables.Count; i++)
-                        tablesInt.Add(Convert.ToInt32(tables[i]));
-
-                    reservations.Add(new Reservation(values[0], values[1], tablesInt, values[3], Convert.ToInt32(values[4]), values[5]));
+                    // Write headers
+                    File.WriteAllText(filePath, "Date;Timeslot;Table;Name;Amount of persons;Reservationcode\n");
                 }
-                return reservations;
+
+                using(var reader = new StreamReader(filePath))
+                {
+                    List<Reservation> reservations = new List<Reservation>();
+                    while (!reader.EndOfStream)
+                    {
+                        var line = reader.ReadLine();
+                        string[] values = line.Split(";");
+                        List<string> tables = values[2].Split(",").ToList();
+                        List<int> tablesInt = new();
+                        for (int i = 0; i < tables.Count; i++)
+                        {
+                            if (int.TryParse(tables[i], out int tableInt))
+                            {
+                                tablesInt.Add(tableInt);
+                            }
+                        }
+
+                        int NumPers = 0;
+                        if (int.TryParse(values[4], out int PersInt))
+                        {
+                            NumPers = PersInt;
+                        }
+
+                        reservations.Add(new Reservation(values[0], values[1], tablesInt, values[3], NumPers, values[5]));
+                    }
+                    return reservations;
+                }
             }
-        }
-        catch (FileNotFoundException ex)
-        {
-            Console.WriteLine($"File not found {ex}");
-            return null;
-        }
+            catch (FileNotFoundException ex)
+            {
+                Console.WriteLine($"File not found {ex}");
+                return null;
+            }
         }
     }
-    public static void WriteToCSV(Account account, string filename)
+    public static void WriteToCSV(Account account)
     {
         try
         {
@@ -164,7 +186,7 @@ class CSV
             string folderPath = Path.Combine(Environment.CurrentDirectory, "Data_Sources");
 
             // File path within the folder
-            string filePath = Path.Combine(folderPath, filename);
+            string filePath = Path.Combine(folderPath, "account_data.csv");
 
             // Check if the file already exists, if not create a new file and write headers
             if (!File.Exists(filePath))
@@ -184,7 +206,7 @@ class CSV
             string folderPath = Path.Combine("..", "..", "..", "Data_Sources");
 
             // File path within the folder
-            string filePath = Path.Combine(folderPath, filename);
+            string filePath = Path.Combine(folderPath, "account_data.csv");
 
             // Check if the file already exists, if not create a new file and write headers
             if (!File.Exists(filePath))
