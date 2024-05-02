@@ -4,72 +4,35 @@ class Main_Menu
     {
         while (true)
         {
-            Account.CheckAdmin();
+            Log_in.CheckAdmin();
             Console.WriteLine("Welcome to Restaurant Booking System!");
             Console.WriteLine("1. Make Account / Login");
             Console.WriteLine("2. View Menu");
-            // Console.WriteLine("3. Make Reservation");
-            // Console.WriteLine("4. View Past Reservations");
-            Console.WriteLine("5. About Restaurant");
-            Console.WriteLine("6. Admin Options");
+            Console.WriteLine("3. About Restaurant");
+            Console.WriteLine("4. Quit");
             Console.WriteLine("Enter your choice:");
             int choice = 0;
-            try {choice = int.Parse(Console.ReadLine());}
+            try {choice = int.Parse(Console.ReadLine()); if(choice == 4){break;}}
             catch {Console.WriteLine("Invalid entry");}
 
             switch (choice)
             {
                 case 1:
-                    Console.WriteLine(Account.Option());
+                    //Console.WriteLine(Log_in.Option());
+                    DisplayCorrectMenu.DisplayMenu(Log_in.Option());
                     break;
                 case 2:
                     Console.WriteLine("Menu");
-                    DisplayMenu();
+                    MenuManager.ViewMenu();
                     break;
                 case 3:
-                    Console.WriteLine("Reservation");
-                    // restaurantSystem.MakeReservation();
-                    break;
-                case 4:
-                    Console.WriteLine("Past reservations");
-                    // restaurantSystem.ViewPastReservations();
-                    break;
-                case 5:
                     Console.WriteLine("About restaurant");
                     PrintAboutText();
-                    break;
-                case 6:
-                    Console.WriteLine("Admin account");
-                    // restaurantSystem.AdminOptions();
-                    Admin_Menu.AdminMenu();
                     break;
                 default:
                     Console.WriteLine("Invalid choice. Please try again.");
                     break;
             }
-        }
-    }
-    public static void DisplayMenu()
-    {
-        // Read menu items from JSON
-        List<MenuItem> menuItems = JSON.ReadJSON();
-
-        // Print menu items
-        foreach (var item in menuItems)
-        {
-            Console.WriteLine($"{item.Name}");
-            Console.WriteLine("Ingredients: ");
-            foreach (var ingredient in item.Ingredients)
-            {
-                Console.WriteLine($"- {ingredient}");
-            }
-            Console.WriteLine($"Price: ${item.Price}");
-            Console.WriteLine("Dietary Info: ");
-            foreach (var info in item.DietaryInfo)
-            {
-                Console.WriteLine($"- {info}");
-            }
-            Console.WriteLine();
         }
     }
 
