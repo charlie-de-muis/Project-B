@@ -24,6 +24,7 @@ public class Add_Item
                 {
                     Console.WriteLine("Enter the name of the menu item:");
                     Name = Console.ReadLine();
+                    Program.ConsoleClear();
                     Check++;
                 } while (Check < 1);
 
@@ -31,16 +32,18 @@ public class Add_Item
                 {
                     Console.WriteLine("Enter the all the ingredients seperated by a comma:");
                     Ingredients = Console.ReadLine().Split(",").ToList();
+                    Program.ConsoleClear();
                     Check++;
                 } while (Check < 2);
 
                 do
                 {
                     Console.WriteLine("Enter the price of the menu item:");
-                    Price = Convert.ToDouble(Console.ReadLine().Replace(".",","));
-                    Check++;
+                    try { Price = Convert.ToDouble(Console.ReadLine().Replace(".",",")); Check++; }
+                    catch { Program.ConsoleClear(); Console.WriteLine("Invalid entry..."); }
                 } while (Check < 3);
 
+                Program.ConsoleClear();
                 Console.WriteLine(@"Enter the dietary information. Please seperate them by a comma.
 If the dish doesn't fit these options, enter x.
 These are all the options:
@@ -50,7 +53,8 @@ These are all the options:
 - dairy free");
 
                 string Diet = Console.ReadLine();
-                if (Diet == "x"){DietaryInfo = new(){"No dietary restrictions."};}
+                Program.ConsoleClear();
+                if (Diet.ToLower() == "x"){DietaryInfo = new(){"No dietary restrictions."};}
                 else {DietaryInfo = Diet.Split(",").ToList();}
                 Check ++;
 
@@ -58,8 +62,11 @@ These are all the options:
 
             Menu.Add(new MenuItem(Name, Ingredients, Price, DietaryInfo));
 
+            Program.ConsoleClear();
             Console.WriteLine("Do you want to add more items? Please type yes or no");
             string Answer = Console.ReadLine().ToLower();
+
+            Program.ConsoleClear();
             if (Answer == "yes"){MoreItems = "yes";}
             else if (Answer == "no"){MoreItems = "no";}
             else {Console.WriteLine("Invalid answer.");}

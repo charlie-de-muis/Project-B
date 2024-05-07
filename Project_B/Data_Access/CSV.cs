@@ -90,7 +90,7 @@ class CSV
                 if (!File.Exists(filePath))
                 {
                     // Write headers
-                    File.WriteAllText(filePath, "Date;Timeslot;Table;Name;Amount of persons;Reservationcode\n");
+                    File.WriteAllText(filePath, "Date;Timeslot;Table;Name;Email;Amount of persons;Reservationcode\n");
                 }
 
                 using(var reader = new StreamReader(filePath))
@@ -99,6 +99,8 @@ class CSV
                     while (!reader.EndOfStream)
                     {
                         var line = reader.ReadLine();
+                        if (line == "Date;Timeslot;Table;Name;Email;Amount of persons;Reservationcode") { continue; }
+
                         string[] values = line.Split(";");
                         List<string> tables = values[2].Split(",").ToList();
                         List<int> tablesInt = new();
@@ -111,12 +113,12 @@ class CSV
                         }
 
                         int NumPers = 0;
-                        if (int.TryParse(values[4], out int PersInt))
+                        if (int.TryParse(values[5], out int PersInt))
                         {
                             NumPers = PersInt;
                         }
 
-                        reservations.Add(new Reservation(values[0], values[1], tablesInt, values[3], NumPers, values[5]));
+                        reservations.Add(new Reservation(values[0], values[1], tablesInt, values[3], values[4], NumPers, values[6], values[7]));
                     }
                     return reservations;
                 }
@@ -140,7 +142,7 @@ class CSV
                 if (!File.Exists(filePath))
                 {
                     // Write headers
-                    File.WriteAllText(filePath, "Date;Timeslot;Table;Name;Amount of persons;Reservationcode\n");
+                    File.WriteAllText(filePath, "Date;Timeslot;Table;Name;Email;Amount of persons;Reservationcode\n");
                 }
 
                 using(var reader = new StreamReader(filePath))
@@ -149,6 +151,8 @@ class CSV
                     while (!reader.EndOfStream)
                     {
                         var line = reader.ReadLine();
+                        if (line == "Date;Timeslot;Table;Name;Email;Amount of persons;Reservationcode") { continue; }
+
                         string[] values = line.Split(";");
                         List<string> tables = values[2].Split(",").ToList();
                         List<int> tablesInt = new();
@@ -161,12 +165,12 @@ class CSV
                         }
 
                         int NumPers = 0;
-                        if (int.TryParse(values[4], out int PersInt))
+                        if (int.TryParse(values[5], out int PersInt))
                         {
                             NumPers = PersInt;
                         }
 
-                        reservations.Add(new Reservation(values[0], values[1], tablesInt, values[3], NumPers, values[5]));
+                        reservations.Add(new Reservation(values[0], values[1], tablesInt, values[3], values[4], NumPers, values[6], values[7]));
                     }
                     return reservations;
                 }
@@ -236,11 +240,11 @@ class CSV
             if (!File.Exists(filePath))
             {
                 // Write headers
-                File.WriteAllText(filePath, "Date;Timeslot;Table;Name;Amount of persons;Reservationcode\n");
+                File.WriteAllText(filePath, "Date;Timeslot;Table;Name;Email;Amount of persons;Reservationcode;Date of booking\n");
             }
 
             // Write new data to the CSV file
-            string userDataString = $"{reservation.Date};{reservation.TimeSlot};{reservation.Table};{reservation.CustomerName};{reservation.AmountofPersons};{reservation.ReservationCode}\n";
+            string userDataString = $"{reservation.Date};{reservation.TimeSlot};" + string.Join(",", reservation.Table) + $";{reservation.CustomerName};{reservation.CustomerEmail};{reservation.AmountofPersons};{reservation.ReservationCode};{reservation.DateOfBooking}\n";
 
             File.AppendAllText(filePath, userDataString);
         }
@@ -256,11 +260,11 @@ class CSV
             if (!File.Exists(filePath))
             {
                 // Write headers
-                File.WriteAllText(filePath, "Date;Timeslot;Table;Name;Amount of persons;Reservationcode\n");
+                File.WriteAllText(filePath, "Date;Timeslot;Table;Name;Email;Amount of persons;Reservationcode;Date of booking\n");
             }
 
             // Write new data to the CSV file
-            string userDataString = $"{reservation.Date};{reservation.TimeSlot};{reservation.Table};{reservation.CustomerName};{reservation.AmountofPersons};{reservation.ReservationCode}\n";
+            string userDataString = $"{reservation.Date};{reservation.TimeSlot};" + string.Join(",", reservation.Table) + $";{reservation.CustomerName};{reservation.CustomerEmail};{reservation.AmountofPersons};{reservation.ReservationCode};{reservation.DateOfBooking}\n";
 
             File.AppendAllText(filePath, userDataString);
         }

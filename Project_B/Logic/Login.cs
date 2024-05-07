@@ -12,11 +12,13 @@ public class Log_in
                 int attemptsleft = 3;
                 bool NextStep = false;
 
+                Program.ConsoleClear();
                 while (NextStep == false && attemptsleft > 0)
                 {
                     Console.WriteLine("Enter username:");
                     string username = Console.ReadLine();
-                    Console.WriteLine($"Enter password ({attemptsleft} attempts remaining):");
+
+                    Console.WriteLine($"\nEnter password ({attemptsleft} attempts remaining):");
                     string password = Console.ReadLine();
 
                     attemptsleft--;
@@ -32,28 +34,36 @@ public class Log_in
                             return new Customer(loggedInAccount.UserName, loggedInAccount.PassWord, loggedInAccount.Email);
                         }
                     }
-                    else {Console.WriteLine("Wrong username and/or password\n");}
+                    else {Program.ConsoleClear(); Console.WriteLine("Wrong username and/or password\n");}
                 }
 
                 return null;
             }
             else if (choice == "create account")
             {
+                Program.ConsoleClear();
                 Console.WriteLine("Enter an e-mail:");
                 string email = Console.ReadLine();
-                if (!email.Contains("@")){return "Invalid email";}
-                Console.WriteLine("Enter a username:");
+                if (!email.Contains("@")){Console.WriteLine("Invalid email"); return null;}
+
+                Console.WriteLine("\nEnter a username:");
                 string username = Console.ReadLine();
-                Console.WriteLine("Enter a password:");
+
+                Console.WriteLine("\nEnter a password:");
                 string password = Console.ReadLine();
-                if (Customer.MakeAccount(username, password, email)) {return "account created\n";}
+
+                Program.ConsoleClear();
+                if (Customer.MakeAccount(username, password, email)) {return new Customer(username, password, email);}
+                else {Console.WriteLine("Press enter to continue..."); Console.ReadLine();}
             }
             else 
             {
-                return "Wrong Input (login/create account)\n";
+                Program.ConsoleClear();
+                Console.WriteLine("Wrong Input (login/create account)\nPress enter to continue..."); Console.ReadLine(); Program.ConsoleClear(); return null;
             };
         }
-        return "unknown error in option method\n";
+        Program.ConsoleClear();
+        Console.WriteLine("unknown error in option method\nPress enter to continue..."); Console.ReadLine(); Program.ConsoleClear(); return null;
     }
 
     // private static Account GetAccountByUsername(string username)

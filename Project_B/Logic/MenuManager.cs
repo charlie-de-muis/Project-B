@@ -64,7 +64,9 @@ public class MenuManager
         
         if (filteredItems.Count == 0)
         {
+            Program.ConsoleClear();
             Console.WriteLine("No items match the filter input.");
+            Console.WriteLine("Press enter to continue..."); Console.ReadLine(); Program.ConsoleClear();
         }
 
         return filteredItems;
@@ -77,29 +79,40 @@ public class MenuManager
 
         if (filterSortChoice.ToLower() == "yes")
         {
+            Program.ConsoleClear();
             Console.WriteLine("\nWould you like to filter based on ingredients or diet, or would you like to sort based on price? (filter/sort)");
             string filterSortInput = Console.ReadLine();
 
             if (filterSortInput.ToLower() == "filter")
             {
                 // Prompt user for filter input
+                Program.ConsoleClear();
                 Console.WriteLine("Enter an ingredient or dietary restriction to filter the menu:");
                 string filterInput = Console.ReadLine();
+                
+                Program.ConsoleClear();
                 DisplayFilteredMenu(filterInput);
+                Console.WriteLine("Press enter to continue..."); Console.ReadLine(); Program.ConsoleClear();
             }
             else if (filterSortInput.ToLower() == "sort")
             {
                 // Sort and display the menu
+                Program.ConsoleClear();
                 DisplaySortedMenu();
+                Console.WriteLine("Press enter to continue..."); Console.ReadLine(); Program.ConsoleClear();
             }
             else
             {
+                Program.ConsoleClear();
                 Console.WriteLine("Invalid input. Please enter 'filter' or 'sort'.");
+                Console.WriteLine("Press enter to continue..."); Console.ReadLine(); Program.ConsoleClear();
             }
         }
         else
         {
+            Program.ConsoleClear();
             DisplayMenu();
+            Console.WriteLine("Press enter to continue..."); Console.ReadLine(); Program.ConsoleClear();
         }
     }
 }

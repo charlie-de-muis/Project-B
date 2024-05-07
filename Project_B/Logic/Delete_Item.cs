@@ -10,12 +10,15 @@ public class Delete_Item
 
             Console.WriteLine("\nWhich item do you want to delete? Or type cancel.");
             string choice = Console.ReadLine();
+            Program.ConsoleClear();
+            Console.SetBufferSize(Console.WindowWidth, 100);
 
             if (choice.ToLower() == "cancel") {return;}
             
-            if (!int.TryParse(choice, out int index) || index < 1 || index > menuItems.Count)
+            if (!int.TryParse(choice, out int index))
             {
-                Console.WriteLine("Invalid entry. Please enter an item index or type 'cancel'.");
+                Console.WriteLine("Invalid entry. Please enter a correct item index.\nPress enter to continue...");
+                Console.ReadLine(); Program.ConsoleClear(); Console.SetBufferSize(Console.WindowWidth, 100);
                 continue;
             }
             
@@ -29,9 +32,13 @@ public class Delete_Item
         {
             menuItems.Remove(menuItems[index - 1]);
             JSON.DeletedItemsWriteJSON(menuItems);
-            Console.WriteLine("Item Removed\n");
             return menuItems;
         }
-        catch (ArgumentOutOfRangeException) {Console.WriteLine($"Item number {index} not found\n"); return menuItems; }
+        catch (ArgumentOutOfRangeException)
+        {
+            Console.WriteLine($"Item number {index} not found");
+            Console.WriteLine("Press enter to continue..."); Console.ReadLine(); Program.ConsoleClear(); Console.SetBufferSize(Console.WindowWidth, 100);
+            return menuItems;
+        }
     }
 }

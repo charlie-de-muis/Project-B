@@ -17,9 +17,9 @@ public class Customer : Account
                 break;
             }
         }
-        if (EmailExists(email))
+        if (EmailandNameExists(email, username))
         {
-            Console.WriteLine($"Creating account failed. Email {email} already exists.");
+            Console.WriteLine($"Creating account failed. Email {email} and / or Name {username} already exists.");
             return false;
         }
         if (test_chars == true)
@@ -31,12 +31,12 @@ public class Customer : Account
         return false;
     }
 
-    private static bool EmailExists(string email)
+    private static bool EmailandNameExists(string email, string userName)
     {
         List<Account> accounts = CSV.ReadFromCSV();
         if (accounts != null)
         {
-            return accounts.Any(acc => acc.Email == email);
+            return accounts.Any(acc => acc.Email == email || acc.UserName == userName);
         }
         return false;
     }

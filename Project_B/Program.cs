@@ -4,4 +4,9 @@
     {
         Main_Menu.MainMenu();
     }
+
+    public static void ConsoleClear()
+    {
+        Console.Clear();
+    }
 }

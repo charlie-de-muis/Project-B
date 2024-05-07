@@ -15,24 +15,34 @@ static class ReservationSystem
 
         while (true)
         {
-            Console.WriteLine("1. Display the tables");
-            Console.WriteLine("2. Make a reservation");
-            Console.WriteLine("3. Return to customer menu");
+            Console.WriteLine("╔═══════════════════════════════════════╗");
+            Console.WriteLine("║ Want to make a reservation?           ║");
+            Console.WriteLine("╠═══════════════════════════════════════╣");
+            Console.WriteLine("║ 1. Display The Tables                 ║");
+            Console.WriteLine("║ 2. Make A Reservation                 ║");
+            Console.WriteLine("║ 3. Return To The Main Menu            ║");
+            Console.WriteLine("║                                       ║");
+            Console.WriteLine("║ Enter your choice.                    ║");
+            Console.WriteLine("╚═══════════════════════════════════════╝");
 
-            int choice = 0;
-            try { choice = int.Parse(Console.ReadLine()); }
-            catch { Console.WriteLine("Invalid entry"); }
+            int choice;
+            try { choice = int.Parse(Console.ReadLine()); Program.ConsoleClear(); }
+            catch
+            {
+                Program.ConsoleClear();
+                Console.WriteLine("Invalid choice. Press enter to continue...");
+                Console.ReadLine(); Program.ConsoleClear();
+                continue;
+            }
 
             switch (choice)
             {
-                case 1:
+                case 1: 
                     Table.DisplayTables();
-                    break;
-                case 2:
-                    MakeReservation();
-                    break;
-                case 3:
-                    return;
+                    Console.WriteLine("\nPress enter to continue...");
+                    Console.ReadLine(); Program.ConsoleClear(); continue;
+                case 2: MakeReservation(); continue;
+                case 3: return;
             }
         }
     }
@@ -69,6 +79,7 @@ static class ReservationSystem
             Console.WriteLine($"14. {DateTime.Now.AddDays(14):dd-MM-yyyy}");
 
             string entry = Console.ReadLine().Replace(" ", "");
+            Program.ConsoleClear();
             List<string> availableDates = new List<string>() { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14" };
             if (availableDates.Contains(entry)) { DateSelect = DateTime.Now.AddDays(int.Parse(entry)).ToString("dd-MM-yyyy"); }
             else if (entry == "cancel") { return; }
@@ -107,6 +118,7 @@ static class ReservationSystem
             Console.WriteLine("Type 'select date' to reserve on a different date.");
             Console.WriteLine("Or type 'cancel' to cancel the reservation.");
             TimeSlot = Console.ReadLine().ToLower();
+            Program.ConsoleClear();
             if (TimeSlot == "brunch" ||
                 TimeSlot == "lunch" ||
                 TimeSlot == "afternoon" ||
@@ -129,6 +141,7 @@ static class ReservationSystem
             Console.WriteLine("Type 'select date' to reserve on a different date.");
             Console.WriteLine("Or type 'cancel' to cancel the reservation.");
             string choice = Console.ReadLine().ToLower();
+            Program.ConsoleClear();
             if (choice == "cancel" || choice == "select date") { return choice; }
             else
             {
@@ -137,7 +150,11 @@ static class ReservationSystem
                 {
                     Console.WriteLine("Invalid entry, for how many people do you order? (1 - 16)");
                 }
-                else if (totalPersons < 1 || totalPersons > 16 ) { Console.WriteLine($"{totalPersons} is not within this range (1 - 16)"); }
+                else if (totalPersons < 1 || totalPersons > 16 )
+                {
+                    Console.WriteLine($"{totalPersons} is not within this range (1 - 16)");
+                    Console.WriteLine("For how many people do you order?");
+                }
                 else { AmountofPersons = totalPersons; return choice; }
             }
         }
@@ -169,7 +186,7 @@ static class ReservationSystem
             else
             {
                 Console.WriteLine($"Sorry, {TimeSlot} is fully booked on this date, please select a different timeslot or date.");
-                Console.WriteLine("Press enter to continue."); Console.ReadLine(); return "no tables";
+                Console.WriteLine("Press enter to continue."); Console.ReadLine(); Program.ConsoleClear(); return "no tables";
             }
 
             Console.WriteLine("\nSelect a single table by its number.");
@@ -178,6 +195,7 @@ static class ReservationSystem
             Console.WriteLine("Or type 'cancel' to cancel the reservation.");
 
             string entryTables = Console.ReadLine();
+            Program.ConsoleClear();
             if (entryTables == "cancel" || entryTables == "select date") { return entryTables; }
 
             List<string> entries = entryTables.Split(',').ToList();
@@ -185,7 +203,7 @@ static class ReservationSystem
             foreach (string number in entries) { TableChoicesSTR.Add(number.Replace(" ", "")); }
 
             List<string> tableNumbers = new List<string>() { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15" };
-            foreach (string number in TableChoicesSTR) { if (!tableNumbers.Contains(number)) { Console.WriteLine("Invalid entry."); count = false; break; } }
+            foreach (string number in TableChoicesSTR) { if (!tableNumbers.Contains(number)) { Console.WriteLine("Invalid entry, please try again."); count = false; break; } }
 
             //If the arguments given match, it will pass on to the next code below.
             if (count)
@@ -206,8 +224,7 @@ static class ReservationSystem
                     else
                     {
                         Console.WriteLine($"You have selected table {TableChoices[0]}\n");
-                        Console.WriteLine("Press enter to continue...");
-                        Console.ReadLine();
+                        Console.WriteLine("Press enter to continue..."); Console.ReadLine();
                         return entryTables;
                     }
                 }
@@ -238,8 +255,7 @@ static class ReservationSystem
                         else
                         {
                             Console.WriteLine($"You have selected/merged tables '{tablesMerge}' for reservation.\n");
-                            Console.WriteLine("Press enter to continue...");
-                            Console.ReadLine();
+                            Console.WriteLine("Press enter to continue..."); Console.ReadLine();
                             return entryTables;
                         }
                     }
@@ -253,13 +269,14 @@ static class ReservationSystem
         string TableChoicesSTR = string.Join(", ", TableChoices);
         List<int> stringLengths = new List<int>() { TimeSlot.Length, TableChoicesSTR.Length };
         int spacing = Math.Max(10, stringLengths.Max());
-        int width = 29;
+        int width = 28;
 
         if (spacing > 10) { width -= spacing - 10; }
 
         //Final menu which displays their selections and what they can change, or they confirm of course.
         while (true)
         {
+            Program.ConsoleClear();
             Console.WriteLine("This is what you have selected:");
             Console.WriteLine();
             Console.WriteLine("{0, -" + width + "} {1}", "Booking Date:", DateSelect.PadLeft(spacing));
@@ -276,9 +293,9 @@ static class ReservationSystem
             Console.WriteLine("3. Select a different timeslot (You will be making a new reservation)");
             Console.WriteLine("4. Cancel Reservation");
 
-            string entry = Console.ReadLine().Replace(" ", "");
+            string entry = Console.ReadLine().Replace(" ", ""); Program.ConsoleClear();
 
-            if (entry == "1") { Console.WriteLine("Reservation Confirmed.\n"); break; }
+            if (entry == "1") { Console.WriteLine("Reservation Confirmed.\nPress enter to continue..."); Console.ReadLine(); Program.ConsoleClear(); break; }
             else if (entry == "2") { return "select date"; }
             else if (entry == "3") { return "select timeslot"; }
             else if (entry == "4") { return "main menu"; }
@@ -287,7 +304,7 @@ static class ReservationSystem
 
         //If the customer confirms reservation, the reservation is saved and a receipt will be printed.
         string ReservationCode = GenerateReservationCode(reservations);
-        Reservation reservation = new Reservation(DateSelect, TimeSlot, TableChoices, Customer.UserName, AmountofPersons, ReservationCode);
+        Reservation reservation = new Reservation(DateSelect, TimeSlot, TableChoices, Customer.UserName, Customer.Email, AmountofPersons, ReservationCode, DateTime.Now.ToString("dd-MM-yyyy"));
         CSV.WriteToCSVReservations(reservation, "Reservation.csv");
 
         Reservation.PrintReceipt(width, spacing, DateSelect, TimeSlot, AmountofPersons.ToString(), TableChoicesSTR, ReservationCode, DateTime.Now.ToString("dd-MM-yyyy"));
@@ -296,7 +313,7 @@ static class ReservationSystem
         Console.WriteLine("");
         Console.WriteLine("You can also find this receipt through the main menu.");
         Console.WriteLine("Press enter to continue...");
-        Console.ReadLine();
+        Console.ReadLine(); Program.ConsoleClear();
 
         return "main menu";
     }

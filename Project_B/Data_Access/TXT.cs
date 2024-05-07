@@ -57,7 +57,7 @@ public static class TXT
                 string text = Console.ReadLine();
                 using (StreamWriter writer = File.AppendText(filePath))
                 {
-                    writer.WriteLine($"{text}\n");
+                    writer.WriteLine(text);
                 }
             }
         }
