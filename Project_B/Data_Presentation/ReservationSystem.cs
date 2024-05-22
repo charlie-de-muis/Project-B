@@ -357,4 +357,22 @@ static class ReservationSystem
         }
         catch (Exception e) { return false; }
     }
+
+    public static void ViewReservations()
+    {
+        List<Reservation> file = CSV.ReadFromCSVReservations("Reservation.csv");
+        foreach (Reservation r in file)
+        {
+            if (r.Date == "Date"){continue;}
+            Console.WriteLine(@$"Date: {r.Date}
+Timeslot: {r.TimeSlot}
+Table(s): {string.Join(",", r.Table)}
+Customer name: {r.CustomerName}
+Customer email:{r.CustomerEmail}
+Amount of persons:{r.AmountofPersons}
+Reservation code: {r.ReservationCode}
+Booking date: {r.DateOfBooking}
+");
+        }
+    }
 }

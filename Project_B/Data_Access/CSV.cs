@@ -269,4 +269,59 @@ class CSV
             File.AppendAllText(filePath, userDataString);
         }
     }
+
+    public static void Update_CSV_Reservations(Reservation reservation)
+    {
+        // replacing the old reservation
+        List<Reservation> old_reservations = ReadFromCSVReservations("Reservation.csv");
+
+        for (int i = 0; i < old_reservations.Count; i++)
+        {
+            if (old_reservations[i].ReservationCode == reservation.ReservationCode && old_reservations[i].DateOfBooking == reservation.DateOfBooking)
+            {
+                old_reservations[i] = reservation;
+            }
+        }
+
+
+        // loading the file
+        string folderPath;
+        string filePath;
+
+        try
+        {
+            folderPath = Path.Combine(Environment.CurrentDirectory, "Data_Sources");
+            filePath = Path.Combine(folderPath, "Reservation.csv");
+
+            // Check if the file already exists, if not create a new file and write headers
+            if (!File.Exists(filePath))
+            {
+                // Write headers
+                File.WriteAllText(filePath, "Date;Timeslot;Table;Name;Email;Amount of persons;Reservationcode;Date of booking\n");
+            }
+        }
+        catch
+        {
+            folderPath = Path.Combine("..", "..", "..", "Data_Sources");
+            filePath = Path.Combine(folderPath, "Reservation.csv");
+
+            // Check if the file already exists, if not create a new file and write headers
+            if (!File.Exists(filePath))
+            {
+                // Write headers
+                File.WriteAllText(filePath, "Date;Timeslot;Table;Name;Email;Amount of persons;Reservationcode;Date of booking\n");
+            }
+        }
+
+        // clearing the file
+        File.WriteAllText(filePath, string.Empty);
+
+
+        // Write new data to the CSV file
+        foreach (Reservation r in old_reservations)
+        {
+            string userDataString = $"{r.Date};{r.TimeSlot};" + string.Join(",", r.Table) + $";{r.CustomerName};{r.CustomerEmail};{r.AmountofPersons};{r.ReservationCode};{r.DateOfBooking}\n";
+            File.AppendAllText(filePath, userDataString);
+        }
+    }
 }

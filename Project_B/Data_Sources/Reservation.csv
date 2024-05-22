@@ -1,1 +1,3 @@
-Date;Timeslot;Table;Name;Email;Amount of persons;Reservationcode;Date of booking
+Date;Timeslot;;Name;Email;0;Reservationcode;Date of booking
+31-05-2024;dinner;3;Tiffany;hi@hi.nl;2;phyAzEMq;22-05-2024
+31-05-2024;dinner;4,5;Tiffany;hi@hi.nl;4;OJ2JtiwP;22-05-2024

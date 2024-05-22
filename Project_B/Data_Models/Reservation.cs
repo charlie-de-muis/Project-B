@@ -18,7 +18,7 @@ public class Reservation
         this.CustomerEmail = email;
         this.AmountofPersons = amount;
         this.ReservationCode = code;
-        this.ReservationCode = dateofbooking;
+        this.DateOfBooking = dateofbooking;
     }
     public static void PrintReceipt(int width, int spacing, string DateSelect, string TimeSlot, string AmountofPersons, string TableChoicesSTR, string ReservationCode, string CurrentDate)
     {
@@ -40,5 +40,17 @@ public class Reservation
         Console.WriteLine("║                                       ║");
         Console.WriteLine("╚═══════════════════════════════════════╝");
         Console.WriteLine();
+    }
+
+    public void PrintThisReceipt()
+    {
+        string TableChoicesSTR = string.Join(", ", Table);
+        List<int> stringLengths = new List<int>() { TimeSlot.Length, TableChoicesSTR.Length };
+        int spacing = Math.Max(10, stringLengths.Max());
+        int width = 28;
+
+        if (spacing > 10) { width -= spacing - 10; }
+
+        PrintReceipt(width, spacing, Date, TimeSlot, Convert.ToString(AmountofPersons), TableChoicesSTR, ReservationCode, DateOfBooking);
     }
 }
