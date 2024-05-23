@@ -3,7 +3,6 @@ public class Table
     public int ID;
     public int TotalSeats;
     public bool IsAvailable;
-    //public List<Reservation> TableReservations = new List<Reservation>();
 
     public Table(int id, int totalSeats)
     {
@@ -32,19 +31,36 @@ public class Table
         IsAvailable = true;
     }
 
-    public static void DisplayTables()
+    public static void DisplayTables(List<Table> tables)
     {
-        Console.WriteLine(@"
-   _______      _______      _______      _______      _______
- 1.|__|__|    2.|__|__|    3.|__|__|    4.|__|__|    5.|__|__|
+        string[] layout = {
+            "   _______      _______      _______      _______      _______",
+            " 1.|__|__|    2.|__|__|    3.|__|__|    4.|__|__|    5.|__|__|",
+            "",
+            "   __________      _______      _______         ____      ____",
+            " 6.|__|__|__|    7.|__|__|    8.|__|__|       9.|__|   10.|__|",
+            "   |__|__|__|      |__|__|      |__|__|         |__|      |__|",
+            "",
+            "   __________      _______      _______      _______      ____",
+            "11.|__|__|__|   12.|__|__|   13.|__|__|   14.|__|__|   15.|__|",
+            "   |__|__|__|      |__|__|      |__|__|      |__|__|      |__|"
+        };
 
-   __________      _______      _______         ____      ____
- 6.|__|__|__|    7.|__|__|    8.|__|__|       9.|__|   10.|__|
-   |__|__|__|      |__|__|      |__|__|         |__|      |__|
+        for (int i = 0; i < layout.Length; i++)
+        {
+            foreach (var table in tables)
+            {
+                if (table.IsAvailable == false)
+                {
+                    string original = $"{table.ID}.|__|";
+                    string replacement = $"{table.ID}.|X|";
+                    layout[i] = layout[i].Replace(original, replacement);
+                }
+            }
+            Console.WriteLine(layout[i]);
+        }
 
-   __________      _______      _______      _______      ____
-11.|__|__|__|   12.|__|__|   13.|__|__|   14.|__|__|   15.|__|
-   |__|__|__|      |__|__|      |__|__|      |__|__|      |__|
-        ");
+        Console.WriteLine("Legend:");
+        Console.WriteLine("   X = Not Available\n");
     }
 }

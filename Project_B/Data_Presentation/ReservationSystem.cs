@@ -37,8 +37,9 @@ static class ReservationSystem
 
             switch (choice)
             {
-                case 1: 
-                    Table.DisplayTables();
+                case 1:
+                    List<Table> tables = Table.GetTableInfo(); 
+                    Table.DisplayTables(tables);
                     Console.WriteLine("\nPress enter to continue...");
                     Console.ReadLine(); Program.ConsoleClear(); continue;
                 case 2: MakeReservation(); continue;
@@ -180,7 +181,7 @@ static class ReservationSystem
 
             if (allAvailableTables.Count > 0)
             {
-                Table.DisplayTables();
+                Table.DisplayTables(tables);
                 Console.WriteLine("\nAvailable tables: " + string.Join(", ", allAvailableTables));
             }
             else
