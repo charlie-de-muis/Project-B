@@ -1,5 +1,9 @@
 public class MenuManager
 {
+
+    private static string folderPath = Path.Combine("..", "..", "..", "Data_Sources\\Menu_Storage");
+    private static string currentMenuFile = "CurrentMenu.txt";
+
     public static void DisplayMenu()
     {
         // Read menu items from JSON
@@ -15,7 +19,7 @@ public class MenuManager
         PrintMenu(filteredMenu);
     }
 
-        public static void DisplaySortedMenu()
+    public static void DisplaySortedMenu()
     {
         // Read menu items from JSON
         var menuItems = JSON.ReadJSON();
@@ -61,7 +65,7 @@ public class MenuManager
             item.Ingredients.Any(ingredient => ingredient.ToLower().Contains(filter)) ||
             item.DietaryInfo.Any(diet => diet.ToLower().Contains(filter)))
             .ToList();
-        
+
         if (filteredItems.Count == 0)
         {
             Program.ConsoleClear();
@@ -89,7 +93,7 @@ public class MenuManager
                 Program.ConsoleClear();
                 Console.WriteLine("Enter an ingredient or dietary restriction to filter the menu:");
                 string filterInput = Console.ReadLine();
-                
+
                 Program.ConsoleClear();
                 DisplayFilteredMenu(filterInput);
                 Console.WriteLine("Press enter to continue..."); Console.ReadLine(); Program.ConsoleClear();
@@ -113,6 +117,158 @@ public class MenuManager
             Program.ConsoleClear();
             DisplayMenu();
             Console.WriteLine("Press enter to continue..."); Console.ReadLine(); Program.ConsoleClear();
+        }
+    }
+
+    public static void ManageAllMenus()
+    {
+        if (!Directory.Exists(folderPath))
+        {
+            Directory.CreateDirectory(folderPath);
+        }
+
+        bool exit = false;
+
+        while (!exit)
+        {
+            Program.ConsoleClear();
+            Console.WriteLine("╔═══════════════════════════════════════╗");
+            Console.WriteLine("║ Menu Management System.               ║");
+            Console.WriteLine("╠═══════════════════════════════════════╣");
+            Console.WriteLine("║ 1. Upload Current Menu                ║");
+            Console.WriteLine("║ 2. Upload Future Menu                 ║");
+            Console.WriteLine("║ 3. Switch Between Menu's              ║");
+            Console.WriteLine("║ 4. View Past Menu's                   ║");
+            Console.WriteLine("║ 5. Delete Menu's                      ║");
+            Console.WriteLine("║ 6. Exit                               ║");
+            Console.WriteLine("║                                       ║");
+            Console.WriteLine("║ Enter your choice:                    ║");
+            Console.WriteLine("╚═══════════════════════════════════════╝");
+
+            string filterSortChoice = Console.ReadLine();
+
+            switch (filterSortChoice)
+            {
+                case "1":
+                    Program.ConsoleClear();
+                    UploadMenu("current");
+                    break;
+                case "2":
+                    Program.ConsoleClear();
+                    UploadMenu("future");
+                    break;
+                case "3":
+                    Program.ConsoleClear();
+                    SwitchMenu();
+                    break;
+                case "4":
+                    Program.ConsoleClear();
+                    ViewPastMenus();
+                    break;
+                case "5":
+                    Program.ConsoleClear();
+                    DeleteMenu();
+                    break;
+                case "6":
+                    Program.ConsoleClear();
+                    Console.WriteLine("Exiting...");
+                    exit = true;
+                    break;
+                default:
+                    Program.ConsoleClear();
+                    Console.WriteLine("Invalid choice, please try again.");
+                    break;
+            }
+        }
+    }
+
+    private static void UploadMenu(string menuType)
+    {
+        Console.WriteLine($"Uploading {menuType} Menu...");
+        Console.WriteLine("Please enter the name of the JSON file you uploaded:");
+        string fileName = Console.ReadLine();
+
+        if (!File.Exists(fileName))
+        {
+            Console.WriteLine("File not found. Please make sure the file name is correct and try again.");
+            return;
+        }
+
+        string newFileName = Path.Combine(folderPath, $"{menuType}_{DateTime.Now:yyyyMMdd}.json");
+
+        try
+        {
+            File.Copy(fileName, newFileName);
+            Console.WriteLine($"File uploaded successfully as {newFileName}.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An error occurred while uploading the file: {ex.Message}");
+        }
+    }
+
+    private static void SwitchMenu()
+    {
+        Console.WriteLine("Switching Between Menus...");
+        ViewPastMenus();
+
+        Console.WriteLine("Please enter the name of the menu file you want to set as current:");
+        string menuFileName = Console.ReadLine();
+        string fullPath = Path.Combine(folderPath, menuFileName);
+
+        if (File.Exists(fullPath))
+        {
+            File.WriteAllText(currentMenuFile, fullPath);
+            Console.WriteLine($"{menuFileName} is now the current menu.");
+        }
+        else
+        {
+            Console.WriteLine("Menu file not found. Please make sure the file name is correct and try again.");
+        }
+    }
+
+    private static void ViewPastMenus()
+    {
+        Console.WriteLine("Viewing Past Menus...");
+        List<string> files = Directory.GetFiles(folderPath, "*.json").Select(Path.GetFileNameWithoutExtension).ToList();
+
+        if (files.Count == 0)
+        {
+            Console.WriteLine("No menus found.");
+        }
+        else
+        {
+            foreach (var file in files)
+            {
+                Console.WriteLine(Path.GetFileName(file));
+            }
+        }
+    }
+
+    private static void DeleteMenu()
+    {
+        Console.WriteLine("Deleting Menus...");
+        ViewPastMenus();
+
+        Console.WriteLine("Please enter the name of the menu file you want to delete:");
+        string menuFileName = Console.ReadLine();
+        string fullPath = Path.Combine(folderPath, menuFileName);
+
+        if (File.Exists(fullPath))
+        {
+            try
+            {
+                File.Delete(fullPath);
+                Console.WriteLine($"{menuFileName} deleted successfully.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred while deleting the file: {ex.Message}");
+            }
+        }
+        else
+        {
+            Console.WriteLine("Menu file not found. Please make sure the file name is correct and try again.");
         }
     }
 }
