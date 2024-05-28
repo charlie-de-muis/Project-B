@@ -34,7 +34,7 @@ public class MenuManager
         {
             var item = menuItems[i];
             // Display the index number and name of the menu item
-            Console.WriteLine($"{i + 1}. {item.Name}");
+            Console.WriteLine($"{item.ID}. {item.Name}");
             // Display the list of ingredients for the menu item
             Console.WriteLine("Ingredients: ");
             foreach (var ingredient in item.Ingredients)
@@ -114,5 +114,122 @@ public class MenuManager
             DisplayMenu();
             Console.WriteLine("Press enter to continue..."); Console.ReadLine(); Program.ConsoleClear();
         }
+    }
+
+    public static void ManageAllMenus()
+    {
+        bool exit = false;
+
+        while (!exit)
+        {
+            Program.ConsoleClear();
+            Console.WriteLine("╔═══════════════════════════════════════╗");
+            Console.WriteLine("║ Menu Management System.               ║");
+            Console.WriteLine("╠═══════════════════════════════════════╣");
+            Console.WriteLine("║ 1. Upload Current Menu                ║");
+            Console.WriteLine("║ 2. Upload Future Menu                 ║");
+            Console.WriteLine("║ 3. Switch Between Menu's              ║");
+            Console.WriteLine("║ 4. View Past Menu's                   ║");
+            Console.WriteLine("║ 5. Delete Menu's                      ║");
+            Console.WriteLine("║ 6. Exit                               ║");
+            Console.WriteLine("║                                       ║");
+            Console.WriteLine("║ Enter your choice:                    ║");
+            Console.WriteLine("╚═══════════════════════════════════════╝");
+
+            string filterSortChoice = Console.ReadLine();
+
+            switch (filterSortChoice)
+            {
+                case "1":
+                    Program.ConsoleClear();
+                    UploadMenu("current");
+                    break;
+                case "2":
+                    Program.ConsoleClear();
+                    UploadMenu("future");
+                    break;
+                case "3":
+                    Program.ConsoleClear();
+                    SwitchMenu();
+                    break;
+                case "4":
+                    Program.ConsoleClear();
+                    ViewPastMenus();
+                    Console.WriteLine("\nPress any key to return..."); Console.ReadKey();
+                    break;
+                case "5":
+                    Program.ConsoleClear();
+                    DeleteMenu();
+                    break;
+                case "6":
+                    Program.ConsoleClear();
+                    Console.WriteLine("Exiting...");
+                    exit = true;
+                    break;
+                default:
+                    Program.ConsoleClear();
+                    Console.WriteLine("Invalid choice, please try again.");
+                    break;
+            }
+        }
+    }
+
+    private static void UploadMenu(string menuType)
+    {
+        Console.WriteLine($"Uploading {menuType} Menu...");
+        Console.WriteLine("Please enter the name of the JSON file you uploaded:");
+        string fileName = Console.ReadLine();
+
+        JSON.SetMenuAs(menuType, fileName);
+    }
+
+    private static void SwitchMenu()
+    {
+        Console.WriteLine("Switching Between Menus...");
+        ViewPastMenus();
+
+        Console.WriteLine("Please enter the name of the menu file you want to set as current:");
+        string menuFileName = Console.ReadLine();
+        Console.WriteLine("\nPlease enter current or future of which you want to set it to:");
+        string menuType = Console.ReadLine().ToLower();
+        
+        if (menuType == "current" || menuType == "future")
+        {
+            JSON.SwitchMenu(menuFileName, menuType);
+        }
+        else
+        {
+            Console.WriteLine("Invalid menu type, set the menu type to current or future");
+            Console.WriteLine("Press any key to continue..."); Console.ReadKey();
+        }
+    }
+
+    private static void ViewPastMenus()
+    {
+        Console.WriteLine("Viewing Past Menus...");
+        List<string> files = JSON.ReadMenusJSON();
+
+        if (files.Count == 0)
+        {
+            Console.WriteLine("No menus found.");
+        }
+        else
+        {
+            foreach (var file in files)
+            {
+                Console.WriteLine(Path.GetFileName(file));
+            }
+        }
+    }
+
+    private static void DeleteMenu()
+    {
+        Console.WriteLine("Deleting Menus...");
+        ViewPastMenus();
+
+        Console.WriteLine("\nPlease enter the name of the menu file you want to delete:");
+        string menuFileName = Console.ReadLine();
+        
+        JSON.DeleteMenu(menuFileName);
     }
 }

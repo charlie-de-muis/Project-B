@@ -5,9 +5,7 @@ static class ReservationSystem
     private static int AmountofPersons;
     private static List<int> TableChoices;
     private static Account Customer;
-    //private static List<int> menuOrders; (all the orders chosen from the menu) (NEXT SPRINT)
-    private static string ReservationCode;
-    //More variables coming?
+    private static List<int> menuOrders;
 
     public static void ReservationMenu(Account account)
     {
@@ -95,11 +93,17 @@ static class ReservationSystem
                 string resultCustomerCount = SelectCustomerCount();
                 if (resultCustomerCount == "cancel") { return; }
                 if (resultCustomerCount == "select date") { break; }
+                if (resultCustomerCount == "select timeslot") { continue; }
 
                 string resultTables = SelectTables(reservations);
                 if (resultTables == "cancel") { return; }
                 if (resultTables == "select date") { break; }
                 if (resultTables == "no tables") { continue; }
+
+                string resultItems = SelectItems();
+                if (resultItems == "cancel") { return; }
+                if (resultItems == "select date") { break; }
+                if (resultItems == "select timeslot") { continue; }
 
                 string resultReceipt = PrintReceipt(reservations);
                 if (resultReceipt == "main menu") { return; }
@@ -138,11 +142,11 @@ static class ReservationSystem
         Console.WriteLine("For how many people do you order? (1 - 16)");
         while (true)
         {
-            Console.WriteLine("Type 'select date' to reserve on a different date.");
+            Console.WriteLine("Type 'select date' or 'select timeslot' to reserve on a different date or timeslot.");
             Console.WriteLine("Or type 'cancel' to cancel the reservation.");
             string choice = Console.ReadLine().ToLower();
             Program.ConsoleClear();
-            if (choice == "cancel" || choice == "select date") { return choice; }
+            if (choice == "cancel" || choice == "select date" || choice == "select timeslot") { return choice; }
             else
             {
                 bool result = int.TryParse(choice.Replace(" ", ""), out int totalPersons);
@@ -166,22 +170,18 @@ static class ReservationSystem
         //This code will check if the tables will be available depending on a chosen timeslot.
         //This code will check if the tables will have enough seats for the amount of people the customer has specified.
         List<Table> tables = Table.GetTableInfo();
-        List<int> allAvailableTables = new List<int>();
-        foreach (Table table in tables)
-        {
-            table.GetTableReservation(reservations, DateSelect, TimeSlot);
-            if (table.IsAvailable) { allAvailableTables.Add(table.ID); }
-        }
+
+        foreach (Table table in tables) { table.GetTableReservation(reservations, DateSelect, TimeSlot); }
+        bool anyAvailableTable = tables.Any(table => table.IsAvailable);
 
         while (true)
         {
             TableChoices = new List<int>();
             bool count = true;
 
-            if (allAvailableTables.Count > 0)
+            if (anyAvailableTable)
             {
                 Table.DisplayTables();
-                Console.WriteLine("\nAvailable tables: " + string.Join(", ", allAvailableTables));
             }
             else
             {
@@ -264,6 +264,78 @@ static class ReservationSystem
         }
     }
 
+    private static string SelectItems()
+    {
+        List<MenuItem> menuItems = JSON.ReadJSON("Menu_current");
+        if (!menuItems.Any())
+        {
+            Console.WriteLine("No menu or menu items available at the moment.\nPress any key to continue.");
+            Console.ReadKey();
+            return "select date";
+        }
+        List<int> itemListID = menuItems.Select(menuItems => menuItems.ID).ToList();
+
+        menuOrders = new List<int>();
+        int selectedItem = 0;
+        int selectByIndex = 0;
+
+        while (true)
+        {
+            if (selectedItem > menuOrders.Count - 1) { selectedItem = menuOrders.Count - 1; }
+            Program.ConsoleClear();
+            MenuManager.DisplayMenu();
+            Console.WriteLine();
+            Console.WriteLine($"Select the items you would like to order > {itemListID[selectByIndex]}");
+            Console.WriteLine();
+            Console.Write("Selections: ");
+            for (int i = 0; i < menuOrders.Count; i++)
+            {
+                if (i == selectedItem)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkBlue;
+                    Console.Write($"{menuOrders[i]} ");
+                    Console.ResetColor();
+                }
+                else
+                {
+                    Console.Write($"{menuOrders[i]} ");
+                }
+            }
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write("Esc.   ");
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.Write("d (select date).   ");
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.Write("t (select timeslot).   ");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write("c (confirm items).   ");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write("Enter (add item).");
+            Console.ResetColor();
+
+            ConsoleKeyInfo keyInfo = Console.ReadKey();
+
+            if (keyInfo.Key == ConsoleKey.Backspace) { if (menuOrders.Count > 0 && selectedItem >= 0) { menuOrders.RemoveAt(selectedItem); if (selectedItem > 0) { selectedItem--; } } }
+            else if (keyInfo.Key == ConsoleKey.Enter) { if (selectByIndex < itemListID.Count) { menuOrders.Add(itemListID[selectByIndex]); } }
+
+            else if (keyInfo.Key == ConsoleKey.UpArrow) { if (selectByIndex > 0) { selectByIndex--; } }
+            else if (keyInfo.Key == ConsoleKey.DownArrow) { if (selectByIndex < itemListID.Count - 1) { selectByIndex++; } }
+            else if (keyInfo.Key == ConsoleKey.LeftArrow) { if (selectedItem > 0) { selectedItem--; } }
+            else if (keyInfo.Key == ConsoleKey.RightArrow) { if (selectedItem < menuOrders.Count - 1) { selectedItem++; } }
+
+            else if (keyInfo.Key == ConsoleKey.Escape) { return "cancel"; }
+            else if (keyInfo.Key == ConsoleKey.D) { return "select date"; }
+            else if (keyInfo.Key == ConsoleKey.T) { return "select timeslot"; }
+            else if (keyInfo.Key == ConsoleKey.C && menuOrders.Count > 0) { break; }
+
+            else { continue; }
+        }
+
+        return "order completed";
+    }
+
     private static string PrintReceipt(List<Reservation> reservations)
     {
         string TableChoicesSTR = string.Join(", ", TableChoices);
@@ -272,6 +344,10 @@ static class ReservationSystem
         int width = 28;
 
         if (spacing > 10) { width -= spacing - 10; }
+
+        List<MenuItem> menuItems = JSON.ReadJSON("Menu_current");
+        Dictionary<int, int> orderCounts = menuOrders.GroupBy(id => id).ToDictionary(group => group.Key, group => group.Count());
+        ICollection<int> keys = orderCounts.Keys;
 
         //Final menu which displays their selections and what they can change, or they confirm of course.
         while (true)
@@ -284,9 +360,24 @@ static class ReservationSystem
             Console.WriteLine("{0, -" + width + "} {1}", "Total Customers:", AmountofPersons.ToString().PadLeft(spacing));
             Console.WriteLine("{0, -" + width + "} {1}", "Table Numbers:", TableChoicesSTR.PadLeft(spacing));
             Console.WriteLine();
+            Console.WriteLine("Current Orders:");
+            Console.WriteLine();
+            double totalPrice = 0;
+
+            foreach (int key in keys)
+            {
+                MenuItem item = menuItems.FirstOrDefault(menuItem => menuItem.ID == key);
+                int count = orderCounts[key];
+                double price = count * item.Price;
+                totalPrice += price;
+                Console.WriteLine("{0, -" + width + "} {1}", $"x{count} {item.Name}", $"{price}".PadLeft(spacing));
+            }
+            Console.WriteLine();
+            Console.WriteLine("{0, -" + width + "} {1}", "Total Price", $"{totalPrice}".PadLeft(spacing));
+            Console.WriteLine();
             Console.WriteLine("----------------------------------------");
             Console.WriteLine();
-            Console.WriteLine($"Current Options:");
+            Console.WriteLine("Current Options:");
             Console.WriteLine();
             Console.WriteLine("1. Confirm Reservation");
             Console.WriteLine("2. Select a different date (You will be making a new reservation)");
@@ -304,10 +395,10 @@ static class ReservationSystem
 
         //If the customer confirms reservation, the reservation is saved and a receipt will be printed.
         string ReservationCode = GenerateReservationCode(reservations);
-        Reservation reservation = new Reservation(DateSelect, TimeSlot, TableChoices, Customer.UserName, Customer.Email, AmountofPersons, ReservationCode, DateTime.Now.ToString("dd-MM-yyyy"));
+        Reservation reservation = new Reservation(DateSelect, TimeSlot, TableChoices, Customer.UserName, Customer.Email, AmountofPersons, orderCounts, ReservationCode, DateTime.Now.ToString("dd-MM-yyyy"));
         CSV.WriteToCSVReservations(reservation, "Reservation.csv");
 
-        Reservation.PrintReceipt(width, spacing, DateSelect, TimeSlot, AmountofPersons.ToString(), TableChoicesSTR, ReservationCode, DateTime.Now.ToString("dd-MM-yyyy"));
+        Reservation.PrintReceipt(width, spacing, DateSelect, TimeSlot, AmountofPersons.ToString(), TableChoicesSTR, orderCounts, ReservationCode, DateTime.Now.ToString("dd-MM-yyyy"));
         Console.WriteLine("Your receipt with reservation code has been printed.");
         Console.WriteLine("You will need this code once you arrive. See you soon!");
         Console.WriteLine("");
@@ -356,5 +447,23 @@ static class ReservationSystem
             return false;
         }
         catch (Exception e) { return false; }
+    }
+
+    public static void ViewReservations()
+    {
+        List<Reservation> file = CSV.ReadFromCSVReservations("Reservation.csv");
+        foreach (Reservation r in file)
+        {
+            if (r.Date == "Date"){continue;}
+            Console.WriteLine(@$"Date: {r.Date}
+Timeslot: {r.TimeSlot}
+Table(s): {string.Join(",", r.Table)}
+Customer name: {r.CustomerName}
+Customer email:{r.CustomerEmail}
+Amount of persons:{r.AmountofPersons}
+Reservation code: {r.ReservationCode}
+Booking date: {r.DateOfBooking}
+");
+        }
     }
 }

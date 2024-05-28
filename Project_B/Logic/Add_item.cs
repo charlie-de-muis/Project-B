@@ -60,7 +60,7 @@ These are all the options:
 
             } while (Check < 4);
 
-            Menu.Add(new MenuItem(Name, Ingredients, Price, DietaryInfo));
+            Menu.Add(new MenuItem(GenerateID(), Name, Ingredients, Price, DietaryInfo));
 
             Program.ConsoleClear();
             Console.WriteLine("Do you want to add more items? Please type yes or no");
@@ -73,6 +73,12 @@ These are all the options:
 
         } while (MoreItems == "yes");
 
-        JSON.WriteJSON(Menu);
+        JSON.WriteJSON(Menu, "Menu_current");
+    }
+
+    private static int GenerateID()
+    {
+        List<MenuItem> menuItems = JSON.ReadJSON("Menu_current");
+        return (menuItems.Any() ? menuItems.MaxBy(menuItem => menuItem.ID).ID : 0) + 1;
     }
 }

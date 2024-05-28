@@ -19,7 +19,7 @@ public class PreviousReservation
             
             if (R.CustomerEmail == c.Email && R.ReservationCode == code)
             {
-                Reservation.PrintReceipt(width, spacing, R.Date, R.TimeSlot, Convert.ToString(R.AmountofPersons), TableChoicesSTR, R.ReservationCode, R.DateOfBooking); found = true;
+                Reservation.PrintReceipt(width, spacing, R.Date, R.TimeSlot, Convert.ToString(R.AmountofPersons), TableChoicesSTR, R.MenuOrders, R.ReservationCode, R.DateOfBooking); found = true;
                 Console.WriteLine("\nPress enter to continue..."); Console.ReadLine(); Program.ConsoleClear();
             }
         }
