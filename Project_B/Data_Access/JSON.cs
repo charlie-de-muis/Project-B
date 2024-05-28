@@ -120,6 +120,8 @@ public class JSON
                 // File path within the folder
                 string filePath = Path.Combine(folderPath, $"{GetCurrentMenuName(folderPath, menuType)}.json");
 
+                Console.WriteLine($"{GetCurrentMenuName(folderPath, menuType)}.json");
+
                 if (string.IsNullOrEmpty(filePath))
                 {
                     Console.WriteLine("Error: File not found, or the file is currently not available.");
@@ -459,12 +461,16 @@ public class JSON
     {
         try
         {
+            folderPath = Path.Combine(Environment.CurrentDirectory, "Data_Sources\\Menu_Storage");
+
             List<string> menuNames = Directory.GetFiles(folderPath, "*.json").Select(Path.GetFileNameWithoutExtension).ToList()!;
 
             return menuNames.FirstOrDefault(menuName => menuName.Contains($"Menu_{menuType}"))!;
         }
         catch
         {
+            folderPath = Path.Combine("..", "..", "..", "Data_Sources\\Menu_Storage");
+
             List<string> menuNames = Directory.GetFiles(folderPath, "*.json").Select(Path.GetFileNameWithoutExtension).ToList()!;
 
             return menuNames.FirstOrDefault(menuName => menuName.Contains($"Menu_{menuType}"))!;

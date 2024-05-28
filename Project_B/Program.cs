@@ -7,6 +7,6 @@
 
     public static void ConsoleClear()
     {
-        Console.Clear();
+        //Console.Clear();
     }
 }

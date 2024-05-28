@@ -2,7 +2,7 @@ public class Delete_Item
 {
     public static void Delete_Items()
     {
-        List<MenuItem> menuItems = JSON.ReadJSON();
+        List<MenuItem> menuItems = JSON.ReadJSON("Menu_current");
         
         while (true)
         {
@@ -32,7 +32,7 @@ public class Delete_Item
             int removed = menuItems.RemoveAll(menuItem => menuItem.ID == index);
             if (removed > 0)
             {
-                JSON.DeletedItemsWriteJSON(menuItems);
+                JSON.DeletedItemsWriteJSON(menuItems, "Menu_current");
             }
             else
             {
