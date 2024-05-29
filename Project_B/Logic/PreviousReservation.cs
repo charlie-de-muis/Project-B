@@ -2,11 +2,37 @@ public class PreviousReservation
 {
     public static void PreRes(Customer c)
     {
-        Console.WriteLine("Please enter your reservation code:");
+        List<Reservation> file = CSV.ReadFromCSVReservations("Reservation.csv");
+        List<MenuItem> menuItems = JSON.ReadJSON("Menu_current");
+
+        foreach (Reservation r in file)
+        {
+            if (r.Date == "Date") { continue; }
+            else if (r.CustomerName == c.UserName && r.CustomerEmail == c.Email)
+            {            
+                List<int> keys = r.MenuOrders.Keys.ToList();
+                string menuOrdersSTR = "";
+                foreach (int key in keys) { menuOrdersSTR += $"{menuItems.FirstOrDefault(menuItem => menuItem.ID == key)?.Name} x {r.MenuOrders[key]}"; }
+                
+                Console.WriteLine(@$"
+Date: {r.Date}
+Timeslot: {r.TimeSlot}
+Table(s): {string.Join(",", r.Table)}
+Customer name: {r.CustomerName}
+Customer email: {r.CustomerEmail}
+Amount of persons: {r.AmountofPersons}
+Menu Orders: {menuOrdersSTR}
+Reservation code: {r.ReservationCode}
+Booking date: {r.DateOfBooking}
+");
+            }
+        }
+
+        Console.WriteLine("Please enter the reservation code from the reservation you want to see:");
         string code = Console.ReadLine();
         bool found = false;
 
-        foreach (Reservation R in CSV.ReadFromCSVReservations("Reservation.csv"))
+        foreach (Reservation R in file)
         {
             string TableChoicesSTR = string.Join(", ", R.Table);
             Program.ConsoleClear();
