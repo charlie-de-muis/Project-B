@@ -78,9 +78,16 @@ class Main_Menu
         Console.WriteLine("Press enter to return..."); Console.ReadLine(); Program.ConsoleClear();
     }
 
+    // About me text (if it exists) gets deleted and the admin can write the about me text from scratch
     public static void AboutTextAdmin()
     {
         Console.WriteLine("Type 3 lines of information about your restaurant:");
+        string folderPath = Path.Combine(Environment.CurrentDirectory, "Data_Sources");
+        string filePath = Path.Combine(folderPath, "restauranttext.txt");
+        using (FileStream fs = new FileStream(filePath, FileMode.Truncate))
+        {
+            // clearing file
+        }
         TXT.WritetoTXT();
         TXT.WritetoTXT();
         TXT.WritetoTXT();
