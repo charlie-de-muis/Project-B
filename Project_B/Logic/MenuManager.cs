@@ -1,24 +1,24 @@
 public class MenuManager
 {
-    public static void DisplayMenu()
+    public static void DisplayMenu(string menuType)
     {
         // Read menu items from JSON
-        var menuItems = JSON.ReadJSON("Menu_current");
+        var menuItems = JSON.ReadJSON(menuType);
         PrintMenu(menuItems);
     }
 
-    public static void DisplayFilteredMenu(string filter)
+    public static void DisplayFilteredMenu(string filter, string menuType)
     {
         // Read menu items from JSON
-        var menuItems = JSON.ReadJSON("Menu_current");
+        var menuItems = JSON.ReadJSON(menuType);
         var filteredMenu = FilterMenu(menuItems, filter);
         PrintMenu(filteredMenu);
     }
 
-        public static void DisplaySortedMenu()
+        public static void DisplaySortedMenu(string menuType)
     {
         // Read menu items from JSON
-        var menuItems = JSON.ReadJSON("Menu_current");
+        var menuItems = JSON.ReadJSON(menuType);
 
         // Sort menu items by price, low to high
         menuItems = menuItems.OrderBy(item => item.Price).ToList();
@@ -74,6 +74,14 @@ public class MenuManager
 
     public static void ViewMenu()
     {
+        string prompt = "Choose a menu:";
+        string[] options = { "current menu", "future menu" };
+        int index = ConsoleGUI.OptionGUI(prompt, options);
+
+        string menuType;
+        if (index == 0) { menuType = "Menu_current"; }
+        else { menuType = "Menu_future"; }
+
         Console.WriteLine("\nWould you like to filter or sort the menu? (yes/no)");
         string filterSortChoice = Console.ReadLine();
 
@@ -91,14 +99,14 @@ public class MenuManager
                 string filterInput = Console.ReadLine();
                 
                 Program.ConsoleClear();
-                DisplayFilteredMenu(filterInput);
+                DisplayFilteredMenu(filterInput, menuType);
                 Console.WriteLine("Press enter to continue..."); Console.ReadLine(); Program.ConsoleClear();
             }
             else if (filterSortInput.ToLower() == "sort")
             {
                 // Sort and display the menu
                 Program.ConsoleClear();
-                DisplaySortedMenu();
+                DisplaySortedMenu(menuType);
                 Console.WriteLine("Press enter to continue..."); Console.ReadLine(); Program.ConsoleClear();
             }
             else
@@ -111,7 +119,7 @@ public class MenuManager
         else
         {
             Program.ConsoleClear();
-            DisplayMenu();
+            DisplayMenu(menuType);
             Console.WriteLine("Press enter to continue..."); Console.ReadLine(); Program.ConsoleClear();
         }
     }

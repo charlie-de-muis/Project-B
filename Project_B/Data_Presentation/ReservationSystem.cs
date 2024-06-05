@@ -283,7 +283,7 @@ static class ReservationSystem
         {
             if (selectedItem > menuOrders.Count - 1) { selectedItem = menuOrders.Count - 1; }
             Program.ConsoleClear();
-            MenuManager.DisplayMenu();
+            MenuManager.DisplayMenu("Menu_current");
             Console.WriteLine();
             Console.WriteLine($"Select the items you would like to order > {itemListID[selectByIndex]}");
             Console.WriteLine();
@@ -304,15 +304,13 @@ static class ReservationSystem
             Console.WriteLine();
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.Write("Esc.   ");
+            Console.Write("Esc.   c (confirm items).   ");
             Console.ForegroundColor = ConsoleColor.Blue;
-            Console.Write("d (select date).   ");
-            Console.ForegroundColor = ConsoleColor.Blue;
-            Console.Write("t (select timeslot).   ");
+            Console.WriteLine("d (select date).   t (select timeslot).   ");
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write("c (confirm items).   ");
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write("Enter (add item).");
+            Console.Write("▲   ▼ (find item).   Enter (add item).");
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.Write("►   ◄ (select item).   Backspace (remove item).");
             Console.ResetColor();
 
             ConsoleKeyInfo keyInfo = Console.ReadKey();
