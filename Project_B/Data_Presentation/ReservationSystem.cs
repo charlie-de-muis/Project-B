@@ -6,6 +6,7 @@ static class ReservationSystem
     private static List<int> TableChoices;
     private static Account Customer;
     private static List<int> menuOrders;
+    private const double DISCOUNT_RATE = 0.10;
 
     public static void ReservationMenu(Account account)
     {
@@ -36,7 +37,7 @@ static class ReservationSystem
             switch (choice)
             {
                 case 1: 
-                    Table.DisplayTables();
+                    Table.DisplayTables(new List<Table>()); //Temporarily parameter
                     Console.WriteLine("\nPress enter to continue...");
                     Console.ReadLine(); Program.ConsoleClear(); continue;
                 case 2: MakeReservation(); continue;
@@ -181,7 +182,7 @@ static class ReservationSystem
 
             if (anyAvailableTable)
             {
-                Table.DisplayTables();
+                Table.DisplayTables(tables);
             }
             else
             {
@@ -308,7 +309,7 @@ static class ReservationSystem
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine("d (select date).   t (select timeslot).   ");
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write("▲   ▼ (find item).   Enter (add item).");
+            Console.Write("▲   ▼ (find item).   Enter (add item).   ");
             Console.ForegroundColor = ConsoleColor.DarkGreen;
             Console.Write("►   ◄ (select item).   Backspace (remove item).");
             Console.ResetColor();
@@ -361,6 +362,7 @@ static class ReservationSystem
             Console.WriteLine("Current Orders:");
             Console.WriteLine();
             double totalPrice = 0;
+            double discount = 0;
 
             foreach (int key in keys)
             {
@@ -370,6 +372,16 @@ static class ReservationSystem
                 totalPrice += price;
                 Console.WriteLine("{0, -" + width + "} {1}", $"x{count} {item.Name}", $"{price}".PadLeft(spacing));
             }
+            if (AmountofPersons >= 5)
+            {
+                discount = totalPrice * DISCOUNT_RATE;
+                Console.WriteLine();
+                Console.WriteLine("{0, -" + width + "} {1}", "Price before discount", $"{totalPrice:C}".PadLeft(spacing));
+                Console.WriteLine("{0, -" + (width + 1) + "} {1}", $"Because totalcustomer = {AmountofPersons}:", "".PadLeft(spacing + 1));
+                Console.WriteLine("{0, -" + width + "} {1}", "Discount (10%)", $"-{discount:C}".PadLeft(spacing));
+            }
+            double finalTotalPrice = totalPrice - discount;
+            Console.WriteLine("{0, -" + width + "} {1}", "Total Price", $"{finalTotalPrice:C}".PadLeft(spacing));
             Console.WriteLine();
             Console.WriteLine("{0, -" + width + "} {1}", "Total Price", $"{totalPrice}".PadLeft(spacing));
             Console.WriteLine();

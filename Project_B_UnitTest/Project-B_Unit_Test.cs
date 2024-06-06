@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace Project_B_UnitTest;
 
 [TestClass]
@@ -12,20 +14,24 @@ public class UnitTest1
         Assert.AreEqual(PasswordEncoding.DecodeString("ZsDDG"), "Hallo");
         Assert.AreEqual(PasswordEncoding.DecodeString("TQw"), "Bye");
     }
-// Hij kan het JSON bestand niet vinden. De code zelf zou moeten werken, we moeten alleen even kijken hoe we 
-// zorgen dat hij het bestand kan vinden.
-    // [TestMethod]
-    // public void Test_Add_Items()
-    // {
-    //     MenuItem Pizza = new MenuItem("Pizza pepperoni", new List<string> (){"dough", "sauce", "cheese", "pepperoni"}, 4.50, new List<string>(){"x"});
-    //     JSON.WriteJSON(new List<MenuItem>(){Pizza});
 
-    //     CollectionAssert.Contains(JSON.ReadJSON(), Pizza);
-    // }
+    [TestMethod]
+    public void WriteReservationTest()
+    {
+        string Date = "10-06-2024";
+        string TimeSlot = "dinner";
+        List<int> Tables = new List<int>() { 6, 7 };
+        string CName = "Melvern";
+        string EMail = "melvernvandijk@outlook.com";
+        int CCount = 8;
+        Dictionary<int, int> MItems = new Dictionary<int, int>() { {2, 5}, {1, 6} };
+        string Code = "GJi5d8VB";
+        string DateOfBooking = "06-06-2024";
+        Reservation reservationWrite = new Reservation(Date, TimeSlot, Tables, CName, EMail, CCount, MItems, Code, DateOfBooking);
 
-    // [TestMethod]
-    // public void Test_Saved_ReservationCode
-    // {
-    //      hoe moet je het testen als er een input is?
-    // }
+        CSV.WriteToCSVReservations(reservationWrite, "Reservation.csv", true);
+        Reservation reservationRead = CSV.ReadFromCSVReservations("Reservation.csv", true).FirstOrDefault(reservation => reservation.ReservationCode == Code);
+
+        Assert.AreEqual(Code, reservationRead.ReservationCode);
+    }
 }

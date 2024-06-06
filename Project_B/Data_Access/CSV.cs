@@ -1,4 +1,4 @@
-class CSV
+public class CSV
 {
     public static List<Account> ReadFromCSV()
     {
@@ -37,11 +37,13 @@ class CSV
     }
     
 
-    public static List<Reservation> ReadFromCSVReservations(string filename)
-    {//datum, tijdslot, tafel, naam, reserveringscode
+    public static List<Reservation> ReadFromCSVReservations(string filename, bool isTest = false)
+    {
 
             // Folder path where you want to store the CSV
-            string folderPath = Path.Combine(Environment.CurrentDirectory, "Data_Sources");
+            string folderPath;
+            if (isTest) { folderPath = Path.Combine("../../../..","Project_B","Data_Sources"); }
+            else { folderPath = Path.Combine(Environment.CurrentDirectory, "Data_Sources"); }
 
             // File path within the folder
             string filePath = Path.Combine(folderPath, filename);
@@ -51,7 +53,7 @@ class CSV
                 if (!File.Exists(filePath))
                 {
                     // Write headers
-                    File.WriteAllText(filePath, "Date;Timeslot;Table;Name;Email;Amount of persons;Reservationcode;Date of booking\n");
+                    File.WriteAllText(filePath, "Date;Timeslot;Table;Name;Email;Amount of persons;Menu orders;Reservationcode;Date of booking\n");
                 }
 
                 using(var reader = new StreamReader(filePath))
@@ -60,7 +62,7 @@ class CSV
                     while (!reader.EndOfStream)
                     {
                         var line = reader.ReadLine();
-                        if (line == "Date;Timeslot;Table;Name;Email;Amount of persons;Reservationcode;Date of booking") { continue; }
+                        if (line.Contains("Date;Timeslot;Table;Name;Email;Amount of persons;Menu orders;Reservationcode;Date of booking")) { continue; }
 
                         string[] values = line.Split(";");
                         List<string> tables = values[2].Split(",").ToList();
@@ -125,11 +127,13 @@ class CSV
             File.AppendAllText(filePath, userDataString);
     }
 
-    public static void WriteToCSVReservations(Reservation reservation, string filename)
+    public static void WriteToCSVReservations(Reservation reservation, string filename, bool isTest = false)
     {
 
             // Folder path where you want to store the CSV
-            string folderPath = Path.Combine(Environment.CurrentDirectory, "Data_Sources");
+            string folderPath;
+            if (isTest) { folderPath = Path.Combine("../../../..","Project_B","Data_Sources"); }
+            else { folderPath = Path.Combine(Environment.CurrentDirectory, "Data_Sources"); }
 
             // File path within the folder
             string filePath = Path.Combine(folderPath, filename);
@@ -138,7 +142,7 @@ class CSV
             if (!File.Exists(filePath))
             {
                 // Write headers
-                File.WriteAllText(filePath, "Date;Timeslot;Table;Name;Email;Amount of persons;MenuOrders;Reservationcode;Date of booking\n");
+                File.WriteAllText(filePath, "Date;Timeslot;Table;Name;Email;Amount of persons;Menu orders;Reservationcode;Date of booking\n");
             }
 
             string menuOrders = "";
@@ -178,7 +182,7 @@ class CSV
             if (!File.Exists(filePath))
             {
                 // Write headers
-                File.WriteAllText(filePath, "Date;Timeslot;Table;Name;Email;Amount of persons;Reservationcode;Date of booking\n");
+                File.WriteAllText(filePath, "Date;Timeslot;Table;Name;Email;Amount of persons;Menu orders;Reservationcode;Date of booking\n");
             }
 
         // clearing the file
