@@ -6,6 +6,7 @@ static class ReservationSystem
     private static List<int> TableChoices;
     private static Account Customer;
     private static List<int> menuOrders;
+    private const double DISCOUNT_RATE = 0.10;
 
     public static void ReservationMenu(Account account)
     {
@@ -361,6 +362,7 @@ static class ReservationSystem
             Console.WriteLine("Current Orders:");
             Console.WriteLine();
             double totalPrice = 0;
+            double discount = 0;
 
             foreach (int key in keys)
             {
@@ -370,8 +372,16 @@ static class ReservationSystem
                 totalPrice += price;
                 Console.WriteLine("{0, -" + width + "} {1}", $"x{count} {item.Name}", $"{price}".PadLeft(spacing));
             }
-            Console.WriteLine();
-            Console.WriteLine("{0, -" + width + "} {1}", "Total Price", $"{totalPrice}".PadLeft(spacing));
+            if (AmountofPersons >= 5)
+            {
+                discount = totalPrice * DISCOUNT_RATE;
+                Console.WriteLine();
+                Console.WriteLine("{0, -" + width + "} {1}", "Price before discount", $"{totalPrice:C}".PadLeft(spacing));
+                Console.WriteLine("{0, -" + (width + 1) + "} {1}", $"Because totalcustomer = {AmountofPersons}:", "".PadLeft(spacing + 1));
+                Console.WriteLine("{0, -" + width + "} {1}", "Discount (10%)", $"-{discount:C}".PadLeft(spacing));
+            }
+            double finalTotalPrice = totalPrice - discount;
+            Console.WriteLine("{0, -" + width + "} {1}", "Total Price", $"{finalTotalPrice:C}".PadLeft(spacing));
             Console.WriteLine();
             Console.WriteLine("----------------------------------------");
             Console.WriteLine();
