@@ -50,17 +50,53 @@ public class Table
         {
             foreach (var table in tables)
             {
-                if (table.IsAvailable == false)
+                if (!table.IsAvailable)
                 {
                     string original = $"{table.ID}.|__|";
-                    string replacement = $"{table.ID}.|X|";
-                    layout[i] = layout[i].Replace(original, replacement);
+                    string replacement = $"{table.ID}.|XX|"; // Placeholder to show it's reserved
+
+                    if (layout[i].Contains(original))
+                    {
+                        // Zet de tekst in rood en vervang
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        layout[i] = layout[i].Replace(original, replacement);
+                        // Reset de console kleur na de vervanging
+                        Console.ResetColor();
+                    }
                 }
             }
+            // Print de huidige regel van de lay-out
             Console.WriteLine(layout[i]);
+            // foreach (var table in tables)
+            // {
+            //     if (table.IsAvailable == false)
+            //     {
+            //         string original = $"{table.ID}.|__|";
+            //         Console.ForegroundColor = ConsoleColor.Red;
+            //         string replacement = $"{table.ID}.|__|";
+            //         layout[i] = layout[i].Replace(original, replacement);
+            //     }
+            // }
+            // Console.ResetColor();
+            // Console.WriteLine(layout[i]);
         }
 
         Console.WriteLine("Legend:");
         Console.WriteLine("   X = Not Available\n");
+        // Change the text color to Red
+        // Console.ForegroundColor = ConsoleColor.Red;
+        // Console.WriteLine("This text is red!");
+
+        // Change the text color to Green
+        // Console.ForegroundColor = ConsoleColor.Green;
+        // Console.WriteLine("This text is green!");
+
+        // Change the text color to Blue
+        // Console.ForegroundColor = ConsoleColor.Blue;
+        // Console.WriteLine("This text is blue!");
+
+        // Reset the text color to the default
+        // Console.ResetColor();
+        // Console.WriteLine("This text is the default color.");
     }
 }
