@@ -1,4 +1,4 @@
-public class Add_Item
+public abstract class Add_Item
 {
     public static void Add_Items()
     {

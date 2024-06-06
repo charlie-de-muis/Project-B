@@ -22,9 +22,10 @@ public class Log_in
                     string password = Console.ReadLine();
 
                     attemptsleft--;
-                    if (Login(username, password) != null)
+                    Tuple<string,string> data = new Tuple<string, string>(username,password);
+                    if (Login(data) != null)
                     {
-                        Account loggedInAccount = Login(username, password);
+                        Account loggedInAccount = Login(data);
                         if (loggedInAccount != null && loggedInAccount.UserName == "Admin")
                         {
                             return new Admin(loggedInAccount.UserName, loggedInAccount.PassWord, loggedInAccount.Email);
@@ -66,20 +67,10 @@ public class Log_in
         Console.WriteLine("unknown error in option method\nPress enter to continue..."); Console.ReadLine(); Program.ConsoleClear(); return null;
     }
 
-    // private static Account GetAccountByUsername(string username)
-    // {
-    //     foreach (Account acc in CSV.ReadFromCSV())
-    //     {
-    //         if (acc.UserName == username)
-    //         {
-    //             return acc;
-    //         }
-    //     }
-    //     return null;
-    // }
-
-    private static Account Login(string username, string password)
+    private static Account Login(Tuple<string, string> login)
     {
+        string username = login.Item1;
+        string password = login.Item2;
         //Console.WriteLine(ReadFromCSV().Count);
         foreach (Account acc in CSV.ReadFromCSV())
         {
