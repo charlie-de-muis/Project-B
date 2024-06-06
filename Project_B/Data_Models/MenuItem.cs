@@ -1,9 +1,9 @@
-public class MenuItem
+public class MenuItem : IFood
 {
     // vegetarian, vegan, glutenfree, dairy free?
-    public int ID;
-    public string Name;
-    public List<string> Ingredients;
+    public int ID {get;set;}
+    public string Name {get;set;}
+    public List<string> Ingredients {get;set;}
     public double Price = 0.00;
     public List<string> DietaryInfo = new();
 
