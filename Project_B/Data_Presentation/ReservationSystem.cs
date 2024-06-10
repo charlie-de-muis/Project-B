@@ -47,7 +47,7 @@ static class ReservationSystem
 
     public static void MakeReservation()
     {
-        List<Reservation> reservations = CSV.ReadFromCSVReservations("Reservation.csv");
+        List<Reservation> reservations = CSV.ReadFromCSVReservations("Reservation.csv", false);
 
         //CUSTOMER SELECTS ON WHICH DATE HE/SHE WANTS TO RESERVE.
         Console.WriteLine("For which day do you want to book?");
@@ -56,8 +56,6 @@ static class ReservationSystem
             DateSelect = "";
             AmountofPersons = 0;
             TableChoices = new List<int>();
-            //List<int> menuOrders; (all the orders chosen from the menu) (NEXT SPRINT)
-            //More variables coming?
 
             //First the sure selects on of the future dates to book.
             Console.WriteLine("Or type 'cancel' to cancel the reservation.\n");
@@ -138,7 +136,7 @@ static class ReservationSystem
 
     private static string SelectCustomerCount()
     {
-        //Customer specifiec for how many people will be reserved.
+        //Customer specifies for how many people will be reserved.
         Console.WriteLine("For how many people do you order? (1 - 16)");
         while (true)
         {
@@ -266,7 +264,8 @@ static class ReservationSystem
 
     private static string SelectItems()
     {
-        List<MenuItem> menuItems = JSON.ReadJSON("Menu_current");
+        // customer selects the food they want to have
+        List<MenuItem> menuItems = JSON.ReadJSON("Menu_current", false);
         if (!menuItems.Any())
         {
             Console.WriteLine("No menu or menu items available at the moment.\nPress any key to continue.");
@@ -345,7 +344,7 @@ static class ReservationSystem
 
         if (spacing > 10) { width -= spacing - 10; }
 
-        List<MenuItem> menuItems = JSON.ReadJSON("Menu_current");
+        List<MenuItem> menuItems = JSON.ReadJSON("Menu_current", false);
         Dictionary<int, int> orderCounts = menuOrders.GroupBy(id => id).ToDictionary(group => group.Key, group => group.Count());
         ICollection<int> keys = orderCounts.Keys;
 
@@ -394,9 +393,9 @@ static class ReservationSystem
         }
 
         //If the customer confirms reservation, the reservation is saved and a receipt will be printed.
-        string ReservationCode = GenerateReservationCode(reservations);
+        string ReservationCode = ReservationCodes.GenerateReservationCode(reservations);
         Reservation reservation = new Reservation(DateSelect, TimeSlot, TableChoices, Customer.UserName, Customer.Email, AmountofPersons, orderCounts, ReservationCode, DateTime.Now.ToString("dd-MM-yyyy"));
-        CSV.WriteToCSVReservations(reservation, "Reservation.csv");
+        CSV.WriteToCSVReservations(reservation, "Reservation.csv", false);
 
         Reservation.PrintReceipt(width, spacing, DateSelect, TimeSlot, AmountofPersons.ToString(), TableChoicesSTR, orderCounts, ReservationCode, DateTime.Now.ToString("dd-MM-yyyy"));
         Console.WriteLine("Your receipt with reservation code has been printed.");
@@ -408,50 +407,9 @@ static class ReservationSystem
 
         return "main menu";
     }
-
-    // maak een random code, check of hij al bestaat, en stuur de code of een error bericht terug.
-    private static string GenerateReservationCode(List<Reservation> reservations)
-    {
-        int attempts = 100;
-
-        while (true)
-        {
-            string code = "";
-
-            Random rand = new Random();
-            string letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-            int length = 8;
-
-            for(int i = 0; i < length; i++)
-            {
-                int pos = rand.Next(62);
-                code = code + letters.ElementAt(pos);
-            }
-
-            if (CheckCode(code, reservations) == false) { return code; }
-
-            attempts--;
-            if (attempts <= 0) { return null; }
-        }
-    }
-
-    // returned false als de code nog niet bestaat, anders true
-    private static bool CheckCode(string code, List<Reservation> reservations)
-    {
-        try
-        {
-            foreach (Reservation r in reservations)
-            {
-                if (r.ReservationCode == code) { return true; }
-            }
-            return false;
-        }
-        catch (Exception e) { return false; }
-    }
-
     public static void ViewReservations()
     {
-        List<Reservation> file = CSV.ReadFromCSVReservations("Reservation.csv");
+        List<Reservation> file = CSV.ReadFromCSVReservations("Reservation.csv", false);
         foreach (Reservation r in file)
         {
             if (r.Date == "Date"){continue;}

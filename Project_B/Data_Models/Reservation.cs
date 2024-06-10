@@ -42,7 +42,9 @@ public class Reservation
         Console.WriteLine("║                                       ║");
         Console.WriteLine("║ Dishes/Drinks:                        ║");
         Console.WriteLine("║                                       ║");
-        List<MenuItem> menuItems = JSON.ReadJSON("Menu_current");
+
+        // correctly display the chose food
+        List<MenuItem> menuItems = JSON.ReadJSON("Menu_current", false);
         ICollection<int> keys = MenuOrders.Keys;
         foreach (int key in keys)
             {
@@ -62,6 +64,7 @@ public class Reservation
         Console.WriteLine();
     }
 
+    // method to print receipts in other places
     public void PrintThisReceipt()
     {
         string TableChoicesSTR = string.Join(", ", Table);

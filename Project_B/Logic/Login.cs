@@ -15,6 +15,7 @@ public class Log_in
                 Program.ConsoleClear();
                 while (NextStep == false && attemptsleft > 0)
                 {
+                    // ask for the username and password
                     Console.WriteLine("Enter username:");
                     string username = Console.ReadLine();
 
@@ -25,6 +26,7 @@ public class Log_in
                     Tuple<string,string> data = new Tuple<string, string>(username,password);
                     if (Login(data) != null)
                     {
+                        // check if username and password are correct, and return the correct menu
                         Account loggedInAccount = Login(data);
                         if (loggedInAccount != null && loggedInAccount.UserName == "Admin")
                         {
@@ -42,6 +44,7 @@ public class Log_in
             }
             else if (choice == "create account")
             {
+                // ask for all the necessary data
                 Program.ConsoleClear();
                 Console.WriteLine("Enter an e-mail:");
                 string email = Console.ReadLine();
@@ -54,6 +57,8 @@ public class Log_in
                 string password = Console.ReadLine();
 
                 Program.ConsoleClear();
+
+                // create a new account
                 if (Customer.MakeAccount(username, password, email)) {return new Customer(username, password, email);}
                 else {Console.WriteLine("Press enter to continue..."); Console.ReadLine();}
             }
@@ -71,11 +76,10 @@ public class Log_in
     {
         string username = login.Item1;
         string password = login.Item2;
-        //Console.WriteLine(ReadFromCSV().Count);
-        foreach (Account acc in CSV.ReadFromCSV())
+
+        foreach (Account acc in CSV.ReadFromCSV(false))
         {
-            //Console.WriteLine(acc.UserName);
-            //Console.WriteLine(acc.PassWord);
+            // if there is an account with the given info
             if (acc.UserName == username && PasswordEncoding.DecodeString(acc.PassWord) == password){return acc;}
         }
         return null;
@@ -83,7 +87,8 @@ public class Log_in
 
     public static void CheckAdmin()
     {
-        List<Account> info = CSV.ReadFromCSV();
+        // check if the logged in account is from the admin
+        List<Account> info = CSV.ReadFromCSV(false);
         bool adminExists = false;
         foreach (Account profile in info)
         {
@@ -94,10 +99,10 @@ public class Log_in
             }
         }
 
+        // create an admin account if it doesn't exist
         if (!adminExists)
         {
-            CSV.WriteToCSV(new Admin("Admin", PasswordEncoding.EncodeString("Admin"), "admin@admin.com"));
-            //MakeAccount("Admin", "Admin", "admin@admin.com");
+            CSV.WriteToCSV(new Admin("Admin", PasswordEncoding.EncodeString("Admin"), "admin@admin.com"), false);
         }
     }
 }

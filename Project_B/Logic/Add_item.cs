@@ -2,7 +2,6 @@ public abstract class Add_Item
 {
     public static void Add_Items()
     {
-        //List<MenuItem> Menu = JSON.ReadJSON();
         List<MenuItem> Menu = new();
         string MoreItems = "yes";
 
@@ -18,8 +17,10 @@ public abstract class Add_Item
             double Price = 0;
             List<string> DietaryInfo = new();
 
+            // get all the info about the new menu item
             do 
             {
+                // name
                 do 
                 {
                     Console.WriteLine("Enter the name of the menu item:");
@@ -28,6 +29,7 @@ public abstract class Add_Item
                     Check++;
                 } while (Check < 1);
 
+                // ingredients
                 do
                 {
                     Console.WriteLine("Enter the all the ingredients seperated by a comma:");
@@ -36,6 +38,7 @@ public abstract class Add_Item
                     Check++;
                 } while (Check < 2);
 
+                // price
                 do
                 {
                     Console.WriteLine("Enter the price of the menu item:");
@@ -44,6 +47,8 @@ public abstract class Add_Item
                 } while (Check < 3);
 
                 Program.ConsoleClear();
+
+                // dietary info
                 Console.WriteLine(@"Enter the dietary information. Please seperate them by a comma.
 If the dish doesn't fit these options, enter x.
 These are all the options:
@@ -60,9 +65,12 @@ These are all the options:
 
             } while (Check < 4);
 
+            // add the item to the menu
             Menu.Add(new MenuItem(GenerateID(), Name, Ingredients, Price, DietaryInfo));
 
             Program.ConsoleClear();
+
+            // ask if the admin wants to add more items
             Console.WriteLine("Do you want to add more items? Please type yes or no");
             string Answer = Console.ReadLine().ToLower();
 
@@ -73,12 +81,13 @@ These are all the options:
 
         } while (MoreItems == "yes");
 
-        JSON.WriteJSON(Menu, "Menu_current");
+        JSON.WriteJSON(Menu, "Menu_current", false);
     }
 
+    // generate menu item ID
     private static int GenerateID()
     {
-        List<MenuItem> menuItems = JSON.ReadJSON("Menu_current");
+        List<MenuItem> menuItems = JSON.ReadJSON("Menu_current", false);
         return (menuItems.Any() ? menuItems.MaxBy(menuItem => menuItem.ID).ID : 0) + 1;
     }
 }

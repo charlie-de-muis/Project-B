@@ -3,14 +3,14 @@ public class MenuManager
     public static void DisplayMenu()
     {
         // Read menu items from JSON
-        var menuItems = JSON.ReadJSON("Menu_current");
+        var menuItems = JSON.ReadJSON("Menu_current", false);
         PrintMenu(menuItems);
     }
 
     public static void DisplayFilteredMenu(string filter)
     {
         // Read menu items from JSON
-        var menuItems = JSON.ReadJSON("Menu_current");
+        var menuItems = JSON.ReadJSON("Menu_current", false);
         var filteredMenu = FilterMenu(menuItems, filter);
         PrintMenu(filteredMenu);
     }
@@ -18,7 +18,7 @@ public class MenuManager
         public static void DisplaySortedMenu()
     {
         // Read menu items from JSON
-        var menuItems = JSON.ReadJSON("Menu_current");
+        var menuItems = JSON.ReadJSON("Menu_current", false);
 
         // Sort menu items by price, low to high
         menuItems = menuItems.OrderBy(item => item.Price).ToList();
