@@ -28,22 +28,22 @@ public class Reservation
         double totalPrice = 0;
         double discount = 0;
 
-        Console.WriteLine("╔═══════════════════════════════════════╗");
-        Console.WriteLine("║            [RestaurantName]           ║");
-        Console.WriteLine("╠═══════════════════════════════════════╣");
-        Console.WriteLine("║                                       ║");
-        Console.WriteLine("║------------- Your Receipt ------------║");
-        Console.WriteLine("║                                       ║");
+        Console.WriteLine("╔════════════════════════════════════════════════════════════════════════════╗");
+        Console.WriteLine("║                              [RestaurantName]                              ║");
+        Console.WriteLine("╠════════════════════════════════════════════════════════════════════════════╣");
+        Console.WriteLine("║                                                                            ║");
+        Console.WriteLine("║-------------------------------- Your Receipt ------------------------------║");
+        Console.WriteLine("║                                                                            ║");
         Console.WriteLine("{0, -" + width + "} {1}", "║ Booking Date:", DateSelect.PadLeft(spacing) + " ║");
         Console.WriteLine("{0, -" + width + "} {1}", "║ TimeSlot:", TimeSlot.PadLeft(spacing) + " ║");
         Console.WriteLine("{0, -" + width + "} {1}", "║ Total Customers:", AmountofPersons.ToString().PadLeft(spacing) + " ║");
         Console.WriteLine("{0, -" + width + "} {1}", "║ Table Numbers:", TableChoicesSTR.PadLeft(spacing) + " ║");
         Console.WriteLine("{0, -" + width + "} {1}", "║ Reservation Code:", ReservationCode.PadLeft(spacing) + " ║");
-        Console.WriteLine("║                                       ║");
-        Console.WriteLine("║---------------------------------------║");
-        Console.WriteLine("║                                       ║");
-        Console.WriteLine("║ Dishes/Drinks:                        ║");
-        Console.WriteLine("║                                       ║");
+        Console.WriteLine("║                                                                            ║");
+        Console.WriteLine("║----------------------------------------------------------------------------║");
+        Console.WriteLine("║                                                                            ║");
+        Console.WriteLine("║ Dishes/Drinks:                                                             ║");
+        Console.WriteLine("║                                                                            ║");
         List<MenuItem> menuItems = JSON.ReadJSON("Menu_current");
         ICollection<int> keys = MenuOrders.Keys;
         foreach (int key in keys)
@@ -55,21 +55,22 @@ public class Reservation
                 totalPrice += price;
                 Console.WriteLine("{0, -" + (width + 1) + "} {1}", $"║ x{count} {item.Name}", $"{price} ║".PadLeft(spacing + 1));
             }
-        Console.WriteLine("║                                       ║");
+        Console.WriteLine("║                                                                            ║");
         int AmountofPersons1 = int.Parse(AmountofPersons);
         if (AmountofPersons1 >= 5)
             {
+                string AoPSTR = AmountofPersons1 < 10 ? $"0{AmountofPersons1}" : $"{AmountofPersons1}";
                 discount = totalPrice * DISCOUNT_RATE;
-                Console.WriteLine("{0, -" + (width + 1) + "} {1}", $"║ Price before discount", $"{totalPrice:C}   ║".PadLeft(spacing + 1));
-                Console.WriteLine("{0, -" + (width + 1) + "} {1}", $"║ Because totalcustomer = {AmountofPersons1}:", " ║".PadLeft(spacing + 1));
-                Console.WriteLine("{0, -" + (width + 1) + "} {1}", $"║ Discount (10%)", $"-{discount:C}   ║".PadLeft(spacing + 1));
+                Console.WriteLine("{0, -" + (width + 1) + "} {1}", $"║ Price before discount", $"{totalPrice:C} ║".PadLeft(spacing + 1));
+                Console.WriteLine($"║ Because totalcustomer = {AoPSTR}                                                 ║");
+                Console.WriteLine("{0, -" + (width + 1) + "} {1}", $"║ Discount (10%)", $"-{discount:C} ║".PadLeft(spacing + 1));
             }
         double finalTotalPrice = totalPrice - discount;
-        Console.WriteLine("{0, -" + (width + 1) + "} {1}", $"║ Total Price", $"{finalTotalPrice:C}   ║".PadLeft(spacing + 1));
-        Console.WriteLine("║                                       ║");
-        Console.WriteLine("║-------------- " + CurrentDate + " -------------║");
-        Console.WriteLine("║                                       ║");
-        Console.WriteLine("╚═══════════════════════════════════════╝");
+        Console.WriteLine("{0, -" + (width + 1) + "} {1}", $"║ Total Price", $"{finalTotalPrice:C} ║".PadLeft(spacing + 1));
+        Console.WriteLine("║                                                                            ║");
+        Console.WriteLine("║--------------------------------- " + CurrentDate + " -------------------------------║");
+        Console.WriteLine("║                                                                            ║");
+        Console.WriteLine("╚════════════════════════════════════════════════════════════════════════════╝");
         Console.WriteLine();
     }
 

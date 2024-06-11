@@ -34,4 +34,15 @@ public class UnitTest1
 
         Assert.AreEqual(Code, reservationRead.ReservationCode);
     }
+
+    [DataTestMethod]
+    [DataRow(new string[] { "10" }, true)]
+    [DataRow(new string[] { "12", "13" }, true)]
+    public void TestChooseTables(string[] TablesArray, bool Expected)
+    {
+        List<string> Tables = TablesArray.ToList();
+        bool result = ReservationSystem.GetTables(Tables, Table.GetTableInfo());
+
+        Assert.AreEqual(Expected, result);
+    }
 }

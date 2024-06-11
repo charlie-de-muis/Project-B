@@ -1,4 +1,4 @@
-static class ReservationSystem
+public static class ReservationSystem
 {
     private static string DateSelect;
     private static string TimeSlot;
@@ -37,7 +37,7 @@ static class ReservationSystem
             switch (choice)
             {
                 case 1: 
-                    Table.DisplayTables(new List<Table>()); //Temporarily parameter
+                    Table.DisplayTables(new List<Table>());
                     Console.WriteLine("\nPress enter to continue...");
                     Console.ReadLine(); Program.ConsoleClear(); continue;
                 case 2: MakeReservation(); continue;
@@ -177,7 +177,6 @@ static class ReservationSystem
 
         while (true)
         {
-            TableChoices = new List<int>();
             bool count = true;
 
             if (anyAvailableTable)
@@ -190,6 +189,11 @@ static class ReservationSystem
                 Console.WriteLine("Press enter to continue."); Console.ReadLine(); Program.ConsoleClear(); return "no tables";
             }
 
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write("\nRed ");
+            Console.ResetColor();
+            Console.WriteLine("tables are already booked");
+
             Console.WriteLine("\nSelect a single table by its number.");
             Console.WriteLine("Select multiple tables for merging by their numbers, comma seperated. (up to 16 people)");
             Console.WriteLine("Type 'select date' to reserve on a different date.");
@@ -197,6 +201,7 @@ static class ReservationSystem
 
             string entryTables = Console.ReadLine();
             Program.ConsoleClear();
+
             if (entryTables == "cancel" || entryTables == "select date") { return entryTables; }
 
             List<string> entries = entryTables.Split(',').ToList();
@@ -206,63 +211,69 @@ static class ReservationSystem
             List<string> tableNumbers = new List<string>() { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15" };
             foreach (string number in TableChoicesSTR) { if (!tableNumbers.Contains(number)) { Console.WriteLine("Invalid entry, please try again."); count = false; break; } }
 
-            //If the arguments given match, it will pass on to the next code below.
             if (count)
             {
-                foreach (string number in TableChoicesSTR) { TableChoices.Add(int.Parse(number)); }
+                bool isSuccess = GetTables(TableChoicesSTR, tables);
+                if (isSuccess) { return entryTables; }
+            }
+        }
+    }
 
-                //Single table chosen.
-                if (TableChoices.Count == 1)
+    public static bool GetTables(List<string> TableChoicesSTR, List<Table> tables)
+    {
+        TableChoices = new List<int>();
+        foreach (string number in TableChoicesSTR) { TableChoices.Add(int.Parse(number)); }
+
+        //Single table chosen.
+        if (TableChoices.Count == 1)
+        {
+            if (!tables[TableChoices[0] - 1].IsAvailable)
+            {
+                Console.WriteLine($"Table {TableChoices[0]} is already booked during {TimeSlot}.");
+            }
+            else if (AmountofPersons > tables[TableChoices[0] - 1].TotalSeats)
+            {
+                Console.WriteLine($"Table {TableChoices[0]} does not have enough seats for {AmountofPersons} people.\n");
+            }
+            else
+            {
+                Console.WriteLine($"You have selected table {TableChoices[0]}\n");
+                return true;
+            }
+        }
+        //Multiple tables chosen.
+        else if (TableChoices.Count > 1)
+        {
+            bool availableTables = true;
+            foreach (int number in TableChoices)
+            {
+                if (!tables[number - 1].IsAvailable)
                 {
-                    if (!tables[TableChoices[0] - 1].IsAvailable)
-                    {
-                        Console.WriteLine($"Table {TableChoices[0]} is already booked during {TimeSlot}.");
-                    }
-                    else if (AmountofPersons > tables[TableChoices[0] - 1].TotalSeats)
-                    {
-                        Console.WriteLine($"Table {TableChoices[0]} does not have enough seats for {AmountofPersons} people.\n");
-                    }
-                    else
-                    {
-                        Console.WriteLine($"You have selected table {TableChoices[0]}\n");
-                        Console.WriteLine("Press enter to continue..."); Console.ReadLine();
-                        return entryTables;
-                    }
+                    Console.WriteLine($"Table {number} is already booked during {TimeSlot}.");
+                    availableTables = false;
                 }
-                //Multiple tables chosen.
-                else if (TableChoices.Count > 1)
+            }
+
+            //After checking table availablility, the amount of seats must be higher than the number of people they reserve for.
+            if (availableTables)
+            {
+                string tablesMerge = string.Join(", ", TableChoices);
+                int mergedSeats = 0;
+                foreach (int number in TableChoices) { mergedSeats += tables[number - 1].TotalSeats; }
+
+                if (AmountofPersons > mergedSeats)
                 {
-                    bool availableTables = true;
-                    foreach (int number in TableChoices)
-                    {
-                        if (!tables[number - 1].IsAvailable)
-                        {
-                            Console.WriteLine($"Table {number} is already booked during {TimeSlot}.");
-                            availableTables = false;
-                        }
-                    }
-
-                    //After checking table availablility, the amount of seats must be higher than the number of people they reserve for.
-                    if (availableTables)
-                    {
-                        string tablesMerge = string.Join(", ", TableChoices);
-                        int mergedSeats = 0;
-                        foreach (int number in TableChoices) { mergedSeats += tables[number - 1].TotalSeats; }
-
-                        if (AmountofPersons > mergedSeats)
-                        {
-                            Console.WriteLine($"Tables '{tablesMerge}' do not have enough seats for {AmountofPersons} people.\n");
-                        }
-                        else
-                        {
-                            Console.WriteLine($"You have selected/merged tables '{tablesMerge}' for reservation.\n");
-                            Console.WriteLine("Press enter to continue..."); Console.ReadLine();
-                            return entryTables;
-                        }
-                    }
+                    Console.WriteLine($"Tables '{tablesMerge}' do not have enough seats for {AmountofPersons} people.\n");
+                }
+                else
+                {
+                    Console.WriteLine($"You have selected/merged tables '{tablesMerge}' for reservation.\n");
+                    return true;
                 }
             }
         }
+
+        return false;
     }
 
     private static string SelectItems()
@@ -339,10 +350,10 @@ static class ReservationSystem
     {
         string TableChoicesSTR = string.Join(", ", TableChoices);
         List<int> stringLengths = new List<int>() { TimeSlot.Length, TableChoicesSTR.Length };
-        int spacing = Math.Max(10, stringLengths.Max());
-        int width = 28;
+        int spacing = Math.Max(30, stringLengths.Max());
+        int width = 45;
 
-        if (spacing > 10) { width -= spacing - 10; }
+        if (spacing > 30) { width -= spacing - 30; }
 
         List<MenuItem> menuItems = JSON.ReadJSON("Menu_current");
         Dictionary<int, int> orderCounts = menuOrders.GroupBy(id => id).ToDictionary(group => group.Key, group => group.Count());
@@ -372,18 +383,16 @@ static class ReservationSystem
                 totalPrice += price;
                 Console.WriteLine("{0, -" + width + "} {1}", $"x{count} {item.Name}", $"{price}".PadLeft(spacing));
             }
+            Console.WriteLine();
             if (AmountofPersons >= 5)
             {
                 discount = totalPrice * DISCOUNT_RATE;
-                Console.WriteLine();
                 Console.WriteLine("{0, -" + width + "} {1}", "Price before discount", $"{totalPrice:C}".PadLeft(spacing));
                 Console.WriteLine("{0, -" + (width + 1) + "} {1}", $"Because totalcustomer = {AmountofPersons}:", "".PadLeft(spacing + 1));
                 Console.WriteLine("{0, -" + width + "} {1}", "Discount (10%)", $"-{discount:C}".PadLeft(spacing));
             }
             double finalTotalPrice = totalPrice - discount;
             Console.WriteLine("{0, -" + width + "} {1}", "Total Price", $"{finalTotalPrice:C}".PadLeft(spacing));
-            Console.WriteLine();
-            Console.WriteLine("{0, -" + width + "} {1}", "Total Price", $"{totalPrice}".PadLeft(spacing));
             Console.WriteLine();
             Console.WriteLine("----------------------------------------");
             Console.WriteLine();
