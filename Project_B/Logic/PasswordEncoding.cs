@@ -1,3 +1,5 @@
+// Made by Tiffany
+
 public class PasswordEncoding
 {
     // allowed chars in password

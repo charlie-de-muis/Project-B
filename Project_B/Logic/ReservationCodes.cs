@@ -1,3 +1,4 @@
+// Made by Tiffany
 public class ReservationCodes
 {
     // returns false if the reservationcode doesn't already exist. Otherwise it returns true

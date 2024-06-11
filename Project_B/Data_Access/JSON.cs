@@ -1,3 +1,5 @@
+// Everyone contributed
+
 using Newtonsoft.Json;
 
 public static class JSON

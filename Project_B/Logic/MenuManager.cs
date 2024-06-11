@@ -1,3 +1,5 @@
+// Made by Bente & Orestis
+
 public class MenuManager
 {
     public static void DisplayMenu()
