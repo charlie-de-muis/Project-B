@@ -11,4 +11,10 @@ public class Account
         this.PassWord = password;
         this.Email = email;
     } 
+
+
+    public virtual void StartMenu(int choice)
+    {
+        
+    }
 }

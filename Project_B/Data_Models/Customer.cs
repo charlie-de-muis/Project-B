@@ -5,6 +5,11 @@ public class Customer : Account
         
     }
 
+    public override void StartMenu(int choice)
+    {
+        throw new NotImplementedException();
+    }
+
     public static bool MakeAccount(string username, string password, string email)
     {
         bool test_chars = true;
