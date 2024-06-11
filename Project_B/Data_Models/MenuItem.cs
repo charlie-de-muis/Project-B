@@ -1,3 +1,5 @@
+// Made by Tiffany
+
 public class MenuItem : IFood
 {
     // vegetarian, vegan, glutenfree, dairy free?
