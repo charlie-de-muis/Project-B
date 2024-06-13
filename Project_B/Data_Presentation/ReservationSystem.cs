@@ -37,7 +37,7 @@ static class ReservationSystem
             switch (choice)
             {
                 case 1: 
-                    Table.DisplayTables();
+                    Console.WriteLine(Table.DisplayTables(new List<Table>()));
                     Console.WriteLine("\nPress enter to continue...");
                     Console.ReadLine(); Program.ConsoleClear(); continue;
                 case 2: MakeReservation(); continue;
@@ -182,7 +182,7 @@ static class ReservationSystem
 
             if (anyAvailableTable)
             {
-                Table.DisplayTables();
+                Console.WriteLine(Table.DisplayTables(tables));
             }
             else
             {
