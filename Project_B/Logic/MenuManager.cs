@@ -83,16 +83,17 @@ public class MenuManager
         if (index == 0) { menuType = "Menu_current"; }
         else { menuType = "Menu_future"; }
 
-        Console.WriteLine("\nWould you like to filter or sort the menu? (yes/no)");
-        string filterSortChoice = Console.ReadLine();
+        string prompt2 = "Would you like to filter or sort the menu? (yes / no)";
+        string[] options2 = { "yes", "no" };
+        int index2 = ConsoleGUI.OptionGUI(prompt2, options2);
 
-        if (filterSortChoice.ToLower() == "yes")
+        if (index2 == 0)
         {
-            Program.ConsoleClear();
-            Console.WriteLine("\nWould you like to filter based on ingredients or diet, or would you like to sort based on price? (filter/sort)");
-            string filterSortInput = Console.ReadLine();
+            string prompt3 = "Would you like to filter based on ingredients or diet, or would you like to sort based on price?";
+            string[] options3 = { "filter", "sort" };
+            int index3 = ConsoleGUI.OptionGUI(prompt3, options3);
 
-            if (filterSortInput.ToLower() == "filter")
+            if (index3 == 0)
             {
                 // Prompt user for filter input
                 Program.ConsoleClear();
@@ -101,20 +102,14 @@ public class MenuManager
                 
                 Program.ConsoleClear();
                 DisplayFilteredMenu(filterInput, menuType);
-                Console.WriteLine("Press enter to continue..."); Console.ReadLine(); Program.ConsoleClear();
+                Console.WriteLine("Press enter to return..."); Console.ReadLine(); Program.ConsoleClear();
             }
-            else if (filterSortInput.ToLower() == "sort")
+            else
             {
                 // Sort and display the menu
                 Program.ConsoleClear();
                 DisplaySortedMenu(menuType);
-                Console.WriteLine("Press enter to continue..."); Console.ReadLine(); Program.ConsoleClear();
-            }
-            else
-            {
-                Program.ConsoleClear();
-                Console.WriteLine("Invalid input. Please enter 'filter' or 'sort'.");
-                Console.WriteLine("Press enter to continue..."); Console.ReadLine(); Program.ConsoleClear();
+                Console.WriteLine("Press enter to return..."); Console.ReadLine(); Program.ConsoleClear();
             }
         }
         else
