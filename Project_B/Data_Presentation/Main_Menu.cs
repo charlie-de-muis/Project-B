@@ -58,12 +58,12 @@ class Main_Menu
             else
             {
                 if (choice == 4) { Console.WriteLine("You exited the program."); break; }
-                // switch (choice)
-                // {
-                //     case 1: account = Log_in.Option(); continue;
-                //     case 2: MenuManager.ViewMenu(); continue;
-                //     case 3: PrintAboutText(); continue;
-                // }
+                switch (choice)
+                {
+                    case 1: account = Log_in.Option(); continue;
+                    case 2: MenuManager.ViewMenu(); continue;
+                    case 3: PrintAboutText(); continue;
+                }
                 Console.WriteLine("Invalid choice. Press enter to continue...");
                 Console.ReadLine(); Program.ConsoleClear(); continue;
             }
