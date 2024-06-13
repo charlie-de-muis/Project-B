@@ -3,9 +3,13 @@
 public static class TXT
 {
     // Read from the text file
-    public static string ReadFromTXT()
+    public static string ReadFromTXT(bool test)
     {
-            string folderPath = Path.Combine(Environment.CurrentDirectory, "Data_Sources");
+            // Folder path where you want to store the CSV --> bool test is true for unit tests,
+            // false for the normal program
+            string folderPath;
+            if (test){folderPath = Path.Combine("../../../..", "Project_B", "Data_Sources");}
+            else {folderPath = Path.Combine(Environment.CurrentDirectory, "Data_Sources");}
             string filePath = Path.Combine(folderPath, "restauranttext.txt");
 
             // create a file if it doesn't exist
@@ -25,9 +29,13 @@ public static class TXT
     }
 
     // Write to the text file (this is the append one, there needs to be an update one soon too)
-    public static void WritetoTXT()
+    public static void WritetoTXT(bool test)
     {
-            string folderPath = Path.Combine(Environment.CurrentDirectory, "Data_Sources");
+            // Folder path where you want to store the CSV --> bool test is true for unit tests,
+            // false for the normal program
+            string folderPath;
+            if (test){folderPath = Path.Combine("../../../..", "Project_B", "Data_Sources");}
+            else {folderPath = Path.Combine(Environment.CurrentDirectory, "Data_Sources");}
             string filePath = Path.Combine(folderPath, "restauranttext.txt");
 
             // create a file if it doesn't exist

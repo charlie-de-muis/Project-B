@@ -1,5 +1,5 @@
 // Made by Olivier
-class Main_Menu
+public class Main_Menu
 {
     public static object account = null;
 
@@ -71,7 +71,7 @@ class Main_Menu
 
     public static void PrintAboutText()
     {
-        string text = TXT.ReadFromTXT();
+        string text = TXT.ReadFromTXT(false);
         if (text != null)
         {
             Console.WriteLine(text);
@@ -88,9 +88,9 @@ class Main_Menu
         {
             // clearing file
         }
-        TXT.WritetoTXT();
-        TXT.WritetoTXT();
-        TXT.WritetoTXT();
+        TXT.WritetoTXT(false);
+        TXT.WritetoTXT(false);
+        TXT.WritetoTXT(false);
         Program.ConsoleClear();
     }
 
