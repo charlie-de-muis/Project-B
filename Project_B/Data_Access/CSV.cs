@@ -1,15 +1,20 @@
-public class CSV
+// Everyone contributed
+
+public static class CSV
 {
-    public static List<Account> ReadFromCSV()
+    public static List<Account> ReadFromCSV(bool test)
     {
-            // Folder path where you want to store the CSV
-            string folderPath = Path.Combine(Environment.CurrentDirectory, "Data_Sources");
+            // Folder path where you want to store the CSV --> bool test is true for unit tests,
+            // false for the normal program
+            string folderPath;
+            if (test){folderPath = Path.Combine("../../../..", "Project_B", "Data_Sources");}
+            else {folderPath = Path.Combine(Environment.CurrentDirectory, "Data_Sources");}
 
             // File path within the folder
             string filePath = Path.Combine(folderPath, "account_data.csv");
             try
         {
-
+            // create a new file if it doesn't exist
             if (!File.Exists(filePath))
             {
                 // Write headers
@@ -23,7 +28,7 @@ public class CSV
                 {
                     var line = reader.ReadLine();
                     string[] values = line.Split(";");
-
+                    // retrieve the data from the file, and return a list of accounts
                     accounts.Add(new Account(values[0], values[1], values[2]));
                 }
                 return accounts;
@@ -37,35 +42,37 @@ public class CSV
     }
     
 
-    public static List<Reservation> ReadFromCSVReservations(string filename, bool isTest = false)
+    public static List<Reservation> ReadFromCSVReservations(string filename, bool test)
     {
-
-            // Folder path where you want to store the CSV
+            // Folder path where you want to store the CSV --> bool test is true for unit tests,
+            // false for the normal program
             string folderPath;
-            if (isTest) { folderPath = Path.Combine("../../../..","Project_B","Data_Sources"); }
-            else { folderPath = Path.Combine(Environment.CurrentDirectory, "Data_Sources"); }
+            if (test){folderPath = Path.Combine("../../../..", "Project_B", "Data_Sources");}
+            else {folderPath = Path.Combine(Environment.CurrentDirectory, "Data_Sources");}
 
             // File path within the folder
             string filePath = Path.Combine(folderPath, filename);
             try
             {
-
+                // create a new file if it doesn't exist
                 if (!File.Exists(filePath))
                 {
                     // Write headers
-                    File.WriteAllText(filePath, "Date;Timeslot;Table;Name;Email;Amount of persons;Menu orders;Reservationcode;Date of booking\n");
+                    File.WriteAllText(filePath, "Date;Timeslot;Table;Name;Email;Amount of persons;Reservationcode;Date of booking\n");
                 }
 
+                // retrieve all the information from the file, and return a list of reservations
                 using(var reader = new StreamReader(filePath))
                 {
                     List<Reservation> reservations = new List<Reservation>();
                     while (!reader.EndOfStream)
                     {
                         var line = reader.ReadLine();
-                        if (line.Contains("Date;Timeslot;Table;Name;Email;Amount of persons;Menu orders;Reservationcode;Date of booking")) { continue; }
+                        if (line == "Date;Timeslot;Table;Name;Email;Amount of persons;Reservationcode;Date of booking") { continue; }
 
                         string[] values = line.Split(";");
                         List<string> tables = values[2].Split(",").ToList();
+                        // list of tables
                         List<int> tablesInt = new();
                         for (int i = 0; i < tables.Count; i++)
                         {
@@ -74,7 +81,7 @@ public class CSV
                                 tablesInt.Add(tableInt);
                             }
                         }
-
+                        // food orders
                         Dictionary<int, int> menuOrders = new Dictionary<int, int>();
 
                         List<string> parts = values[6].Split('-').ToList();
@@ -87,7 +94,7 @@ public class CSV
                                 menuOrders[key] = value;
                             }
                         }
-
+                        // number of customers
                         int NumPers = 0;
                         if (int.TryParse(values[5], out int PersInt))
                         {
@@ -105,11 +112,14 @@ public class CSV
                 return null;
             }
     }
-    public static void WriteToCSV(Account account)
+    public static void WriteToCSV(Account account, bool test)
     {
 
-            // Folder path where you want to store the CSV
-            string folderPath = Path.Combine(Environment.CurrentDirectory, "Data_Sources");
+            // Folder path where you want to store the CSV --> bool test is true for unit tests,
+            // false for the normal program
+            string folderPath;
+            if (test){folderPath = Path.Combine("../../../..", "Project_B", "Data_Sources");}
+            else {folderPath = Path.Combine(Environment.CurrentDirectory, "Data_Sources");}
 
             // File path within the folder
             string filePath = Path.Combine(folderPath, "account_data.csv");
@@ -127,13 +137,14 @@ public class CSV
             File.AppendAllText(filePath, userDataString);
     }
 
-    public static void WriteToCSVReservations(Reservation reservation, string filename, bool isTest = false)
+    public static void WriteToCSVReservations(Reservation reservation, string filename, bool test)
     {
 
-            // Folder path where you want to store the CSV
+            // Folder path where you want to store the CSV --> bool test is true for unit tests,
+            // false for the normal program
             string folderPath;
-            if (isTest) { folderPath = Path.Combine("../../../..","Project_B","Data_Sources"); }
-            else { folderPath = Path.Combine(Environment.CurrentDirectory, "Data_Sources"); }
+            if (test){folderPath = Path.Combine("../../../..", "Project_B", "Data_Sources");}
+            else {folderPath = Path.Combine(Environment.CurrentDirectory, "Data_Sources");}
 
             // File path within the folder
             string filePath = Path.Combine(folderPath, filename);
@@ -142,7 +153,7 @@ public class CSV
             if (!File.Exists(filePath))
             {
                 // Write headers
-                File.WriteAllText(filePath, "Date;Timeslot;Table;Name;Email;Amount of persons;Menu orders;Reservationcode;Date of booking\n");
+                File.WriteAllText(filePath, "Date;Timeslot;Table;Name;Email;Amount of persons;MenuOrders;Reservationcode;Date of booking\n");
             }
 
             string menuOrders = "";
@@ -159,9 +170,10 @@ public class CSV
 
     public static void Update_CSV_Reservations(Reservation reservation)
     {
-        // replacing the old reservation
-        List<Reservation> old_reservations = ReadFromCSVReservations("Reservation.csv");
+        // loading the old reservations
+        List<Reservation> old_reservations = ReadFromCSVReservations("Reservation.csv", false);
 
+        // search for the correct reservation and change the data
         for (int i = 0; i < old_reservations.Count; i++)
         {
             if (old_reservations[i].ReservationCode == reservation.ReservationCode && old_reservations[i].DateOfBooking == reservation.DateOfBooking)
@@ -182,7 +194,7 @@ public class CSV
             if (!File.Exists(filePath))
             {
                 // Write headers
-                File.WriteAllText(filePath, "Date;Timeslot;Table;Name;Email;Amount of persons;Menu orders;Reservationcode;Date of booking\n");
+                File.WriteAllText(filePath, "Date;Timeslot;Table;Name;Email;Amount of persons;Reservationcode;Date of booking\n");
             }
 
         // clearing the file

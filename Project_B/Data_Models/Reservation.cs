@@ -1,3 +1,4 @@
+//Made by Tiffany and Melvern
 public class Reservation
 {
     public string Date;
@@ -23,6 +24,8 @@ public class Reservation
         this.ReservationCode = code;
         this.DateOfBooking = dateofbooking;
     }
+    
+    // method to print receipts in other places
     public static void PrintReceipt(int width, int spacing, string DateSelect, string TimeSlot, string AmountofPersons, string TableChoicesSTR, Dictionary<int, int> MenuOrders, string ReservationCode, string CurrentDate)
     {
         double totalPrice = 0;
@@ -44,7 +47,7 @@ public class Reservation
         Console.WriteLine("║                                                                            ║");
         Console.WriteLine("║ Dishes/Drinks:                                                             ║");
         Console.WriteLine("║                                                                            ║");
-        List<MenuItem> menuItems = JSON.ReadJSON("Menu_current");
+        List<MenuItem> menuItems = JSON.ReadJSON("Menu_current", false);
         ICollection<int> keys = MenuOrders.Keys;
         foreach (int key in keys)
             {

@@ -1,3 +1,5 @@
+// Made by Orestis
+
 public static class TXT
 {
     // Read from the text file
@@ -6,11 +8,13 @@ public static class TXT
             string folderPath = Path.Combine(Environment.CurrentDirectory, "Data_Sources");
             string filePath = Path.Combine(folderPath, "restauranttext.txt");
 
+            // create a file if it doesn't exist
             if (!File.Exists(filePath))
                 File.Create(filePath).Close();
 
             if (File.Exists(filePath))
             {
+                // add the data to the file
                 string text = File.ReadAllText(filePath);
                 return text;
             }
@@ -26,11 +30,13 @@ public static class TXT
             string folderPath = Path.Combine(Environment.CurrentDirectory, "Data_Sources");
             string filePath = Path.Combine(folderPath, "restauranttext.txt");
 
+            // create a file if it doesn't exist
             if (!File.Exists(filePath))
                 File.Create(filePath).Close();
 
             if (File.Exists(filePath))
             {
+                // retrieve the data from the file
                 string text = Console.ReadLine();
                 using (StreamWriter writer = File.AppendText(filePath))
                 {

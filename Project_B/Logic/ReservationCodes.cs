@@ -1,36 +1,43 @@
+// Made by Tiffany
 public class ReservationCodes
 {
-    // returned false als de code nog niet bestaat, anders true
-    public static bool CheckCode(string code)
+    // returns false if the reservationcode doesn't already exist. Otherwise it returns true
+    private static bool CheckCode(string code, List<Reservation> reservations)
     {
-        List<Reservation> Reservations = CSV.ReadFromCSVReservations("Reservations.csv");
         try
         {
-            foreach (Reservation r in Reservations)
+            foreach (Reservation r in reservations)
             {
-                if (r.ReservationCode == code){return true;}
+                if (r.ReservationCode == code) { return true; }
             }
             return false;
         }
-        catch (Exception e){return false;}
+        catch (Exception e) { return false; }
     }
 
-    // maak een random code, check of hij al bestaat, en stuur de code of een error bericht terug.
-    public static string GenerateReservationCode()
+    // creates a random code, checks if the code already exists, and returns the generated code
+    public static string GenerateReservationCode(List<Reservation> reservations)
     {
-        string code = "";
+        int attempts = 100;
 
-        Random rand = new Random();
-        string letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-        int length = 8;
-
-        for(int i = 0; i < length; i++)
+        while (true)
         {
-            int pos = rand.Next(62);
-            code = code + letters.ElementAt(pos);
-        }
+            string code = "";
 
-        if (CheckCode(code) == false){return code;}
-        else {return "This code already exists.";}
+            Random rand = new Random();
+            string letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+            int length = 8;
+
+            for(int i = 0; i < length; i++)
+            {
+                int pos = rand.Next(62);
+                code = code + letters.ElementAt(pos);
+            }
+
+            if (CheckCode(code, reservations) == false) { return code; }
+
+            attempts--;
+            if (attempts <= 0) { return null; }
+        }
     }
 }

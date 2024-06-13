@@ -1,3 +1,4 @@
+// Made by Olivier
 class Main_Menu
 {
     public static object account = null;
@@ -78,7 +79,6 @@ class Main_Menu
         Console.WriteLine("Press enter to return..."); Console.ReadLine(); Program.ConsoleClear();
     }
 
-    // About me text (if it exists) gets deleted and the admin can write the about me text from scratch
     public static void AboutTextAdmin()
     {
         Console.WriteLine("Type 3 lines of information about your restaurant:");

@@ -1,18 +1,15 @@
+// Made by Tiffany
 public class EditReservations
 {
-    // bij de input wordt de reservering meegegeven
-    // daarna wordt er gevraagd wat ze willen aanpassen
-    // generics + constraint --> input kan een string, int of list<int> zijn
-    // dat specifieke stukje in het reserveringsobject wordt aangepast
-    // de aanpassing wordt geupload naar het csv bestand
     public static void Choose_Reservation()
     {
-        List<Reservation> file = CSV.ReadFromCSVReservations("Reservation.csv");
+        List<Reservation> file = CSV.ReadFromCSVReservations("Reservation.csv", false);
 
         foreach (Reservation r in file)
         {
             if (r.Date == "Date") { continue; }
             
+            // print all the reservations clearly
             List<int> keys = r.MenuOrders.Keys.ToList();
             string menuOrdersSTR = @"""order"" x ""count""";
             foreach (int key in keys) { menuOrdersSTR += $" : {key} x {r.MenuOrders[key]}"; }
@@ -30,6 +27,7 @@ Booking date: {r.DateOfBooking}
 ");
         }
 
+        // let the admin choose the reservation they want to change
         Console.WriteLine("Please enter the reservationcode of the reservation you want to change:");
         string code = Console.ReadLine();
 
@@ -40,6 +38,7 @@ Booking date: {r.DateOfBooking}
     {
         while (true)
         {
+            // ask what needs to be changed
             Console.WriteLine(@"What do you want to change?
 1. Date
 2. Timeslot
@@ -58,6 +57,7 @@ Booking date: {r.DateOfBooking}
                 Console.ReadLine();
             }
 
+            // switch statement to redirect the admin to the correct data
             if (choice == 7){break;}
             Console.WriteLine("Please enter the new data.");
 
@@ -94,9 +94,9 @@ Booking date: {r.DateOfBooking}
         }
     }
 
-// hier is van allebei maar 1 optie
     private static void Change_reservation<T>(T new_data, Reservation reservation)
     {
+        // change the table numbers
         if (new_data is string)
         {   // maakt van de string een lijst met integers
             reservation.Table = Convert.ToString(new_data).Split(",").Select(int.Parse).ToList();
@@ -105,6 +105,7 @@ Booking date: {r.DateOfBooking}
 
             Console.WriteLine("Reservation updated.");
         }
+        // change the amount of people for this reservation
         else if (new_data is int)
         {
             reservation.AmountofPersons = Convert.ToInt32(new_data);
@@ -119,21 +120,25 @@ Booking date: {r.DateOfBooking}
     {
         switch (type_of_data)
         {
+            // change the date
             case "date": 
                 reservation.Date = new_data; 
                 CSV.Update_CSV_Reservations(reservation); 
                 Console.WriteLine("Reservation updated."); 
                 break;
+            // change the timeslot
             case "time":
                 reservation.TimeSlot = new_data; 
                 CSV.Update_CSV_Reservations(reservation); 
                 Console.WriteLine("Reservation updated."); 
                 break;
+            // change the name of the customer
             case "name": 
                 reservation.CustomerName = new_data; 
                 CSV.Update_CSV_Reservations(reservation); 
                 Console.WriteLine("Reservation updated."); 
                 break;
+            // change the emailadress of the customer
             case "email": 
                 reservation.CustomerEmail = new_data; 
                 CSV.Update_CSV_Reservations(reservation); 

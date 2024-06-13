@@ -10,6 +10,7 @@ public class Customer : Account
         bool test_chars = true;
         foreach (char c in password)
         {
+            // check if all the characters in the file are valid
             if (!PasswordEncoding.Chars.Contains(c))
             {
                 Console.WriteLine($"Creating account failed. Invalid character {c}");
@@ -17,6 +18,7 @@ public class Customer : Account
                 break;
             }
         }
+        // check for duplicate accounts
         if (EmailandNameExists(email, username))
         {
             Console.WriteLine($"Creating account failed. Email {email} and / or Name {username} already exists.");
@@ -24,16 +26,18 @@ public class Customer : Account
         }
         if (test_chars == true)
         {
+            // endcode the given password and upload the new account to the file
             password = PasswordEncoding.EncodeString(password);
-            CSV.WriteToCSV(new Customer(username, password, email));
+            CSV.WriteToCSV(new Customer(username, password, email), false);
             return true;
         }
         return false;
     }
 
+    // check for duplicate accounts
     private static bool EmailandNameExists(string email, string userName)
     {
-        List<Account> accounts = CSV.ReadFromCSV();
+        List<Account> accounts = CSV.ReadFromCSV(false);
         if (accounts != null)
         {
             return accounts.Any(acc => acc.Email == email || acc.UserName == userName);

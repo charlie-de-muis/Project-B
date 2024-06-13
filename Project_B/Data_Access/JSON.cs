@@ -1,16 +1,16 @@
+// Everyone contributed
+
 using Newtonsoft.Json;
 
-public class JSON
+public static class JSON
 {
-    // Hoe willen we de data uploaden? --> data wordt ingevuld door de admin in het programma, en dan geupload 
-    // uit overleg met Cigdem 2-4-2024s
-
-    public static void WriteJSON(List<MenuItem> ValueToWrite, string menuType)
+    public static void WriteJSON(List<MenuItem> ValueToWrite, string menuType, bool test)
     {
-        // deze try catch blokken zorgen ervoor dat de code werkt op verschillende computers. 
-        // De ene zoekt in de bin map, de ander in de main project map
-            // Folder path where you want to store the JSON
-            string folderPath = Path.Combine(Environment.CurrentDirectory, "Data_Sources\\Menu_Storage");
+            // Folder path where you want to store the JSON --> bool test is true for unit tests,
+            // false for the normal program
+            string folderPath;
+            if (test){folderPath = Path.Combine("../../../..", "Project_B", "Data_Sources");}
+            else {folderPath = Path.Combine(Environment.CurrentDirectory, "Data_Sources\\Menu_Storage");}
 
             // File path within the folder
             string filePath = Path.Combine(folderPath, $"{GetCurrentMenuName(folderPath, menuType)}.json");
@@ -21,7 +21,7 @@ public class JSON
                 Console.WriteLine("Press any key to continue..."); Console.ReadKey();
             }
 
-            List<MenuItem> Menu = ReadJSON(menuType);
+            List<MenuItem> Menu = ReadJSON(menuType, test);
             Menu.AddRange(ValueToWrite);
 
             // writing the data
@@ -33,10 +33,8 @@ public class JSON
 
     public static void DeletedItemsWriteJSON(List<MenuItem> Menu, string menuType)
     {
-        // deze try catch blokken zorgen ervoor dat de code werkt op verschillende computers. 
-        // De ene zoekt in de bin map, de ander in de main project map
-
-            // Folder path where you want to store the JSON
+            // Folder path where you want to store the JSON --> bool test is true for unit tests,
+            // false for the normal program
             string folderPath = Path.Combine(Environment.CurrentDirectory, "Data_Sources\\Menu_Storage");
 
             // File path within the folder
@@ -55,16 +53,19 @@ public class JSON
             }        
     }
 
-    public static List<MenuItem> ReadJSON(string menuType)
+    public static List<MenuItem> ReadJSON(string menuType, bool test)
     {
         // create an empty Streamreader
         StreamReader reader = null!;
 
             try
             {
-                // Folder path where you want to read the JSON
-                string folderPath = Path.Combine(Environment.CurrentDirectory, "Data_Sources\\Menu_Storage");
-
+                // Folder path where you want to read the JSON --> bool test is true for unit tests,
+                // false for the normal program
+                string folderPath;
+                if (test){folderPath = Path.Combine("../../../..", "Project_B", "Data_Sources");}
+                else {folderPath = Path.Combine(Environment.CurrentDirectory, "Data_Sources\\Menu_Storage");}
+                
                 // File path within the folder
                 string filePath = Path.Combine(folderPath, $"{GetCurrentMenuName(folderPath, menuType)}.json");
 
@@ -85,8 +86,8 @@ public class JSON
                 return Menu;
             }
 
-            catch (FileNotFoundException e){}
-                // {Console.WriteLine($"Missing JSON file. {e.Message}");}
+            catch (FileNotFoundException e)
+                {Console.WriteLine($"Missing JSON file. {e.Message}");}
 
             catch (JsonReaderException e)
                 {Console.WriteLine($"Invalid JSON. {e.Message}");}
@@ -103,7 +104,7 @@ public class JSON
 
             try
             {
-                // Folder path where you want to read the JSON
+                // Folder path where you want to read the JSON 
                 string folderPath = Path.Combine(Environment.CurrentDirectory, "Data_Sources\\Menu_Storage");
 
                 if (!Directory.Exists(folderPath))
@@ -115,8 +116,8 @@ public class JSON
                 return Directory.GetFiles(folderPath, "*.json").Select(Path.GetFileNameWithoutExtension).ToList()!;
             }
 
-            catch (FileNotFoundException e){}
-                // {Console.WriteLine($"Missing JSON file. {e.Message}");}
+            catch (FileNotFoundException e)
+                {Console.WriteLine($"Missing JSON file. {e.Message}");}
 
             catch (JsonReaderException e)
                 {Console.WriteLine($"Invalid JSON. {e.Message}");}
@@ -127,6 +128,7 @@ public class JSON
 
     public static void SetMenuAs(string menuType, string fileName)
     {
+            // search for the files
             string folderPath = Path.Combine(Environment.CurrentDirectory, "Data_Sources", "Menu_Storage");
             string filePath = Path.Combine(folderPath, fileName);
 
@@ -135,6 +137,7 @@ public class JSON
                 Directory.CreateDirectory(folderPath);
             }
 
+            // create a file if it doesn't exist
             if (!File.Exists(filePath))
             {
                 Console.WriteLine("File not found. Please make sure the file name is correct and try again.");

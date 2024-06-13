@@ -1,12 +1,40 @@
+// Made by Tiffany
+
 public class PreviousReservation
-{
+{ 
+    // let's customers print the receipt of their reservation again
     public static void PreRes(Customer c)
     {
+        List<Reservation> file = CSV.ReadFromCSVReservations("Reservation.csv", false);
+
+        foreach (Reservation r in file)
+        {
+            if (r.CustomerName == c.UserName && r.CustomerEmail == c.Email)
+            {            
+            // print all the reservations clearly
+            List<int> keys = r.MenuOrders.Keys.ToList();
+            string menuOrdersSTR = @"""order"" x ""count""";
+            foreach (int key in keys) { menuOrdersSTR += $" : {key} x {r.MenuOrders[key]}"; }
+            
+            Console.WriteLine(@$"
+Date: {r.Date}
+Timeslot: {r.TimeSlot}
+Table(s): {string.Join(",", r.Table)}
+Customer name: {r.CustomerName}
+Customer email: {r.CustomerEmail}
+Amount of persons: {r.AmountofPersons}
+Menu Orders: {menuOrdersSTR}
+Reservation code: {r.ReservationCode}
+Booking date: {r.DateOfBooking}
+");
+        }}
+
         Console.WriteLine("Please enter your reservation code:");
         string code = Console.ReadLine();
         bool found = false;
 
-        foreach (Reservation R in CSV.ReadFromCSVReservations("Reservation.csv"))
+        // search for the correct reservation
+        foreach (Reservation R in file)
         {
             string TableChoicesSTR = string.Join(", ", R.Table);
             Program.ConsoleClear();
@@ -17,6 +45,7 @@ public class PreviousReservation
 
             if (spacing > 10) { width -= spacing - 10; }
             
+            // if it is the correct reservation, print the receipt
             if (R.CustomerEmail == c.Email && R.ReservationCode == code)
             {
                 Reservation.PrintReceipt(width, spacing, R.Date, R.TimeSlot, Convert.ToString(R.AmountofPersons), TableChoicesSTR, R.MenuOrders, R.ReservationCode, R.DateOfBooking); found = true;

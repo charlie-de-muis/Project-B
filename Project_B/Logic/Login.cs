@@ -1,3 +1,5 @@
+// Made by Orestis
+
 public class Log_in
 {
     public static object Option()
@@ -15,6 +17,7 @@ public class Log_in
                 Program.ConsoleClear();
                 while (NextStep == false && attemptsleft > 0)
                 {
+                    // ask for the username and password
                     Console.WriteLine("Enter username:");
                     string username = Console.ReadLine();
 
@@ -22,9 +25,11 @@ public class Log_in
                     string password = Console.ReadLine();
 
                     attemptsleft--;
-                    if (Login(username, password) != null)
+                    Tuple<string,string> data = new Tuple<string, string>(username,password);
+                    if (Login(data) != null)
                     {
-                        Account loggedInAccount = Login(username, password);
+                        // check if username and password are correct, and return the correct menu
+                        Account loggedInAccount = Login(data);
                         if (loggedInAccount != null && loggedInAccount.UserName == "Admin")
                         {
                             return new Admin(loggedInAccount.UserName, loggedInAccount.PassWord, loggedInAccount.Email);
@@ -41,6 +46,7 @@ public class Log_in
             }
             else if (choice == "create account")
             {
+                // ask for all the necessary data
                 Program.ConsoleClear();
                 Console.WriteLine("Enter an e-mail:");
                 string email = Console.ReadLine();
@@ -53,6 +59,8 @@ public class Log_in
                 string password = Console.ReadLine();
 
                 Program.ConsoleClear();
+
+                // create a new account
                 if (Customer.MakeAccount(username, password, email)) {return new Customer(username, password, email);}
                 else {Console.WriteLine("Press enter to continue..."); Console.ReadLine();}
             }
@@ -66,25 +74,14 @@ public class Log_in
         Console.WriteLine("unknown error in option method\nPress enter to continue..."); Console.ReadLine(); Program.ConsoleClear(); return null;
     }
 
-    // private static Account GetAccountByUsername(string username)
-    // {
-    //     foreach (Account acc in CSV.ReadFromCSV())
-    //     {
-    //         if (acc.UserName == username)
-    //         {
-    //             return acc;
-    //         }
-    //     }
-    //     return null;
-    // }
-
-    private static Account Login(string username, string password)
+    private static Account Login(Tuple<string, string> login)
     {
-        //Console.WriteLine(ReadFromCSV().Count);
-        foreach (Account acc in CSV.ReadFromCSV())
+        string username = login.Item1;
+        string password = login.Item2;
+
+        foreach (Account acc in CSV.ReadFromCSV(false))
         {
-            //Console.WriteLine(acc.UserName);
-            //Console.WriteLine(acc.PassWord);
+            // if there is an account with the given info
             if (acc.UserName == username && PasswordEncoding.DecodeString(acc.PassWord) == password){return acc;}
         }
         return null;
@@ -92,7 +89,8 @@ public class Log_in
 
     public static void CheckAdmin()
     {
-        List<Account> info = CSV.ReadFromCSV();
+        // check if the logged in account is from the admin
+        List<Account> info = CSV.ReadFromCSV(false);
         bool adminExists = false;
         foreach (Account profile in info)
         {
@@ -103,10 +101,10 @@ public class Log_in
             }
         }
 
+        // create an admin account if it doesn't exist
         if (!adminExists)
         {
-            CSV.WriteToCSV(new Admin("Admin", PasswordEncoding.EncodeString("Admin"), "admin@admin.com"));
-            //MakeAccount("Admin", "Admin", "admin@admin.com");
+            CSV.WriteToCSV(new Admin("Admin", PasswordEncoding.EncodeString("Admin"), "admin@admin.com"), false);
         }
     }
 }

@@ -1,3 +1,5 @@
+// Made by Melvern
+
 public static class ReservationSystem
 {
     private static string DateSelect;
@@ -48,7 +50,7 @@ public static class ReservationSystem
 
     public static void MakeReservation()
     {
-        List<Reservation> reservations = CSV.ReadFromCSVReservations("Reservation.csv");
+        List<Reservation> reservations = CSV.ReadFromCSVReservations("Reservation.csv", false);
 
         //CUSTOMER SELECTS ON WHICH DATE HE/SHE WANTS TO RESERVE.
         Console.WriteLine("For which day do you want to book?");
@@ -275,7 +277,7 @@ public static class ReservationSystem
 
     private static string SelectItems()
     {
-        List<MenuItem> menuItems = JSON.ReadJSON("Menu_current");
+        List<MenuItem> menuItems = JSON.ReadJSON("Menu_current", false);
         if (!menuItems.Any())
         {
             Console.WriteLine("No menu or menu items available at the moment.\nPress any key to continue.");
@@ -352,7 +354,7 @@ public static class ReservationSystem
 
         if (spacing > 30) { width -= spacing - 30; }
 
-        List<MenuItem> menuItems = JSON.ReadJSON("Menu_current");
+        List<MenuItem> menuItems = JSON.ReadJSON("Menu_current", false);
         Dictionary<int, int> orderCounts = menuOrders.GroupBy(id => id).ToDictionary(group => group.Key, group => group.Count());
         ICollection<int> keys = orderCounts.Keys;
 
@@ -410,9 +412,9 @@ public static class ReservationSystem
         }
 
         //If the customer confirms reservation, the reservation is saved and a receipt will be printed.
-        string ReservationCode = GenerateReservationCode(reservations);
+        string ReservationCode = ReservationCodes.GenerateReservationCode(reservations);
         Reservation reservation = new Reservation(DateSelect, TimeSlot, TableChoices, Customer.UserName, Customer.Email, AmountofPersons, orderCounts, ReservationCode, DateTime.Now.ToString("dd-MM-yyyy"));
-        CSV.WriteToCSVReservations(reservation, "Reservation.csv");
+        CSV.WriteToCSVReservations(reservation, "Reservation.csv", false);
 
         Reservation.PrintReceipt(width, spacing, DateSelect, TimeSlot, AmountofPersons.ToString(), TableChoicesSTR, orderCounts, ReservationCode, DateTime.Now.ToString("dd-MM-yyyy"));
         Console.WriteLine("Your receipt with reservation code has been printed.");
@@ -425,49 +427,9 @@ public static class ReservationSystem
         return "main menu";
     }
 
-    // maak een random code, check of hij al bestaat, en stuur de code of een error bericht terug.
-    private static string GenerateReservationCode(List<Reservation> reservations)
-    {
-        int attempts = 100;
-
-        while (true)
-        {
-            string code = "";
-
-            Random rand = new Random();
-            string letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-            int length = 8;
-
-            for(int i = 0; i < length; i++)
-            {
-                int pos = rand.Next(62);
-                code = code + letters.ElementAt(pos);
-            }
-
-            if (CheckCode(code, reservations) == false) { return code; }
-
-            attempts--;
-            if (attempts <= 0) { return null; }
-        }
-    }
-
-    // returned false als de code nog niet bestaat, anders true
-    private static bool CheckCode(string code, List<Reservation> reservations)
-    {
-        try
-        {
-            foreach (Reservation r in reservations)
-            {
-                if (r.ReservationCode == code) { return true; }
-            }
-            return false;
-        }
-        catch (Exception e) { return false; }
-    }
-
     public static void ViewReservations()
     {
-        List<Reservation> file = CSV.ReadFromCSVReservations("Reservation.csv");
+        List<Reservation> file = CSV.ReadFromCSVReservations("Reservation.csv", false);
         foreach (Reservation r in file)
         {
             if (r.Date == "Date"){continue;}
