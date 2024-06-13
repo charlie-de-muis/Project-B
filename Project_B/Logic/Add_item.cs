@@ -7,6 +7,10 @@ public class Add_Item
         List<MenuItem> Menu = new();
         string MoreItems = "yes";
 
+        string prompt = "Which menu are you editing?";
+        string[] options = { "Current Menu", "Future Menu" };
+        string menuType = ConsoleGUI.OptionGUI(prompt, options) == 0 ? "Menu_current" : "Menu_future";
+
         do
         {
             Console.WriteLine("Please enter all the details about the new menu item.");
@@ -67,7 +71,7 @@ These are all the options:
             } while (Check < 4);
 
             // add the item to the menu
-            Menu.Add(new MenuItem(GenerateID(), Name, Ingredients, Price, DietaryInfo));
+            Menu.Add(new MenuItem(GenerateID(menuType), Name, Ingredients, Price, DietaryInfo));
 
             Program.ConsoleClear();
             Console.WriteLine("Do you want to add more items? Please type yes or no");
@@ -80,13 +84,13 @@ These are all the options:
 
         } while (MoreItems == "yes");
 
-        JSON.WriteJSON(Menu, "Menu_current", false);
+        JSON.WriteJSON(Menu, menuType, false);
     }
 
     // generate menu item ID
-    private static int GenerateID()
+    private static int GenerateID(string menuType)
     {
-        List<MenuItem> menuItems = JSON.ReadJSON("Menu_current", false);
+        List<MenuItem> menuItems = JSON.ReadJSON(menuType, false);
         return (menuItems.Any() ? menuItems.MaxBy(menuItem => menuItem.ID).ID : 0) + 1;
     }
 }
