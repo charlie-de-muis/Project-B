@@ -73,14 +73,9 @@ These are all the options:
             // add the item to the menu
             Menu.Add(new MenuItem(GenerateID(menuType), Name, Ingredients, Price, DietaryInfo));
 
-            Program.ConsoleClear();
-            Console.WriteLine("Do you want to add more items? Please type yes or no");
-            string Answer = Console.ReadLine().ToLower();
-
-            Program.ConsoleClear();
-            if (Answer == "yes"){MoreItems = "yes";}
-            else if (Answer == "no"){MoreItems = "no";}
-            else {Console.WriteLine("Invalid answer.");}
+            prompt = "Do you want to add more items?";
+            options = new string[] { "yes", "no" };
+            MoreItems = ConsoleGUI.OptionGUI(prompt, options) == 0 ? "yes" : "no";
 
         } while (MoreItems == "yes");
 
