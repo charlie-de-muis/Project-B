@@ -3,7 +3,7 @@ public class Table
 {
     public int ID;
     public int TotalSeats;
-    public bool IsAvailable;
+    public bool IsAvailable = true;
 
     public Table(int id, int totalSeats)
     {
@@ -29,7 +29,6 @@ public class Table
                 return;
             }
         }
-        IsAvailable = true;
     }
 
     // shows the available tables

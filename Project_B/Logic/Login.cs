@@ -4,12 +4,14 @@ public class Log_in
 {
     public static object Option()
     {
-        Console.WriteLine("Login or Create account?");
-        string choice = Console.ReadLine().ToLower();
+        string prompt = "Login or Create account?";
+        string[] options = { "Login", "Create Account" };
+        int index = ConsoleGUI.OptionGUI(prompt, options);
+
         bool flag = true;
         while (flag)
         {
-            if (choice == "login")
+            if (index == 0)
             {
                 int attemptsleft = 3;
                 bool NextStep = false;
@@ -44,7 +46,7 @@ public class Log_in
 
                 return null;
             }
-            else if (choice == "create account")
+            else
             {
                 // ask for all the necessary data
                 Program.ConsoleClear();
@@ -64,11 +66,6 @@ public class Log_in
                 if (Customer.MakeAccount(username, password, email)) {return new Customer(username, password, email);}
                 else {Console.WriteLine("Press enter to continue..."); Console.ReadLine();}
             }
-            else 
-            {
-                Program.ConsoleClear();
-                Console.WriteLine("Wrong Input (login/create account)\nPress enter to continue..."); Console.ReadLine(); Program.ConsoleClear(); return null;
-            };
         }
         Program.ConsoleClear();
         Console.WriteLine("unknown error in option method\nPress enter to continue..."); Console.ReadLine(); Program.ConsoleClear(); return null;

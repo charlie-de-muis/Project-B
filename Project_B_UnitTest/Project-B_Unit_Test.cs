@@ -31,7 +31,7 @@ public class UnitTest1
     [TestMethod]
     public void Test_Saved_ReservationCode()
     {
-        Reservation res = new Reservation("12-12-2030", "dinner", new List<int>(){1}, "Tester", "test@gmail.com", 2, new Dictionary<int,int>(), "test123", "06-06-2024");
+        Reservation res = new Reservation("12-12-2030", "dinner", new List<int>(){1}, "Tester", "test@gmail.com", 2, new Dictionary<int,int>() { {2, 5} }, "test123", "06-06-2024");
         CSV.WriteToCSVReservations(res, "Reservation.csv", true);
 
         Reservation latest = CSV.ReadFromCSVReservations("Reservation.csv", true).FirstOrDefault(res => res.Date == "12-12-2030");
@@ -82,8 +82,12 @@ public class UnitTest1
         string line5 = "";
         string line6 = "11[ ][ ][ ] 12[ ][ ] 13[ ][ ] 14[ ][ ] 15[ ]";
         string line7 = "  [ ][ ][ ]   [ ][ ]   [ ][ ]   [ ][ ]   [ ]";
+        string line8 = "   ____  ____  ____  ____  ____  ____  ____  ____";
+        string line9 = "  _|__|__|__|__|__|__|__|__|__|__|__|__|__|__|__|___";
+        string line10 = "  |                      BAR                       |";
+        string line11 = "  |________________________________________________|";
 
-        string tableString = $"{line1}\n{line2}\n{line3}\n{line4}\n{line5}\n{line6}\n{line7}";
+        string tableString = $"{line1}\n{line2}\n{line3}\n{line4}\n{line5}\n{line6}\n{line7}\n{line8}\n{line9}\n{line10}\n{line11}";
         string result = Table.DisplayTables(new List<Table>());
 
         Assert.AreEqual(tableString, result);

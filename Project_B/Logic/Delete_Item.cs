@@ -4,12 +4,16 @@ public class Delete_Item
 {
     public static void Delete_Items()
     {
+        string prompt = "Which menu are you editing?";
+        string[] options = { "Current Menu", "Future Menu" };
+        string menuType = ConsoleGUI.OptionGUI(prompt, options) == 0 ? "Menu_current" : "Menu_future";
+
         // load the menu
-        List<MenuItem> menuItems = JSON.ReadJSON("Menu_current", false);
+        List<MenuItem> menuItems = JSON.ReadJSON(menuType, false);
         
         while (true)
         {
-            MenuManager.DisplayMenu("Menu_current");
+            MenuManager.DisplayMenu(menuType);
 
             // ask which item needs to be deleted
             Console.WriteLine("\nWhich item do you want to delete? Enter an index or type cancel.");
@@ -26,11 +30,11 @@ public class Delete_Item
                 continue;
             }
             
-            menuItems = DeleteChosenItem(index, menuItems);
+            menuItems = DeleteChosenItem(index, menuItems, menuType);
         }
     }
 
-    public static List<MenuItem> DeleteChosenItem(int index, List<MenuItem> menuItems)
+    public static List<MenuItem> DeleteChosenItem(int index, List<MenuItem> menuItems, string menuType)
     {
         try
         {
@@ -39,7 +43,7 @@ public class Delete_Item
             if (removed > 0)
             {
                 // rewrite the menu
-                JSON.DeletedItemsWriteJSON(menuItems, "Menu_current");
+                JSON.DeletedItemsWriteJSON(menuItems, menuType);
             }
             else
             {
