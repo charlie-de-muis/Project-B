@@ -79,7 +79,7 @@ public static class ReservationSystem
 
             string entry = Console.ReadLine().Replace(" ", "");
             Program.ConsoleClear();
-            List<string> availableDates = new List<string>() { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14" };
+            string[] availableDates = new string[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14" };
             if (availableDates.Contains(entry)) { DateSelect = DateTime.Now.AddDays(int.Parse(entry)).ToString("dd-MM-yyyy"); }
             else if (entry == "cancel") { return; }
             else { Console.WriteLine("Invalid entry, for which day do you want to book?"); continue; }
