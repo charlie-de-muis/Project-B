@@ -45,4 +45,21 @@ public class UnitTest1
 
         Assert.AreEqual(Expected, result);
     }
+
+    [TestMethod]
+    public void PrintTables()
+    {
+        string line1 = " 1[ ][ ]  2[ ][ ]  3[ ][ ]  4[ ][ ]  5[ ][ ]";
+        string line2 = "";
+        string line3 = " 6[ ][ ][ ]  7[ ][ ]  8[ ][ ]   9[ ]   10[ ]";
+        string line4 = "  [ ][ ][ ]   [ ][ ]   [ ][ ]    [ ]     [ ]";
+        string line5 = "";
+        string line6 = "11[ ][ ][ ] 12[ ][ ] 13[ ][ ] 14[ ][ ] 15[ ]";
+        string line7 = "  [ ][ ][ ]   [ ][ ]   [ ][ ]   [ ][ ]   [ ]";
+
+        string tableString = $"{line1}\n{line2}\n{line3}\n{line4}\n{line5}\n{line6}\n{line7}";
+        string result = Table.DisplayTables(new List<Table>());
+
+        Assert.AreEqual(tableString, result);
+    }
 }

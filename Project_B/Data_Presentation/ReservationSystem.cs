@@ -37,7 +37,7 @@ public static class ReservationSystem
             switch (choice)
             {
                 case 1: 
-                    Table.DisplayTables(new List<Table>());
+                    Console.WriteLine(Table.DisplayTables(new List<Table>()));
                     Console.WriteLine("\nPress enter to continue...");
                     Console.ReadLine(); Program.ConsoleClear(); continue;
                 case 2: MakeReservation(); continue;
@@ -181,7 +181,7 @@ public static class ReservationSystem
 
             if (anyAvailableTable)
             {
-                Table.DisplayTables(tables);
+                Console.WriteLine(Table.DisplayTables(tables));
             }
             else
             {
@@ -189,10 +189,7 @@ public static class ReservationSystem
                 Console.WriteLine("Press enter to continue."); Console.ReadLine(); Program.ConsoleClear(); return "no tables";
             }
 
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.Write("\nRed ");
-            Console.ResetColor();
-            Console.WriteLine("tables are already booked");
+            Console.WriteLine("\ntables marked X are already booked");
 
             Console.WriteLine("\nSelect a single table by its number.");
             Console.WriteLine("Select multiple tables for merging by their numbers, comma seperated. (up to 16 people)");
