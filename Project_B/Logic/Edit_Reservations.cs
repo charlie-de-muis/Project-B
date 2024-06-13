@@ -96,7 +96,7 @@ Booking date: {r.DateOfBooking}
         }
     }
 
-    private static void Change_reservation<T>(T new_data, Reservation reservation)
+    public static void Change_reservation<T>(T new_data, Reservation reservation)
     {
         // change the table numbers
         if (new_data is string)
