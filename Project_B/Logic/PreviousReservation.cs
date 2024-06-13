@@ -40,15 +40,15 @@ Booking date: {r.DateOfBooking}
             Program.ConsoleClear();
 
             List<int> stringLengths = new List<int>() {R.TimeSlot.Length, TableChoicesSTR.Length };
-            int spacing = Math.Max(10, stringLengths.Max());
-            int width = 28;
+            int spacing = Math.Max(30, stringLengths.Max());
+            int width = 45;
 
-            if (spacing > 10) { width -= spacing - 10; }
+            if (spacing > 30) { width -= spacing - 30; }
             
             // if it is the correct reservation, print the receipt
             if (R.CustomerEmail == c.Email && R.ReservationCode == code)
             {
-                Reservation.PrintReceipt(width, spacing, R.Date, R.TimeSlot, Convert.ToString(R.AmountofPersons), TableChoicesSTR, R.MenuOrders, R.ReservationCode, R.DateOfBooking); found = true;
+                Reservation.PrintReceipt(width, spacing, R.Date, R.TimeSlot, Convert.ToString(R.AmountofPersons), TableChoicesSTR, c.UserName, R.MenuOrders, R.ReservationCode, R.DateOfBooking); found = true;
                 Console.WriteLine("\nPress enter to continue..."); Console.ReadLine(); Program.ConsoleClear();
             }
         }

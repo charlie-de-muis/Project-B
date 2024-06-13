@@ -26,7 +26,7 @@ public class Reservation
     }
     
     // method to print receipts in other places
-    public static void PrintReceipt(int width, int spacing, string DateSelect, string TimeSlot, string AmountofPersons, string TableChoicesSTR, Dictionary<int, int> MenuOrders, string ReservationCode, string CurrentDate)
+    public static void PrintReceipt(int width, int spacing, string DateSelect, string TimeSlot, string AmountofPersons, string TableChoicesSTR, string CustomerName, Dictionary<int, int> MenuOrders, string ReservationCode, string CurrentDate)
     {
         double totalPrice = 0;
         double discount = 0;
@@ -37,6 +37,7 @@ public class Reservation
         Console.WriteLine("║                                                                            ║");
         Console.WriteLine("║-------------------------------- Your Receipt ------------------------------║");
         Console.WriteLine("║                                                                            ║");
+        Console.WriteLine("{0, -" + width + "} {1}", "║ Under Name:", CustomerName.PadLeft(spacing) + " ║");
         Console.WriteLine("{0, -" + width + "} {1}", "║ Booking Date:", DateSelect.PadLeft(spacing) + " ║");
         Console.WriteLine("{0, -" + width + "} {1}", "║ TimeSlot:", TimeSlot.PadLeft(spacing) + " ║");
         Console.WriteLine("{0, -" + width + "} {1}", "║ Total Customers:", AmountofPersons.ToString().PadLeft(spacing) + " ║");
@@ -75,17 +76,5 @@ public class Reservation
         Console.WriteLine("║                                                                            ║");
         Console.WriteLine("╚════════════════════════════════════════════════════════════════════════════╝");
         Console.WriteLine();
-    }
-
-    public void PrintThisReceipt()
-    {
-        string TableChoicesSTR = string.Join(", ", Table);
-        List<int> stringLengths = new List<int>() { TimeSlot.Length, TableChoicesSTR.Length };
-        int spacing = Math.Max(10, stringLengths.Max());
-        int width = 28;
-
-        if (spacing > 10) { width -= spacing - 10; }
-
-        PrintReceipt(width, spacing, Date, TimeSlot, Convert.ToString(AmountofPersons), TableChoicesSTR, MenuOrders, ReservationCode, DateOfBooking);
     }
 }

@@ -416,7 +416,7 @@ public static class ReservationSystem
         Reservation reservation = new Reservation(DateSelect, TimeSlot, TableChoices, Customer.UserName, Customer.Email, AmountofPersons, orderCounts, ReservationCode, DateTime.Now.ToString("dd-MM-yyyy"));
         CSV.WriteToCSVReservations(reservation, "Reservation.csv", false);
 
-        Reservation.PrintReceipt(width, spacing, DateSelect, TimeSlot, AmountofPersons.ToString(), TableChoicesSTR, orderCounts, ReservationCode, DateTime.Now.ToString("dd-MM-yyyy"));
+        Reservation.PrintReceipt(width, spacing, DateSelect, TimeSlot, AmountofPersons.ToString(), TableChoicesSTR, Customer.UserName, orderCounts, ReservationCode, DateTime.Now.ToString("dd-MM-yyyy"));
         Console.WriteLine("Your receipt with reservation code has been printed.");
         Console.WriteLine("You will need this code once you arrive. See you soon!");
         Console.WriteLine("");
