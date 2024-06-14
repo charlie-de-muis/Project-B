@@ -1,4 +1,4 @@
-public class Main_Menu
+public static class Main_Menu
 {
     public static object account = null;
 
