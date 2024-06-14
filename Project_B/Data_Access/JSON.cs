@@ -56,50 +56,55 @@ public static class JSON
     }
 
     public static List<MenuItem> ReadJSON(string menuType, bool test)
-    {
-        // create an empty Streamreader
-        StreamReader reader = null!;
-
+        {
+            // create an empty Streamreader
+            StreamReader reader = null!;
             try
             {
-                // Folder path where you want to read the JSON --> bool test is true for unit tests,
-                // false for the normal program
-                string folderPath;
-                if (test){folderPath = Path.Combine("../../../..", "Project_B", "Data_Sources\\Menu_Storage");}
-                else {folderPath = Path.Combine(Environment.CurrentDirectory, "Data_Sources\\Menu_Storage");}
-                
-                // File path within the folder
-                string filePath = Path.Combine(folderPath, $"{GetCurrentMenuName(folderPath, menuType)}.json");
+                // Determine the folder path
+                string folderPath = test 
+                    ? Path.Combine("../../../..", "Project_B", "Data_Sources\\Menu_Storage") 
+                    : Path.Combine(Environment.CurrentDirectory, "Data_Sources\\Menu_Storage");
 
-                if (string.IsNullOrEmpty(filePath))
+                // Get the current menu name based on the type (current or future)
+                string menuFileName = GetCurrentMenuName(folderPath, menuType);
+
+                // Construct the full file path
+                string filePath = Path.Combine(folderPath, $"{menuFileName}.json");
+
+                if (string.IsNullOrEmpty(filePath) || !File.Exists(filePath))
                 {
                     Console.WriteLine("Error: File not found, or the file is currently not available.");
-                    Console.WriteLine("Press any key to continue..."); Console.ReadKey();
+                    Console.WriteLine("Press any key to continue...");
+                    Console.ReadKey();
+                    return new List<MenuItem>();
                 }
 
+                // Read the JSON file
                 reader = new StreamReader(filePath);
-                
-                // read all the data
                 string jsonString = reader.ReadToEnd();
 
-                // add all the data to a list
-                List<MenuItem> Menu = JsonConvert.DeserializeObject<List<MenuItem>>(jsonString)!;
+                // Deserialize the JSON data into a list of MenuItems
+                List<MenuItem> menu = JsonConvert.DeserializeObject<List<MenuItem>>(jsonString);
 
-                return Menu;
+                return menu ?? new List<MenuItem>();
+            }
+            catch (FileNotFoundException e)
+            {
+                Console.WriteLine($"Missing JSON file. {e.Message}");
+            }
+            catch (JsonReaderException e)
+            {
+                Console.WriteLine($"Invalid JSON. {e.Message}");
+            }
+            finally
+            {
+                reader?.Close();
             }
 
-            catch (FileNotFoundException e)
-                {Console.WriteLine($"Missing JSON file. {e.Message}");}
-
-            catch (JsonReaderException e)
-                {Console.WriteLine($"Invalid JSON. {e.Message}");}
-
-            finally
-                {reader?.Close();}
-
-            // return empty list for errors
+            // Return an empty list in case of errors
             return new List<MenuItem>();
-    }
+        }
 
     public static List<string> ReadMenusJSON()
     {
@@ -234,7 +239,7 @@ public static class JSON
     private static string GetCurrentMenuName(string folderPath, string menuType)
     {
         List<string> menuNames = Directory.GetFiles(folderPath, "*.json").Select(Path.GetFileNameWithoutExtension).ToList()!;
-
-        return menuNames.FirstOrDefault(menuName => menuName.Contains(menuType))!;
+        return menuNames.FirstOrDefault(menuName => menuName.StartsWith(menuType)) ?? string.Empty;
     }
+
 }
