@@ -347,4 +347,29 @@ public class UnitTest1
         Assert.AreEqual(lastReservations[3].TimeSlot, DtimeSlot);
         Assert.AreEqual(lastReservations[3].ReservationCode, Dcode);
     }
+
+    // Olivier
+    [TestMethod]
+    public void AddCustomerTest()
+    {
+        string filePath = "account_data.csv";
+        string UserName = "Test1";
+        string PassWord = "Test12";
+        string Email = "Test@gmail.com";
+        
+        // Maak een nieuwe klant aan
+        Customer accountWrite = new Customer(UserName, PassWord, Email);
+        
+        // Schrijf de klant naar de CSV
+        CSV.WriteToCSV(accountWrite, true);
+        
+        // Lees de klant terug uit de CSV
+        Account accountRead = (Account)CSV.ReadFromCSV(true).Where(c => c.UserName == UserName && c.PassWord == PassWord && c.Email == Email).FirstOrDefault();
+        
+        // Controleer of de geschreven en gelezen waarden gelijk zijn
+        Assert.IsNotNull(accountRead, "Account should be read from CSV.");
+        Assert.AreEqual(accountWrite.UserName, accountRead.UserName);
+        Assert.AreEqual(accountWrite.PassWord, accountRead.PassWord);
+        Assert.AreEqual(accountWrite.Email, accountRead.Email);
+    }
 }
