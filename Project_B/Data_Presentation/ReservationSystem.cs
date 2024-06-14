@@ -16,34 +16,18 @@ public static class ReservationSystem
 
         while (true)
         {
-            Console.WriteLine("╔═══════════════════════════════════════╗");
-            Console.WriteLine("║ Want to make a reservation?           ║");
-            Console.WriteLine("╠═══════════════════════════════════════╣");
-            Console.WriteLine("║ 1. Display The Tables                 ║");
-            Console.WriteLine("║ 2. Make A Reservation                 ║");
-            Console.WriteLine("║ 3. Return To The Main Menu            ║");
-            Console.WriteLine("║                                       ║");
-            Console.WriteLine("║ Enter your choice.                    ║");
-            Console.WriteLine("╚═══════════════════════════════════════╝");
-
-            int choice;
-            try { choice = int.Parse(Console.ReadLine()); Program.ConsoleClear(); }
-            catch
-            {
-                Program.ConsoleClear();
-                Console.WriteLine("Invalid choice. Press enter to continue...");
-                Console.ReadLine(); Program.ConsoleClear();
-                continue;
-            }
+            string prompt = $"╔═══════════════════════════════════════╗\n║ Want to make a reservation?           ║\n╠═══════════════════════════════════════╣";
+            string[] options = { "Display The Tables", "Make A Reservation", "Return To The Main Menu" };
+            int choice = ConsoleGUI.OptionGUI(prompt, options, 2);
 
             switch (choice)
             {
-                case 1: 
+                case 0: 
                     Console.WriteLine(Table.DisplayTables(new List<Table>()));
                     Console.WriteLine("\nPress enter to continue...");
                     Console.ReadLine(); Program.ConsoleClear(); continue;
-                case 2: MakeReservation(); continue;
-                case 3: return;
+                case 1: MakeReservation(); continue;
+                case 2: return;
             }
         }
     }

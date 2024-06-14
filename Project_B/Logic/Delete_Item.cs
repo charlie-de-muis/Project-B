@@ -6,7 +6,7 @@ public class Delete_Item
     {
         string prompt = "Which menu are you editing?";
         string[] options = { "Current Menu", "Future Menu" };
-        string menuType = ConsoleGUI.OptionGUI(prompt, options) == 0 ? "Menu_current" : "Menu_future";
+        string menuType = ConsoleGUI.OptionGUI(prompt, options, 1) == 0 ? "Menu_current" : "Menu_future";
 
         // load the menu
         List<MenuItem> menuItems = JSON.ReadJSON(menuType, false);

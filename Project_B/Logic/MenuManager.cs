@@ -77,7 +77,7 @@ public class MenuManager
     {
         string prompt = "Choose a menu:";
         string[] options = { "current menu", "future menu" };
-        int index = ConsoleGUI.OptionGUI(prompt, options);
+        int index = ConsoleGUI.OptionGUI(prompt, options, 1);
 
         string menuType;
         if (index == 0) { menuType = "Menu_current"; }
@@ -85,13 +85,13 @@ public class MenuManager
 
         string prompt2 = "Would you like to filter or sort the menu? (yes / no)";
         string[] options2 = { "yes", "no" };
-        int index2 = ConsoleGUI.OptionGUI(prompt2, options2);
+        int index2 = ConsoleGUI.OptionGUI(prompt2, options2, 1);
 
         if (index2 == 0)
         {
             string prompt3 = "Would you like to filter based on ingredients or diet, or would you like to sort based on price?";
             string[] options3 = { "filter", "sort" };
-            int index3 = ConsoleGUI.OptionGUI(prompt3, options3);
+            int index3 = ConsoleGUI.OptionGUI(prompt3, options3, 1);
 
             if (index3 == 0)
             {

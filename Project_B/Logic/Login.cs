@@ -6,7 +6,7 @@ public class Log_in
     {
         string prompt = "Login or Create account?";
         string[] options = { "Login", "Create Account" };
-        int index = ConsoleGUI.OptionGUI(prompt, options);
+        int index = ConsoleGUI.OptionGUI(prompt, options, 1);
 
         bool flag = true;
         while (flag)
