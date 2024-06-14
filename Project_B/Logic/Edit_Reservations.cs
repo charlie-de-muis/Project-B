@@ -38,6 +38,8 @@ Booking date: {r.DateOfBooking}
     {
         while (true)
         {
+            if (reservation == null){Console.WriteLine("Invalid reservation code."); break;}
+            else{
             // ask what needs to be changed
             Console.WriteLine(@"What do you want to change?
 1. Date
@@ -90,7 +92,7 @@ Booking date: {r.DateOfBooking}
                 // persons -> int
                 case 6: Change_reservation(int.Parse(Console.ReadLine()), reservation); break; 
                 default: Console.WriteLine("Invalid choice."); continue;
-            }
+            }}
         }
     }
 
