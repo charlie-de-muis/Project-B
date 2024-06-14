@@ -5,52 +5,49 @@ public class Add_Item
     {
         //List<MenuItem> Menu = JSON.ReadJSON();
         List<MenuItem> Menu = new();
-        string MoreItems = "yes";
 
         string prompt = "Which menu are you editing?";
         string[] options = { "Current Menu", "Future Menu" };
         string menuType = ConsoleGUI.OptionGUI(prompt, options) == 0 ? "Menu_current" : "Menu_future";
 
-        do
+        Console.WriteLine("Please enter all the details about the new menu item.");
+
+        // to make sure all the items are filled in correctly
+        int Check = 0;
+
+        string Name = "Unknown";
+        List<string> Ingredients = new();
+        double Price = 0;
+        List<string> DietaryInfo = new();
+
+        // get all the info about the new menu item
+        do 
         {
-            Console.WriteLine("Please enter all the details about the new menu item.");
-
-            // to make sure all the items are filled in correctly
-            int Check = 0;
-
-            string Name = "Unknown";
-            List<string> Ingredients = new();
-            double Price = 0;
-            List<string> DietaryInfo = new();
-
-            // get all the info about the new menu item
+                // name
             do 
             {
-                // name
-                do 
-                {
-                    Console.WriteLine("Enter the name of the menu item:");
-                    Name = Console.ReadLine();
-                    Program.ConsoleClear();
-                    Check++;
-                } while (Check < 1);
+                Console.WriteLine("Enter the name of the menu item:");
+                Name = Console.ReadLine();
+                try{Convert.ToDouble(Name); Program.ConsoleClear(); Console.WriteLine("Invalid entry...");}
+                catch{Program.ConsoleClear();Check++;}
+            } while (Check < 1);
 
-                // ingredients
-                do
-                {
-                    Console.WriteLine("Enter the all the ingredients seperated by a comma:");
-                    Ingredients = Console.ReadLine().Split(",").ToList();
-                    Program.ConsoleClear();
-                    Check++;
-                } while (Check < 2);
+            // ingredients
+            do
+            {
+                Console.WriteLine("Enter the all the ingredients seperated by a comma:");
+                Ingredients = Console.ReadLine().Split(",").ToList();
+                try{Convert.ToDouble(Ingredients[0]); Program.ConsoleClear(); Console.WriteLine("Invalid entry...");}
+                catch{Program.ConsoleClear();Check++;}
+            } while (Check < 2);
 
-                // price
-                do
-                {
-                    Console.WriteLine("Enter the price of the menu item:");
-                    try { Price = Convert.ToDouble(Console.ReadLine().Replace(".",",")); Check++; }
-                    catch { Program.ConsoleClear(); Console.WriteLine("Invalid entry..."); }
-                } while (Check < 3);
+            // price
+            do
+            {
+                Console.WriteLine("Enter the price of the menu item:");
+                try { Price = Convert.ToDouble(Console.ReadLine().Replace(".",",")); Check++; }
+                catch { Program.ConsoleClear(); Console.WriteLine("Invalid entry..."); }
+            } while (Check < 3);
 
                 // dietary info
                 Program.ConsoleClear();
@@ -68,16 +65,8 @@ These are all the options:
                 else {DietaryInfo = Diet.Split(",").ToList();}
                 Check ++;
 
-            } while (Check < 4);
+        } while (Check < 4);
 
-            // add the item to the menu
-            Menu.Add(new MenuItem(GenerateID(menuType), Name, Ingredients, Price, DietaryInfo));
-
-            prompt = "Do you want to add more items?";
-            options = new string[] { "yes", "no" };
-            MoreItems = ConsoleGUI.OptionGUI(prompt, options) == 0 ? "yes" : "no";
-
-        } while (MoreItems == "yes");
 
         JSON.WriteJSON(Menu, menuType, false);
     }

@@ -1,4 +1,4 @@
-// Made by Melvern
+// Made by Melvern and Olivier
 public class Table
 {
     public int ID;

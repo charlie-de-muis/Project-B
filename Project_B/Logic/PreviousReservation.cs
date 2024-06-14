@@ -10,12 +10,7 @@ public class PreviousReservation
         foreach (Reservation r in file)
         {
             if (r.CustomerName == c.UserName && r.CustomerEmail == c.Email)
-            {            
-            // print all the reservations clearly
-            List<int> keys = r.MenuOrders.Keys.ToList();
-            string menuOrdersSTR = @"""order"" x ""count""";
-            foreach (int key in keys) { menuOrdersSTR += $" : {key} x {r.MenuOrders[key]}"; }
-            
+            {                      
             Console.WriteLine(@$"
 Date: {r.Date}
 Timeslot: {r.TimeSlot}
@@ -23,7 +18,6 @@ Table(s): {string.Join(",", r.Table)}
 Customer name: {r.CustomerName}
 Customer email: {r.CustomerEmail}
 Amount of persons: {r.AmountofPersons}
-Menu Orders: {menuOrdersSTR}
 Reservation code: {r.ReservationCode}
 Booking date: {r.DateOfBooking}
 ");
