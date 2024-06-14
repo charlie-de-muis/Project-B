@@ -29,11 +29,24 @@ public class UnitTest1
     [TestMethod]
     public void Test_Saved_ReservationCode()
     {
-        Reservation res = new Reservation("12-12-2030", "dinner", new List<int>(){1}, "Tester", "test@gmail.com", 2, new Dictionary<int,int>() { {2, 5} }, "test123", "06-06-2024");
-        CSV.WriteToCSVReservations(res, "Reservation.csv", true);
+        string tempFile = Path.GetTempFileName();
 
-        Reservation? latest = CSV.ReadFromCSVReservations("Reservation.csv", true).FirstOrDefault(res => res.Date == "12-12-2030");
-        Assert.AreEqual(latest?.ReservationCode, res.ReservationCode);
+        try
+        {
+            Reservation res = new Reservation("12-12-2030", "dinner", new List<int>() { 1 }, "Tester", "test@gmail.com", 2, new Dictionary<int, int>() { { 2, 5 } }, "test123", "06-06-2024");
+            CSV.WriteToCSVReservations(res, tempFile, true);
+
+            // Wait for a short time to ensure the file write is complete
+            Thread.Sleep(100);
+
+            Reservation? latest = CSV.ReadFromCSVReservations(tempFile, true).FirstOrDefault(r => r.Date == "12-12-2030");
+            Assert.IsNotNull(latest, "The latest reservation should not be null");
+            Assert.AreEqual(latest.ReservationCode, res.ReservationCode);
+        }
+        finally
+        {
+            File.Delete(tempFile);
+        }
     }
 
     // Melvern
