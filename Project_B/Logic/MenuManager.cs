@@ -59,8 +59,8 @@ public class MenuManager
         filter = filter.ToLower(); // Convert filter to lowercase for case-insensitive comparison
         // Filter menu items based on user input (ingredient or dietary restriction)
         var filteredItems = menuItems.Where(item =>
-            item.Ingredients.Any(ingredient => ingredient.ToLower().Contains(filter)) ||
-            item.DietaryInfo.Any(diet => diet.ToLower().Contains(filter)))
+            item.Ingredients.Any(ingredient => ingredient.ToLower() == (filter)) ||
+            item.DietaryInfo.Any(diet => diet.ToLower() == (filter)))
             .ToList();
         
         if (filteredItems.Count == 0)
