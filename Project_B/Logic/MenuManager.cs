@@ -1,24 +1,25 @@
+// Made by Bente & Orestis
 public class MenuManager
 {
-    public static void DisplayMenu()
+    public static void DisplayMenu(string menuType)
     {
         // Read menu items from JSON
-        var menuItems = JSON.ReadJSON("Menu_current");
+        var menuItems = JSON.ReadJSON(menuType, false);
         PrintMenu(menuItems);
     }
 
-    public static void DisplayFilteredMenu(string filter)
+    public static void DisplayFilteredMenu(string filter, string menuType)
     {
         // Read menu items from JSON
-        var menuItems = JSON.ReadJSON("Menu_current");
+        var menuItems = JSON.ReadJSON(menuType, false);
         var filteredMenu = FilterMenu(menuItems, filter);
         PrintMenu(filteredMenu);
     }
 
-        public static void DisplaySortedMenu()
+        public static void DisplaySortedMenu(string menuType)
     {
         // Read menu items from JSON
-        var menuItems = JSON.ReadJSON("Menu_current");
+        var menuItems = JSON.ReadJSON(menuType, false);
 
         // Sort menu items by price, low to high
         menuItems = menuItems.OrderBy(item => item.Price).ToList();
@@ -74,16 +75,25 @@ public class MenuManager
 
     public static void ViewMenu()
     {
-        Console.WriteLine("\nWould you like to filter or sort the menu? (yes/no)");
-        string filterSortChoice = Console.ReadLine();
+        string prompt = "Choose a menu:";
+        string[] options = { "current menu", "future menu" };
+        int index = ConsoleGUI.OptionGUI(prompt, options);
 
-        if (filterSortChoice.ToLower() == "yes")
+        string menuType;
+        if (index == 0) { menuType = "Menu_current"; }
+        else { menuType = "Menu_future"; }
+
+        string prompt2 = "Would you like to filter or sort the menu? (yes / no)";
+        string[] options2 = { "yes", "no" };
+        int index2 = ConsoleGUI.OptionGUI(prompt2, options2);
+
+        if (index2 == 0)
         {
-            Program.ConsoleClear();
-            Console.WriteLine("\nWould you like to filter based on ingredients or diet, or would you like to sort based on price? (filter/sort)");
-            string filterSortInput = Console.ReadLine();
+            string prompt3 = "Would you like to filter based on ingredients or diet, or would you like to sort based on price?";
+            string[] options3 = { "filter", "sort" };
+            int index3 = ConsoleGUI.OptionGUI(prompt3, options3);
 
-            if (filterSortInput.ToLower() == "filter")
+            if (index3 == 0)
             {
                 // Prompt user for filter input
                 Program.ConsoleClear();
@@ -91,27 +101,21 @@ public class MenuManager
                 string filterInput = Console.ReadLine();
                 
                 Program.ConsoleClear();
-                DisplayFilteredMenu(filterInput);
-                Console.WriteLine("Press enter to continue..."); Console.ReadLine(); Program.ConsoleClear();
-            }
-            else if (filterSortInput.ToLower() == "sort")
-            {
-                // Sort and display the menu
-                Program.ConsoleClear();
-                DisplaySortedMenu();
-                Console.WriteLine("Press enter to continue..."); Console.ReadLine(); Program.ConsoleClear();
+                DisplayFilteredMenu(filterInput, menuType);
+                Console.WriteLine("Press enter to return..."); Console.ReadLine(); Program.ConsoleClear();
             }
             else
             {
+                // Sort and display the menu
                 Program.ConsoleClear();
-                Console.WriteLine("Invalid input. Please enter 'filter' or 'sort'.");
-                Console.WriteLine("Press enter to continue..."); Console.ReadLine(); Program.ConsoleClear();
+                DisplaySortedMenu(menuType);
+                Console.WriteLine("Press enter to return..."); Console.ReadLine(); Program.ConsoleClear();
             }
         }
         else
         {
             Program.ConsoleClear();
-            DisplayMenu();
+            DisplayMenu(menuType);
             Console.WriteLine("Press enter to continue..."); Console.ReadLine(); Program.ConsoleClear();
         }
     }
