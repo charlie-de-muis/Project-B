@@ -1,5 +1,3 @@
-using System.Runtime.CompilerServices;
-
 namespace Project_B_UnitTest;
 
 [TestClass]
@@ -22,7 +20,7 @@ public class UnitTest1
         MenuItem Pizza = new MenuItem(1000,"Pizza pepperoni", new List<string> (){"dough", "sauce", "cheese", "pepperoni"}, 4.50, new List<string>(){"x"});
         JSON.WriteJSON(new List<MenuItem>(){Pizza},"Menu_current", true);
 
-        MenuItem latest = JSON.ReadJSON("Menu_current", true).FirstOrDefault(item => item.ID == 1000);
+        MenuItem? latest = JSON.ReadJSON("Menu_current", true).FirstOrDefault(item => item.ID == 1000);
         Assert.AreEqual(Pizza.ID, latest.ID);
         Assert.AreEqual(Pizza.Name, latest.Name);
         Assert.AreEqual(Pizza.Price, latest.Price);
@@ -34,8 +32,8 @@ public class UnitTest1
         Reservation res = new Reservation("12-12-2030", "dinner", new List<int>(){1}, "Tester", "test@gmail.com", 2, new Dictionary<int,int>() { {2, 5} }, "test123", "06-06-2024");
         CSV.WriteToCSVReservations(res, "Reservation.csv", true);
 
-        Reservation latest = CSV.ReadFromCSVReservations("Reservation.csv", true).FirstOrDefault(res => res.Date == "12-12-2030");
-        Assert.AreEqual(latest.ReservationCode, res.ReservationCode);
+        Reservation? latest = CSV.ReadFromCSVReservations("Reservation.csv", true).FirstOrDefault(res => res.Date == "12-12-2030");
+        Assert.AreEqual(latest?.ReservationCode, res.ReservationCode);
     }
 
     // Melvern
@@ -57,6 +55,10 @@ public class UnitTest1
         Reservation reservationRead = CSV.ReadFromCSVReservations("Reservation.csv", true).FirstOrDefault(reservation => reservation.ReservationCode == Code);
 
         Assert.AreEqual(Code, reservationRead.ReservationCode);
+        Assert.AreEqual(Code, reservationRead.ReservationCode);
+        Assert.AreEqual(CName, reservationRead.CustomerName);
+        Assert.AreEqual(EMail, reservationRead.CustomerEmail);
+        Assert.AreEqual(Date, reservationRead.Date);
     }
 
     // Melvern
@@ -253,4 +255,83 @@ public class UnitTest1
 
     //     CollectionAssert.AreEqual(expectedFilteredMenu, actualFilteredMenu);
     // }
+
+// orestis
+    [TestMethod]
+    public void Test_Make_Reservations()
+    {
+        // First make the reservations
+        // brunch time
+        string Bdate = "17-06-2024";
+        string BtimeSlot = "brunch";
+        List<int> Btables = new List<int>() { 6, 7 };
+        string Bname = "OrestisTesting";
+        string BeMail = "orestingtesting@testing.com";
+        int BCount = 5;
+        Dictionary<int, int> Bitems = new Dictionary<int, int>() { { 2, 5 } };
+        string Bcode = "GJi5d5XD";
+        string BdateOfBooking = "14-06-2024";
+        Reservation reservationStuffList = new Reservation(Bdate, BtimeSlot, Btables, Bname, BeMail, BCount, Bitems, Bcode, BdateOfBooking);
+        CSV.WriteToCSVReservations(reservationStuffList, "Reservation.csv", true);
+ 
+        // lunch time
+        string Ldate = "17-06-2024";
+        string LtimeSlot = "lunch";
+        List<int> Ltables = new List<int>() { 6, 7 };
+        string Lname = "OrestisTesting";
+        string LeMail = "orestingtesting@testing.com";
+        int LCount = 5;
+        Dictionary<int, int> Litems = new Dictionary<int, int>() { { 2, 5 } };
+        string Lcode = "GJi5d5CF";
+        string LdateOfBooking = "14-06-2024";
+        Reservation reservationStuffList2 = new Reservation(Ldate, LtimeSlot, Ltables, Lname, LeMail, LCount, Litems, Lcode, LdateOfBooking);
+        CSV.WriteToCSVReservations(reservationStuffList2, "Reservation.csv", true);
+ 
+        // afternoon time
+        string Adate = "17-06-2024";
+        string AtimeSlot = "afternoon";
+        List<int> Atables = new List<int>() { 6, 7 };
+        string Aname = "OrestisTesting";
+        string AeMail = "orestingtesting@testing.com";
+        int ACount = 5;
+        Dictionary<int, int> Aitems = new Dictionary<int, int>() { { 2, 5 } };
+        string Acode = "GJi5d5VG";
+        string AdateOfBooking = "14-06-2024";
+        Reservation reservationStuffList3 = new Reservation(Adate, AtimeSlot, Atables, Aname, AeMail, ACount, Aitems, Acode, AdateOfBooking);
+        CSV.WriteToCSVReservations(reservationStuffList3, "Reservation.csv", true);
+ 
+        // dinner time
+        string Ddate = "17-06-2024";
+        string DtimeSlot = "dinner";
+        List<int> Dtables = new List<int>() { 6, 7 };
+        string Dname = "OrestisTesting";
+        string DeMail = "orestingtesting@testing.com";
+        int DCount = 5;
+        Dictionary<int, int> Ditems = new Dictionary<int, int>() { { 2, 5 } };
+        string Dcode = "GJi5d5BH";
+        string DdateOfBooking = "14-06-2024";
+        Reservation reservationStuffList4 = new Reservation(Ddate, DtimeSlot, Dtables, Dname, DeMail, DCount, Ditems, Dcode, DdateOfBooking);
+        CSV.WriteToCSVReservations(reservationStuffList4, "Reservation.csv", true);
+ 
+        // Read the existing reservations. Then select the last 4 by adding them to a list
+        List<Reservation> reservations = CSV.ReadFromCSVReservations("Reservation.csv", true);
+        var lastReservations = reservations.Skip(reservations.Count - 4).ToList();
+ 
+        // Asserting Stage:
+        // Brunch Asserting
+        Assert.AreEqual(lastReservations[0].TimeSlot, BtimeSlot);
+        Assert.AreEqual(lastReservations[0].ReservationCode, Bcode);
+ 
+        // Lunch Asserting
+        Assert.AreEqual(lastReservations[1].TimeSlot, LtimeSlot);
+        Assert.AreEqual(lastReservations[1].ReservationCode, Lcode);
+ 
+        // Afternoon Asserting
+        Assert.AreEqual(lastReservations[2].TimeSlot, AtimeSlot);
+        Assert.AreEqual(lastReservations[2].ReservationCode, Acode);
+ 
+        // Dinner Asserting
+        Assert.AreEqual(lastReservations[3].TimeSlot, DtimeSlot);
+        Assert.AreEqual(lastReservations[3].ReservationCode, Dcode);
+    }
 }
