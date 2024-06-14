@@ -6,7 +6,7 @@ public class Admin_Menu
         while (true)
         {
             string prompt = $"╔═══════════════════════════════════════╗\n║ Welcome to Admin menu!                ║\n╠═══════════════════════════════════════╣";
-            string[] options = { "Add Menu Items", "Delete Menu Items", "View Reservations", "Edit Reservations", "Add / Edit Restaurant Info", "Managa Menu's", "Back To The Main Menu" };
+            string[] options = { "Add Menu Items", "Delete Menu Items", "View Reservations", "Edit Reservations", "Add / Edit Restaurant Info", "Manage Menu's", "Back To The Main Menu" };
             int choice = ConsoleGUI.OptionGUI(prompt, options, 2);
 
             if (choice == 6) { break; }
