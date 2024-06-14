@@ -16,10 +16,10 @@ public class MenuManager
         PrintMenu(filteredMenu);
     }
 
-        public static void DisplaySortedMenu(string menuType)
+        public static void DisplaySortedMenu(string menuType, bool isTest = false)
     {
         // Read menu items from JSON
-        var menuItems = JSON.ReadJSON(menuType, false);
+        var menuItems = JSON.ReadJSON(menuType, isTest);
 
         // Sort menu items by price, low to high
         menuItems = menuItems.OrderBy(item => item.Price).ToList();

@@ -168,10 +168,10 @@ public static class CSV
             File.AppendAllText(filePath, userDataString);
     }
 
-    public static void Update_CSV_Reservations(Reservation reservation)
+    public static void Update_CSV_Reservations(Reservation reservation, bool test = false)
     {
         // loading the old reservations
-        List<Reservation> old_reservations = ReadFromCSVReservations("Reservation.csv", false);
+        List<Reservation> old_reservations = ReadFromCSVReservations("Reservation.csv", test);
 
         // search for the correct reservation and change the data
         for (int i = 0; i < old_reservations.Count; i++)
@@ -187,7 +187,8 @@ public static class CSV
         string filePath;
 
 
-            folderPath = Path.Combine(Environment.CurrentDirectory, "Data_Sources");
+            if (test){folderPath = Path.Combine("../../../..", "Project_B", "Data_Sources");}
+            else {folderPath = Path.Combine(Environment.CurrentDirectory, "Data_Sources");}
             filePath = Path.Combine(folderPath, "Reservation.csv");
 
             // Check if the file already exists, if not create a new file and write headers

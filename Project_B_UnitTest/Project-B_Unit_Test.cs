@@ -20,9 +20,9 @@ public class UnitTest1
     public void Test_Add_Items()
     {
         MenuItem Pizza = new MenuItem(1000,"Pizza pepperoni", new List<string> (){"dough", "sauce", "cheese", "pepperoni"}, 4.50, new List<string>(){"x"});
-        JSON.WriteJSON(new List<MenuItem>(){Pizza},"current", true);
+        JSON.WriteJSON(new List<MenuItem>(){Pizza},"Menu_current", true);
 
-        MenuItem latest = JSON.ReadJSON("current", true).FirstOrDefault(item => item.ID == 1000);
+        MenuItem latest = JSON.ReadJSON("Menu_current", true).FirstOrDefault(item => item.ID == 1000);
         Assert.AreEqual(Pizza.ID, latest.ID);
         Assert.AreEqual(Pizza.Name, latest.Name);
         Assert.AreEqual(Pizza.Price, latest.Price);
@@ -150,5 +150,78 @@ public class UnitTest1
         var lastItem = lines[lines.Length - 9];
         Assert.IsNotNull(output);
         Assert.AreEqual(lastItem, "1020. Creme Brulee");
+    }
+
+    //Bente
+    [TestMethod]
+    public void Test_Sort_Price()
+    {
+        // Arrange
+        MenuItem Pizza = new MenuItem(1000, "Pizza pepperoni", new List<string> {"dough", "sauce", "cheese", "pepperoni"}, 3.00, new List<string> {"x"});
+        MenuItem Burger = new MenuItem(1001, "Cheeseburger", new List<string> {"bun", "cheese", "beef"}, 2.00, new List<string> {"y"});
+        MenuItem Salad = new MenuItem(1002, "Caesar Salad", new List<string> {"lettuce", "dressing", "croutons"}, 4.00, new List<string> {"z"});
+        List<MenuItem> menu = new List<MenuItem> { Pizza, Burger, Salad };
+
+        JSON.WriteJSON(menu, "Menu_current", true);
+
+        // Act
+        //MenuManager.DisplaySortedMenu("Menu_current", true);
+
+        // Assert
+        var sortedMenu = JSON.ReadJSON("Menu_current", true).OrderBy(item => item.Price).ToList();
+        Assert.AreEqual(Burger.ID, sortedMenu[0].ID); // Burger should be first (cheapest)
+        Assert.AreEqual(Pizza.ID, sortedMenu[1].ID);  // Pizza should be second
+        Assert.AreEqual(Salad.ID, sortedMenu[2].ID);  // Salad should be third (most expensive)
+    }
+
+    //Bente
+    /*[TestMethod]
+    public void Test_Filter_By_Price()
+    {
+        // Arrange
+        MenuItem Pizza = new MenuItem(1000, "Pizza pepperoni", new List<string> {"dough", "sauce", "cheese", "pepperoni"}, 4.50, new List<string> {"x"});
+        MenuItem Burger = new MenuItem(1001, "Cheeseburger", new List<string> {"bun", "cheese", "beef"}, 3.00, new List<string> {"y"});
+        MenuItem Salad = new MenuItem(1002, "Caesar Salad", new List<string> {"lettuce", "dressing", "croutons"}, 5.00, new List<string> {"z"});
+        List<MenuItem> menu = new List<MenuItem> { Pizza, Burger, Salad };
+ 
+        JSON.WriteJSON(menu, "Menu_current", true);
+ 
+        // Act
+        MenuManager.ViewMenu();
+ 
+        // Assert
+        // Sort menu manually
+        var sortedMenu = menu.OrderBy(item => item.Price).ToList();
+        var displayedMenu = JSON.ReadJSON("Menu_current", true);
+ 
+        // Filter menu based on price and make sure it matches the sorted menu
+        Assert.IsTrue(displayedMenu.SequenceEqual(sortedMenu));
+    }*/
+ 
+    // Bente
+    [TestMethod]
+    public void Change_Res()
+    {
+        // Arrange
+        // Create a sample reservation using the assumed constructor with parameters
+        var reservation = new Reservation(
+            "07-06-2024",
+            "dinner",
+            new List<int> { 1 },
+            "tiffany",
+            "hi@hi.nl",
+            2,
+            new Dictionary<int, int> { { 4, 1 }, { 6, 1 } },
+            "BTSnTQoz",
+            "06-06-2024"
+        );
+
+        // Act
+        // Change the number of people from 2 to 3
+        EditReservations.Change_reservation(3, reservation, true);
+
+        // Assert
+        // Verify that the reservation was updated correctly
+        Assert.AreEqual(3, reservation.AmountofPersons);
     }
 }

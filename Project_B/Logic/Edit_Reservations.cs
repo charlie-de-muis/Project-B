@@ -94,14 +94,14 @@ Booking date: {r.DateOfBooking}
         }
     }
 
-    private static void Change_reservation<T>(T new_data, Reservation reservation)
+    public static void Change_reservation<T>(T new_data, Reservation reservation, bool isTest = false)
     {
         // change the table numbers
         if (new_data is string)
         {   // maakt van de string een lijst met integers
             reservation.Table = Convert.ToString(new_data).Split(",").Select(int.Parse).ToList();
 
-            CSV.Update_CSV_Reservations(reservation);
+            CSV.Update_CSV_Reservations(reservation, isTest);
 
             Console.WriteLine("Reservation updated.");
         }
@@ -109,7 +109,7 @@ Booking date: {r.DateOfBooking}
         else if (new_data is int)
         {
             reservation.AmountofPersons = Convert.ToInt32(new_data);
-            CSV.Update_CSV_Reservations(reservation);
+            CSV.Update_CSV_Reservations(reservation, isTest);
 
             Console.WriteLine("Reservation updated.");
         }
