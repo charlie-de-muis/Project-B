@@ -139,48 +139,46 @@ public static class JSON
                 Directory.CreateDirectory(folderPath);
             }
 
-            // create a file if it doesn't exist
-            if (!File.Exists(filePath))
+            string menuTypeName = GetCurrentMenuName(folderPath, menuType);
+
+            if (!string.IsNullOrEmpty(menuTypeName))
             {
-                Console.WriteLine("File not found. Please make sure the file name is correct and try again.");
-                return;
+                SwitchMenu(fileName, menuType);
             }
-
-            string newCurrentName = Path.Combine(folderPath, $"Menu_{menuType}_{DateTime.Now:dd-MM-yyyy}.json");
-            string previousFileRename = Path.Combine(folderPath, $"Menu_{DateTime.Now:dd-MM-yyyy}.json");
-
-            try
+            else
             {
-                string currentMenuName = GetCurrentMenuName(folderPath, menuType);
-
-                if (!string.IsNullOrEmpty(currentMenuName))
+                // if file is found, it will change its name to Menu_current_dd-MM-yyyy.json
+                if (!File.Exists(filePath))
                 {
-                    string filePathToCurrentMenu = Path.Combine(folderPath, $"{currentMenuName}.json");
-
-                    File.Copy(filePathToCurrentMenu, previousFileRename);
-                    File.Delete(filePathToCurrentMenu);
+                    Console.WriteLine("File not found. Please make sure the file name is correct and try again.");
+                    return;
                 }
 
-                File.Copy(filePath, newCurrentName);
-                File.Delete(filePath);
-                Console.WriteLine($"File uploaded successfully as {newCurrentName}.");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"An error occurred while uploading the file: {ex.Message}");
+                string newCurrentName = Path.Combine(folderPath, $"{menuType}_{DateTime.Now:dd-MM-yyyy}.json");
+
+                try
+                {
+                    File.Copy(filePath, newCurrentName);
+                    File.Delete(filePath);
+                    Console.WriteLine($"File uploaded successfully as {newCurrentName}.");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"An error occurred while uploading the file: {ex.Message}");
+                }
             }
     }
 
     public static void SwitchMenu(string menuFileName, string menuType)
     {
             string folderPath = Path.Combine(Environment.CurrentDirectory, "Data_Sources\\Menu_Storage");
-            string fullPath = Path.Combine(folderPath, $"{menuFileName}.json");
+            string fullPath = Path.Combine(folderPath, menuFileName);
             string menuTypeName = GetCurrentMenuName(folderPath, menuType);
 
             if (string.IsNullOrEmpty(menuTypeName))
             {
                 Console.WriteLine($"No {menuType} found, upload a new {menuType} file.");
-                Console.WriteLine("Press any key to continue..."); Console.ReadKey();
+                Console.WriteLine("Press any key to continue..."); Console.ReadKey(); return;
             }
 
             string fullPathMenuType = Path.Combine(folderPath, $"{menuTypeName}.json");
@@ -188,7 +186,7 @@ public static class JSON
             if (!File.Exists(fullPath) || !File.Exists(fullPathMenuType))
             {
                 Console.WriteLine($"One or both files don't exist");
-                Console.WriteLine("Press any key to continue..."); Console.ReadKey();
+                Console.WriteLine("Press any key to continue..."); Console.ReadKey(); return;
             }
 
             try

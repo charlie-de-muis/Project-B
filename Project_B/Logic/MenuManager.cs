@@ -127,52 +127,37 @@ public class MenuManager
         while (!exit)
         {
             Program.ConsoleClear();
-            Console.WriteLine("╔═══════════════════════════════════════╗");
-            Console.WriteLine("║ Menu Management System.               ║");
-            Console.WriteLine("╠═══════════════════════════════════════╣");
-            Console.WriteLine("║ 1. Upload Current Menu                ║");
-            Console.WriteLine("║ 2. Upload Future Menu                 ║");
-            Console.WriteLine("║ 3. Switch Between Menu's              ║");
-            Console.WriteLine("║ 4. View Past Menu's                   ║");
-            Console.WriteLine("║ 5. Delete Menu's                      ║");
-            Console.WriteLine("║ 6. Exit                               ║");
-            Console.WriteLine("║                                       ║");
-            Console.WriteLine("║ Enter your choice:                    ║");
-            Console.WriteLine("╚═══════════════════════════════════════╝");
+            string prompt = "╔═══════════════════════════════════════╗\n║ Menu Management System.               ║\n╠═══════════════════════════════════════╣";
+            string[] options = { "Upload Current Menu", "Upload Future Menu", "Switch Between Menu's", "View Past Menu's", "Delete Menu's", "Exit" };
+            int choice = ConsoleGUI.OptionGUI(prompt, options, 2);
 
-            string filterSortChoice = Console.ReadLine();
-
-            switch (filterSortChoice)
+            switch (choice)
             {
-                case "1":
+                case 0:
                     Program.ConsoleClear();
-                    UploadMenu("current");
+                    UploadMenu("Menu_current");
                     break;
-                case "2":
+                case 1:
                     Program.ConsoleClear();
-                    UploadMenu("future");
+                    UploadMenu("Menu_future");
                     break;
-                case "3":
+                case 2:
                     Program.ConsoleClear();
                     SwitchMenu();
                     break;
-                case "4":
+                case 3:
                     Program.ConsoleClear();
                     ViewPastMenus();
                     Console.WriteLine("\nPress any key to return..."); Console.ReadKey();
                     break;
-                case "5":
+                case 4:
                     Program.ConsoleClear();
                     DeleteMenu();
                     break;
-                case "6":
+                case 5:
                     Program.ConsoleClear();
                     Console.WriteLine("Exiting...");
                     exit = true;
-                    break;
-                default:
-                    Program.ConsoleClear();
-                    Console.WriteLine("Invalid choice, please try again.");
                     break;
             }
         }
@@ -180,8 +165,8 @@ public class MenuManager
 
     private static void UploadMenu(string menuType)
     {
-        Console.WriteLine($"Uploading {menuType} Menu...");
-        Console.WriteLine("Please enter the name of the JSON file you uploaded:");
+        Console.WriteLine($"Uploading {menuType}...");
+        Console.WriteLine("Please enter the name of the JSON file you uploaded (with .json added):");
         string fileName = Console.ReadLine();
 
         JSON.SetMenuAs(menuType, fileName);
@@ -194,18 +179,11 @@ public class MenuManager
 
         Console.WriteLine("Please enter the name of the menu file you want to set as current:");
         string menuFileName = Console.ReadLine();
-        Console.WriteLine("\nPlease enter current or future of which you want to set it to:");
-        string menuType = Console.ReadLine().ToLower();
+        string prompt = "\nPlease enter current or future of which you want to set it to:";
+        string[] options = { "Current", "Future" };
+        int index = ConsoleGUI.OptionGUI(prompt, options, 1);
         
-        if (menuType == "current" || menuType == "future")
-        {
-            JSON.SwitchMenu(menuFileName, menuType);
-        }
-        else
-        {
-            Console.WriteLine("Invalid menu type, set the menu type to current or future");
-            Console.WriteLine("Press any key to continue..."); Console.ReadKey();
-        }
+        JSON.SwitchMenu(menuFileName, index == 0 ? "Menu_current" : "Menu_future");
     }
 
     private static void ViewPastMenus()
