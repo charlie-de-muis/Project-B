@@ -66,7 +66,7 @@ public class Reservation
                 string AoPSTR = AmountofPersons1 < 10 ? $"0{AmountofPersons1}" : $"{AmountofPersons1}";
                 discount = totalPrice * DISCOUNT_RATE;
                 Console.WriteLine("{0, -" + (width + 1) + "} {1}", $"║ Price before discount", $"{totalPrice:C} ║".PadLeft(spacing + 1));
-                Console.WriteLine($"║ You will receive a discount because you have \nselected a group sive of {AoPSTR}                                                 ║");
+                Console.WriteLine($"║ Groupsize discount because of a group sive of {AoPSTR}                    ║");
                 Console.WriteLine("{0, -" + (width + 1) + "} {1}", $"║ Discount (10%)", $"-{discount:C} ║".PadLeft(spacing + 1));
             }
         double finalTotalPrice = totalPrice - discount;

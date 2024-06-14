@@ -371,7 +371,7 @@ public static class ReservationSystem
             {
                 discount = totalPrice * DISCOUNT_RATE;
                 Console.WriteLine("{0, -" + width + "} {1}", "Price before discount", $"{totalPrice:C}".PadLeft(spacing));
-                Console.WriteLine("{0, -" + (width + 1) + "} {1}", $"You will receive a discount because you have \nselected a group sive of {AmountofPersons}", "".PadLeft(spacing + 1));
+                Console.WriteLine("{0, -" + (width + 1) + "} {1}", $"Groupsize discount because of a group sive of {AmountofPersons}", "".PadLeft(spacing + 1));
                 Console.WriteLine("{0, -" + width + "} {1}", "Discount (10%)", $"-{discount:C}".PadLeft(spacing));
             }
             double finalTotalPrice = totalPrice - discount;
