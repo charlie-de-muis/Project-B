@@ -99,11 +99,11 @@ public class UnitTest1
     {
         //Adding the menu item Lasagna
         MenuItem Lasagna = new MenuItem(1010,"Lasagna", new List<string> (){"pasta", "sauce", "cheese", "minced meat"}, 5.00, new List<string>(){"x"});
-        JSON.WriteJSON(new List<MenuItem>(){Lasagna},"current", true);
+        JSON.WriteJSON(new List<MenuItem>(){Lasagna},"Menu_current", true);
 
         //Removing menu item Lasagna by reading the Json file, deleting the item, checking if the ID still exists and returns!
-        List<MenuItem> menuItems = JSON.ReadJSON("current", true);
-        Delete_Item.DeleteChosenItem(1010, menuItems, "current");
+        List<MenuItem> menuItems = JSON.ReadJSON("Menu_current", true);
+        Delete_Item.DeleteChosenItem(1010, menuItems, "Menu_current");
         MenuItem deletedLasagna = menuItems.FirstOrDefault(item => item.ID == 1010);
         Assert.IsNull(deletedLasagna);
     }
@@ -113,15 +113,15 @@ public class UnitTest1
     public void Test_Information_Restaurant()
     {
         //First create instances of StringReader, which is a tool that inputs text into the AboutTextAdmin method when called
-        StringReader sr = new StringReader("Testing text 1\nTesting text 2\nTesting text 3\n");
+        StringReader sr = new StringReader("Testing text 1\nTesting text 2\nTesting text 3");
         Console.SetIn(sr);
         //Calling the method
-        Main_Menu.AboutTextAdmin();
+        Main_Menu.AboutTextAdmin(true);
 
         //Read the contents of the restaurant info file, make it an array
         //Check if it has 3 lines & is the same as the lines above
         string[] text = TXT.ReadFromTXT(true).Split('\n');
-        Assert.AreEqual(3, text.Length);
+        Assert.AreEqual(4, text.Length);
         Assert.AreEqual("Testing text 1", text[0].Trim());
         Assert.AreEqual("Testing text 2", text[1].Trim());
         Assert.AreEqual("Testing text 3", text[2].Trim());
@@ -134,14 +134,14 @@ public class UnitTest1
         //First add an item to the current menu so we can later check if its actually there
         //using the Display_Menu function!
         MenuItem Creme_Brulee = new MenuItem(1020,"Creme Brulee", new List<string> (){"eggs", "milk", "sugar", "gelatin"}, 7.00, new List<string>(){"x"});
-        JSON.WriteJSON(new List<MenuItem>(){Creme_Brulee},"current", true);
+        JSON.WriteJSON(new List<MenuItem>(){Creme_Brulee},"Menu_current", true);
 
         //Then create instances of StringWriter, which is a tool that tells you what the console output is
         StringWriter sw = new StringWriter();
         Console.SetOut(sw);
 
         //Calling the method
-        MenuManager.DisplayMenu("current");
+        MenuManager.DisplayMenu("Menu_current", true);
 
         //Processing & Asserting
         var output = sw.GetStringBuilder().ToString().Trim();

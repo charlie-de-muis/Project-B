@@ -9,7 +9,7 @@ public static class JSON
             // Folder path where you want to store the JSON --> bool test is true for unit tests,
             // false for the normal program
             string folderPath;
-            if (test){folderPath = Path.Combine("../../../..", "Project_B", "Data_Sources");}
+            if (test){folderPath = Path.Combine("../../../..", "Project_B", "Data_Sources\\Menu_Storage");}
             else {folderPath = Path.Combine(Environment.CurrentDirectory, "Data_Sources\\Menu_Storage");}
 
             // File path within the folder
@@ -31,11 +31,13 @@ public static class JSON
             }        
     }
 
-    public static void DeletedItemsWriteJSON(List<MenuItem> Menu, string menuType)
+    public static void DeletedItemsWriteJSON(List<MenuItem> Menu, string menuType, bool test = false)
     {
             // Folder path where you want to store the JSON --> bool test is true for unit tests,
             // false for the normal program
-            string folderPath = Path.Combine(Environment.CurrentDirectory, "Data_Sources\\Menu_Storage");
+            string folderPath;
+            if (test){folderPath = Path.Combine("../../../..", "Project_B", "Data_Sources\\Menu_Storage");}
+            else {folderPath = Path.Combine(Environment.CurrentDirectory, "Data_Sources\\Menu_Storage");}
 
             // File path within the folder
             string filePath = Path.Combine(folderPath, $"{GetCurrentMenuName(folderPath, menuType)}.json");
@@ -63,7 +65,7 @@ public static class JSON
                 // Folder path where you want to read the JSON --> bool test is true for unit tests,
                 // false for the normal program
                 string folderPath;
-                if (test){folderPath = Path.Combine("../../../..", "Project_B", "Data_Sources");}
+                if (test){folderPath = Path.Combine("../../../..", "Project_B", "Data_Sources\\Menu_Storage");}
                 else {folderPath = Path.Combine(Environment.CurrentDirectory, "Data_Sources\\Menu_Storage");}
                 
                 // File path within the folder

@@ -63,18 +63,20 @@ public class Main_Menu
         Console.WriteLine("Press enter to return..."); Console.ReadLine(); Program.ConsoleClear();
     }
 
-    public static void AboutTextAdmin()
+    public static void AboutTextAdmin(bool isTest = false)
     {
         Console.WriteLine("Type 3 lines of information about your restaurant:");
-        string folderPath = Path.Combine(Environment.CurrentDirectory, "Data_Sources");
+        string folderPath;
+        if (isTest){folderPath = Path.Combine("../../../..", "Project_B", "Data_Sources");}
+        else {folderPath = Path.Combine(Environment.CurrentDirectory, "Data_Sources");}
         string filePath = Path.Combine(folderPath, "restauranttext.txt");
         using (FileStream fs = new FileStream(filePath, FileMode.Truncate))
         {
             // clearing file
         }
-        TXT.WritetoTXT(false);
-        TXT.WritetoTXT(false);
-        TXT.WritetoTXT(false);
+        TXT.WritetoTXT(isTest);
+        TXT.WritetoTXT(isTest);
+        TXT.WritetoTXT(isTest);
         Program.ConsoleClear();
     }
 

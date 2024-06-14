@@ -43,7 +43,7 @@ public class Delete_Item
             if (removed > 0)
             {
                 // rewrite the menu
-                JSON.DeletedItemsWriteJSON(menuItems, menuType);
+                JSON.DeletedItemsWriteJSON(menuItems, menuType, true);
             }
             else
             {

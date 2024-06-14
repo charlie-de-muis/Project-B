@@ -1,10 +1,10 @@
 // Made by Bente & Orestis
 public class MenuManager
 {
-    public static void DisplayMenu(string menuType)
+    public static void DisplayMenu(string menuType, bool isTest = false)
     {
         // Read menu items from JSON
-        var menuItems = JSON.ReadJSON(menuType, false);
+        var menuItems = JSON.ReadJSON(menuType, isTest);
         PrintMenu(menuItems);
     }
 
