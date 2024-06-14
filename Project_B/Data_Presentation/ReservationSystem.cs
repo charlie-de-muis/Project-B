@@ -427,5 +427,7 @@ Reservation code: {r.ReservationCode}
 Booking date: {r.DateOfBooking}
 ");
         }
+
+        Console.WriteLine($"Press any key to return..."); Console.ReadKey();
     }
 }

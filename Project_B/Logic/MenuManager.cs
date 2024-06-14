@@ -177,7 +177,7 @@ public class MenuManager
         Console.WriteLine("Switching Between Menus...");
         ViewPastMenus();
 
-        Console.WriteLine("Please enter the name of the menu file you want to set as current:");
+        Console.WriteLine("Please enter the name of the menu file you want to set as current (with .json added):");
         string menuFileName = Console.ReadLine();
         string prompt = "\nPlease enter current or future of which you want to set it to:";
         string[] options = { "Current", "Future" };
@@ -209,7 +209,7 @@ public class MenuManager
         Console.WriteLine("Deleting Menus...");
         ViewPastMenus();
 
-        Console.WriteLine("\nPlease enter the name of the menu file you want to delete:");
+        Console.WriteLine("\nPlease enter the name of the menu file you want to delete (with .json added):");
         string menuFileName = Console.ReadLine();
         
         JSON.DeleteMenu(menuFileName);
