@@ -84,38 +84,39 @@ public class Main_Menu
     {
         if (account is Admin)
         {
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("╔═══════════════════════════════════════╗");
-            Console.WriteLine($"║ Logged in ► {(account as Admin).UserName.PadRight(26)}║");
-            Console.WriteLine("╚═══════════════════════════════════════╝");
-            Console.ResetColor();
-            Console.WriteLine();
+            string promptColor = @$"╔═══════════════════════════════════════╗
+║ Logged in ► {(account as Admin).UserName.PadRight(26)}║
+╚═══════════════════════════════════════╝
+";
 
-            string prompt = $"╔═══════════════════════════════════════╗\n║ Restaurant Booking System.            ║\n╠═══════════════════════════════════════╣";
+            string prompt = @"╔═══════════════════════════════════════╗
+║ Restaurant Booking System.            ║
+╠═══════════════════════════════════════╣";
             string[] options = { "Log Out", "View Menu", "About Restaurant", "Admin Options", "Quit" };
-            return ConsoleGUI.OptionGUI(prompt, options, 2);
+            return ConsoleGUI.OptionGUI(prompt, options, 3, promptColor);
         }
         else if (account is Customer)
         {
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("╔═══════════════════════════════════════╗");
-            Console.WriteLine($"║ Logged in ► {(account as Customer).UserName.PadRight(26)}║");
-            Console.WriteLine("╚═══════════════════════════════════════╝");
-            Console.ResetColor();
-            Console.WriteLine();
+            string promptColor = @$"╔═══════════════════════════════════════╗
+║ Logged in ► {(account as Customer).UserName.PadRight(26)}║
+╚═══════════════════════════════════════╝
+";
 
-            string prompt = $"╔═══════════════════════════════════════╗\n║ Restaurant Booking System.            ║\n╠═══════════════════════════════════════╣";
+            string prompt = @"╔═══════════════════════════════════════╗
+║ Restaurant Booking System.            ║
+╠═══════════════════════════════════════╣";
             string[] options = { "Log Out", "View Menu", "Make Reservation", "View Past Reservations", "About Restaurant", "Quit" };
-            return ConsoleGUI.OptionGUI(prompt, options, 2);
+            return ConsoleGUI.OptionGUI(prompt, options, 3, promptColor);
         }
         else
         {
-            Console.WriteLine("╔═══════════════════════════════════════╗");
-            Console.WriteLine("║ Not Logged in                         ║");
-            Console.WriteLine("╚═══════════════════════════════════════╝");
-            Console.WriteLine();
-            
-            string prompt = $"╔═══════════════════════════════════════╗\n║ Restaurant Booking System.            ║\n╠═══════════════════════════════════════╣";
+            string prompt = @"╔═══════════════════════════════════════╗
+║ Not Logged in                         ║
+╚═══════════════════════════════════════╝
+
+╔═══════════════════════════════════════╗
+║ Restaurant Booking System.            ║
+╠═══════════════════════════════════════╣";
             string[] options = { "Make Account / Login", "View Menu", "About Restaurant", "Quit" };
             return ConsoleGUI.OptionGUI(prompt, options, 2);
         }

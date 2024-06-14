@@ -1,6 +1,6 @@
 static class ConsoleGUI
 {
-    public static int OptionGUI(string prompt, string[] options, int printID)
+    public static int OptionGUI(string prompt, string[] options, int printID, string promptColor = default!)
     {
         int selectedIndex = 0;
 
@@ -12,6 +12,7 @@ static class ConsoleGUI
             {
                 case 1: PrintGUI(prompt, options, selectedIndex); break;
                 case 2: PrintMenuGUI(prompt, options, selectedIndex); break;
+                case 3: PrintMenuColorGUI(promptColor, prompt, options, selectedIndex); break;
             }
 
             ConsoleKeyInfo keyInfo = Console.ReadKey();
@@ -51,6 +52,29 @@ static class ConsoleGUI
 
     private static void PrintMenuGUI(string prompt, string[] options, int selectedIndex)
     {
+        Console.WriteLine(prompt);
+
+        for (int i = 0; i < options.Length; i++)
+        {
+            if (i == selectedIndex)
+            {
+                Console.WriteLine($"║ ► {options[i]}".PadRight(40) + "║");
+            }
+            else
+            {
+                Console.WriteLine($"║ {options[i]}".PadRight(40) + "║");
+            }
+        }
+
+        Console.WriteLine("╚═══════════════════════════════════════╝");
+    }
+
+    private static void PrintMenuColorGUI(string promptColor, string prompt, string[] options, int selectedIndex)
+    {
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine(promptColor);
+        Console.ResetColor();
+
         Console.WriteLine(prompt);
 
         for (int i = 0; i < options.Length; i++)
