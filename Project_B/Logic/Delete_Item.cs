@@ -34,7 +34,7 @@ public class Delete_Item
         }
     }
 
-    public static List<MenuItem> DeleteChosenItem(int index, List<MenuItem> menuItems, string menuType)
+    public static List<MenuItem> DeleteChosenItem(int index, List<MenuItem> menuItems, string menuType, bool isTest = false)
     {
         try
         {
@@ -43,7 +43,7 @@ public class Delete_Item
             if (removed > 0)
             {
                 // rewrite the menu
-                JSON.DeletedItemsWriteJSON(menuItems, menuType, true);
+                JSON.DeletedItemsWriteJSON(menuItems, menuType, isTest);
             }
             else
             {

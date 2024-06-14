@@ -67,7 +67,7 @@ These are all the options:
 
         } while (Check < 4);
 
-
+        Menu.Add(new MenuItem(GenerateID(menuType), Name, Ingredients, Price, DietaryInfo));
         JSON.WriteJSON(Menu, menuType, false);
     }
 
