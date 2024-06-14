@@ -9,7 +9,7 @@ public class UnitTest5
     {
         //Adding the menu item Lasagna
         MenuItem Lasagna = new MenuItem(1010,"Lasagna", new List<string> (){"pasta", "sauce", "cheese", "minced meat"}, 5.00, new List<string>(){"x"});
-        JSON.WriteJSON(new List<MenuItem>(){Lasagna},"current", true);
+        JSON.WriteJSON(new List<MenuItem>(){Lasagna},"current");
 
         //Removing menu item Lasagna by reading the Json file, deleting the item, checking if the ID still exists and returns!
         List<MenuItem> menuItems = JSON.ReadJSON("current");
@@ -42,7 +42,7 @@ public class UnitTest5
         //First add an item to the current menu so we can later check if its actually there
         //using the Display_Menu function!
         MenuItem Creme_Brulee = new MenuItem(1020,"Creme Brulee", new List<string> (){"eggs", "milk", "sugar", "gelatin"}, 7.00, new List<string>(){"x"});
-        JSON.WriteJSON(new List<MenuItem>(){Creme_Brulee},"current", true);
+        JSON.WriteJSON(new List<MenuItem>(){Creme_Brulee},"current");
 
         //Then create instances of StringWriter, which is a tool that tells you what the console output is
         StringWriter sw = new StringWriter();
