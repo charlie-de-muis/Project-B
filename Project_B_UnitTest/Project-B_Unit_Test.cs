@@ -60,7 +60,7 @@ public class UnitTest1
         Assert.AreEqual(Salad.ID, sortedMenu[2].ID);  // Salad should be third (most expensive)
     }
 
-//     //Bente
+//     //Bente DON'T TOUCH ITS A PHANTOM BOMB
 //     [TestMethod]
 //     public void Test_Filter_By_Price()
 //     {
@@ -110,5 +110,30 @@ public class UnitTest1
             // Verify that the reservation was updated correctly
             Assert.AreEqual(3, reservation.AmountofPersons);
         }
+
+    // Bente
+    [TestMethod]
+    public void Sort_Ingredients()
+    {
+        // Arrange
+        MenuItem Pizza = new MenuItem(1000, "Pizza pepperoni", new List<string> {"dough", "sauce", "cheese", "pepperoni"}, 4.50, new List<string> {"x"});
+        MenuItem Burger = new MenuItem(1001, "Cheeseburger", new List<string> {"bun", "cheese", "beef"}, 3.00, new List<string> {"y"});
+        MenuItem Salad = new MenuItem(1002, "Caesar Salad", new List<string> {"lettuce", "dressing", "croutons"}, 5.00, new List<string> {"z"});
+        List<MenuItem> menu = new List<MenuItem> { Pizza, Burger, Salad };
+
+        // Mock JSON.ReadJSON method by directly setting the menu list
+        JSON.WriteJSON(menu, "current", true);
+
+        // Act
+        MenuManager.DisplayFilteredMenu("cheese");
+
+        // Assert
+        // Since the filter is "cheese", we expect to get Pizza and Burger, which contain "cheese"
+        var expectedFilteredMenu = new List<MenuItem> { Pizza, Burger };
+        var actualFilteredMenu = JSON.ReadJSON("current", true).Where(item => 
+            item.Ingredients.Any(ingredient => ingredient.ToLower().Contains("cheese"))).ToList();
+
+        CollectionAssert.AreEqual(expectedFilteredMenu, actualFilteredMenu);
+    }
 }
 
